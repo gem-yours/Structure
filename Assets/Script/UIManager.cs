@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class AppManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public static AppManager instance;
+    public static UIManager instance;
 
     private Button battleButton;
     private Button equipButton;
