@@ -1,0 +1,122 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "HairFront",
+			"GroupId": "",
+			"Name": "髪前"
+		},
+		{
+			"Id": "HairBack",
+			"GroupId": "",
+			"Name": "髪後ろ"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "目　開閉"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "",
+			"Name": "目玉 X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "",
+			"Name": "目玉 Y"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "口　開閉"
+		},
+		{
+			"Id": "LeftUpperArm",
+			"GroupId": "",
+			"Name": "左上腕"
+		},
+		{
+			"Id": "LeftFrontArm",
+			"GroupId": "",
+			"Name": "左前腕"
+		},
+		{
+			"Id": "LeftHand",
+			"GroupId": "",
+			"Name": "左手"
+		},
+		{
+			"Id": "RightUpperArm",
+			"GroupId": "",
+			"Name": "右上腕"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "体の回転　Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "体の回転　Z"
+		},
+		{
+			"Id": "HipY",
+			"GroupId": "",
+			"Name": "腰　Y"
+		},
+		{
+			"Id": "HipZ",
+			"GroupId": "",
+			"Name": "腰 Z"
+		},
+		{
+			"Id": "RightLeg",
+			"GroupId": "",
+			"Name": "右足"
+		},
+		{
+			"Id": "LeftLeg",
+			"GroupId": "",
+			"Name": "左足"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [
+		{
+			"Id": "Part",
+			"Name": "themisto_idle.psd（対応無し）"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		],
+		[
+			"ParamEyeBallX",
+			"ParamEyeBallY"
+		]
+	]
+}
