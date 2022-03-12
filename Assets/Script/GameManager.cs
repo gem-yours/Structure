@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
     private GameObject playerObject;
     private Player player;
 
+    private Button attackButton;
+    private Button spell1Button;
+    private Button spell2Button;
+    private Button spell3Button;
+    private Button uniqueButton;
+
     private void Awake() {
         if (instance == null)
         {
@@ -25,6 +31,17 @@ public class GameManager : MonoBehaviour
     {
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
+
+        attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
+        attackButton.onClick.AddListener(() => player.Cast(SpellSlot.Attack));
+        spell1Button = GameObject.Find("Spell1Button").GetComponent<Button>();
+        spell1Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell1));
+        spell2Button = GameObject.Find("Spell2Button").GetComponent<Button>();
+        spell2Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell2));
+        spell3Button = GameObject.Find("Spell3Button").GetComponent<Button>();
+        spell3Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell3));
+        uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
+        uniqueButton.onClick.AddListener(() => player.Cast(SpellSlot.Unique));
     }
 
     public void onDrag(Vector2 direction)

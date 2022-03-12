@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum SpellSlot {
+    Attack,
+    Spell1,
+    Spell2,
+    Spell3,
+    Unique
+}
 public class Player : MonoBehaviour
 {
     public float speed = 0.1f;
@@ -15,6 +23,11 @@ public class Player : MonoBehaviour
         movingDirection = direction;
         
         animator.SetBool("isWalking", direction != Vector2.zero);
+    }
+
+    public void Cast(SpellSlot spellSlot)
+    {
+        Instantiate(Resources.Load("Effects/Firebolt"),transform.position, transform.rotation);
     }
 
     private void Move()
