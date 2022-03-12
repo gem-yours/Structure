@@ -57,6 +57,7 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         SetDraggedPosition(eventData);
 
         startPoint = eventData.position;
+        GameManager.instance.onDrag((eventData.position - startPoint));
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -64,7 +65,7 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (draggingIcon != null)
             SetDraggedPosition(eventData);
 
-        GameManager.instance.onDrag((eventData.position - startPoint).normalized);
+        GameManager.instance.onDrag((eventData.position - startPoint));
     }
 
     private void SetDraggedPosition(PointerEventData data)
@@ -82,5 +83,6 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         if (draggingIcon != null)
             Destroy(draggingIcon);
+        GameManager.instance.EndDragging();
     }
 }

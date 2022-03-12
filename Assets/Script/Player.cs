@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 1f;
+    public float speed = 0.1f;
     
+    private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
     private Animator animator;
 
-    public void AttemptMove(Vector2 direction)
+    public void ChangeMoveDirection(Vector2 direction)
+    {
+        movingDirection = direction;
+        
+        animator.SetBool("isWalking", direction != Vector2.zero);
+    }
+
+    private void Move()
     {
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed));
 
-        animator.SetBool("isWalking", true);
-
-        var leftOrRight = (direction.x < 0) ? 1 : -1; 
+        var leftOrRight = (movingDirection.x < 0) ? 1 : -1; 
         if (leftOrRight != 0)
         {
             transform.localScale = new Vector3(
@@ -36,6 +42,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (movingDirection != Vector2.zero) {
+            Move();
+        }
     }
 }
