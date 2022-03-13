@@ -1,0 +1,23 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "ゆらめき"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "",
+			"Name": "ゆらめき横"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [],
+	"CombinedParameters": [
+		[
+			"Param",
+			"Param2"
+		]
+	]
+}
