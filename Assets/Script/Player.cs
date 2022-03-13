@@ -12,7 +12,7 @@ public enum SpellSlot {
 }
 public class Player : MonoBehaviour
 {
-    public float speed = 0.1f;
+    public float speed;
     
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
@@ -35,11 +35,11 @@ public class Player : MonoBehaviour
         var current = rb2D.position;
         rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed));
 
-        var leftOrRight = (movingDirection.x < 0) ? 1 : -1; 
-        if (leftOrRight != 0)
+        var isLeft = (movingDirection.x < 0) ? 1 : -1; 
+        if (isLeft != 0)
         {
             transform.localScale = new Vector3(
-                Mathf.Abs(transform.localScale.x) * leftOrRight, 
+                Mathf.Abs(transform.localScale.x) * isLeft, 
                 transform.localScale.y, 
                 transform.localScale.z);
         }

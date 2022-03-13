@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public Rigidbody2D playerRb2D;
 
     private GameObject playerObject;
     private Player player;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
+        playerRb2D = playerObject.GetComponent<Rigidbody2D>();
 
         attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
         attackButton.onClick.AddListener(() => player.Cast(SpellSlot.Attack));
@@ -46,6 +48,7 @@ public class GameManager : MonoBehaviour
 
     public void onDrag(Vector2 direction)
     {
+        // y方向のセンシを下げる
         var correctedDir = Vector2.Scale(direction, new Vector2(1, 0.5f));
         player.ChangeMoveDirection(correctedDir);
     }

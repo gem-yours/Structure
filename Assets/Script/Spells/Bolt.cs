@@ -14,7 +14,7 @@ public class Bolt : MonoBehaviour
         rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed));
 
 
-        rb2D.transform.rotation =  Quaternion.LookRotation(direction, Vector3.forward);
+        rb2D.transform.rotation =  Quaternion.FromToRotation(Vector3.right, direction);
     }
 
     protected virtual IEnumerator Fade()
