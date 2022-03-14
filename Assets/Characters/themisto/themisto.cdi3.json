@@ -1,0 +1,192 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "EyeOpenClose",
+			"GroupId": "",
+			"Name": "目　開閉"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "口　開閉"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "体の回転　X"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "体の回転　Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "右腕"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "",
+			"Name": "左腕"
+		},
+		{
+			"Id": "Param3",
+			"GroupId": "",
+			"Name": "左手"
+		},
+		{
+			"Id": "Param5",
+			"GroupId": "",
+			"Name": "右足"
+		},
+		{
+			"Id": "Param6",
+			"GroupId": "",
+			"Name": "右膝"
+		},
+		{
+			"Id": "Param4",
+			"GroupId": "",
+			"Name": "左足"
+		},
+		{
+			"Id": "Param7",
+			"GroupId": "",
+			"Name": "左膝"
+		},
+		{
+			"Id": "Param8",
+			"GroupId": "",
+			"Name": "風"
+		},
+		{
+			"Id": "Param_Angle_Rotation",
+			"GroupId": "ParamGroup",
+			"Name": "[0]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation2",
+			"GroupId": "ParamGroup",
+			"Name": "[1]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation3",
+			"GroupId": "ParamGroup",
+			"Name": "[2]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation4",
+			"GroupId": "ParamGroup",
+			"Name": "[3]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation5",
+			"GroupId": "ParamGroup",
+			"Name": "[4]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation6",
+			"GroupId": "ParamGroup",
+			"Name": "[5]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_1_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[0]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_2_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[1]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_3_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[2]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_4_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[3]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_5_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[4]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_6_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[5]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_7_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[6]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_8_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[7]後ろ髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_9_ArtMesh19",
+			"GroupId": "ParamGroup2",
+			"Name": "[8]後ろ髪"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "前髪"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "後ろ髪"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "ArtMesh_Skinning",
+			"Name": "前髪(スキニング)"
+		},
+		{
+			"Id": "ArtMesh19_Skinning",
+			"Name": "後ろ髪(スキニング)"
+		},
+		{
+			"Id": "Part",
+			"Name": "後ろ髪(回転)"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		]
+	]
+}

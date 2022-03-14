@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 403ae2dd693bb1d4b924f6b8d206b053, type: 3}
+  m_Name: Themisto.fade
+  m_EditorClassIdentifier: 
+  MotionInstanceIds: b482faffa682faff9c82faff9282faff8882faff
+  CubismFadeMotionObjects:
+  - {fileID: 11400000, guid: 7f85b376388d3c747a7e70d68b1583bf, type: 2}
+  - {fileID: 11400000, guid: 8bee8a7c2a805ee438d41d8ded64ccbc, type: 2}
+  - {fileID: 11400000, guid: 174ce6af2f1f0c643af76ccd2126d927, type: 2}
+  - {fileID: 11400000, guid: 5a9541a0f2c97d44ca309f94306bc199, type: 2}
+  - {fileID: 11400000, guid: bb184fc0e99d97543979db8b1c19d5ce, type: 2}
