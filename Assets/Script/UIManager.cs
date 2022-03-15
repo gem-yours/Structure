@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
         
         battleButton.onClick.AddListener(() => ActivateScreen(battleScreen));
         equipButton.onClick.AddListener(() => ActivateScreen(equipScreen));
+        battleButton.onClick.AddListener(() => SceneManager.LoadScene("Game"));
 
         ActivateScreen(battleScreen);
     }
