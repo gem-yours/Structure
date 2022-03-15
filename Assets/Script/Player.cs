@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
         movingDirection = direction;
         
         animator.SetBool("isWalking", direction != Vector2.zero);
+        Debug.Log(direction);
     }
 
     public void Cast(SpellSlot spellSlot)
