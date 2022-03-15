@@ -2397,7 +2397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd9e6647bfff7542acb0200ab74bdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CubismFadeMotionList: {fileID: 11400000, guid: 862e118d80a03ef488bfae08787985f2, type: 2}
+  CubismFadeMotionList: {fileID: 11400000, guid: 00506d5d34da8b84c80aefe2a306f99b, type: 2}
 --- !u!114 &6906359910969335633
 MonoBehaviour:
   m_ObjectHideFlags: 0
