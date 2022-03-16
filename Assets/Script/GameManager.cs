@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     private GameObject playerObject;
     private Player player;
 
+    private GameCamera gameCamera;
+
     private Button attackButton;
     private Button spell1Button;
     private Button spell2Button;
@@ -34,6 +36,10 @@ public class GameManager : MonoBehaviour
         player = playerObject.GetComponent<Player>();
         playerRb2D = playerObject.GetComponent<Rigidbody2D>();
 
+        gameObject.AddComponent<GameCamera>();
+        gameCamera = gameObject.GetComponent<GameCamera>();
+        gameCamera.target = playerObject;
+
         attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
         attackButton.onClick.AddListener(() => player.Cast(SpellSlot.Attack));
         spell1Button = GameObject.Find("Spell1Button").GetComponent<Button>();
@@ -51,6 +57,8 @@ public class GameManager : MonoBehaviour
         // y方向のセンシを下げる
         var correctedDir = Vector2.Scale(direction, new Vector2(1, 0.5f));
         player.ChangeMoveDirection(correctedDir);
+        
+        gameCamera.offset = correctedDir;
     }
 
     public void EndDragging()
