@@ -18,7 +18,22 @@ public class GameCamera : MonoBehaviour
     }
     private GameObject _target;
 
-    public Vector3 offset = Vector3.zero;
+    public Vector3 offset
+    {
+        get
+        {
+            return _offset;
+        }
+        set
+        {
+            // 1秒かけてカメラ位置が最遠になるように
+            _offset += value.normalized / offsetSize;
+             if (_offset.magnitude > offsetSize) {
+                 _offset = _offset.normalized * offsetSize;
+            }
+        }
+    }
+    private Vector3 _offset = Vector3.zero;
     private Vector3 initialDistance;
     private float offsetSize = 3;
     private float speed = 0.2f;
@@ -36,12 +51,7 @@ public class GameCamera : MonoBehaviour
         }
 
         // offsetによってカメラ位置をずらすことで移動を表現したい
-        var correctedOffset = offset / 20;
-        if(correctedOffset.magnitude > offsetSize) {
-            correctedOffset = correctedOffset.normalized * offsetSize;
-        }
-
-        var newPosition = target.transform.position + initialDistance + correctedOffset;
+        var newPosition = target.transform.position + initialDistance + _offset;
         transform.position = Vector3.MoveTowards(transform.position, newPosition, speed);        
     }
 }

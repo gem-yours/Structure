@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         var correctedDir = Vector2.Scale(direction, new Vector2(1, 0.5f));
         player.ChangeMoveDirection(correctedDir);
         
-        gameCamera.offset = correctedDir;
+        gameCamera._offset = correctedDir;
     }
 
     public void EndDragging()
