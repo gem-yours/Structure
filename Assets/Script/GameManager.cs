@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
         spell3Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell3));
         uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
         uniqueButton.onClick.AddListener(() => player.Cast(SpellSlot.Unique));
+
+        MapGenerator.Generate(Vector2.zero, 100, 50, Resources.Load("Map/Glass") as GameObject);
     }
 
     public void onDrag(Vector2 direction)
@@ -57,8 +59,6 @@ public class GameManager : MonoBehaviour
         // y方向のセンシを下げる
         var correctedDir = Vector2.Scale(direction, new Vector2(1, 0.5f));
         player.ChangeMoveDirection(correctedDir);
-        
-        gameCamera._offset = correctedDir;
     }
 
     public void EndDragging()
