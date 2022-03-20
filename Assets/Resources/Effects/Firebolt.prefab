@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5462186251657780408}
   - component: {fileID: 5462186251657780415}
   - component: {fileID: 2951180041077587389}
+  - component: {fileID: 5110316482042951229}
   m_Layer: 0
   m_Name: Firebolt
   m_TagString: Untagged
@@ -757,7 +758,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.1, y: 1, z: 0.1}
+    m_Scale: {x: 1, y: 0.1, z: 0.1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -1071,22 +1072,22 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.8783798
-          inSlope: -0.03303556
-          outSlope: -0.03303556
+          time: 0.0027070919
+          value: 0.040540487
+          inSlope: 5.93631
+          outSlope: 5.93631
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.24547279
+          outWeight: 0.060424924
         - serializedVersion: 3
-          time: 1
+          time: 0.9972876
           value: 0
-          inSlope: -2.3775408
-          outSlope: -2.3775408
+          inSlope: -0.5381301
+          outSlope: -0.5381301
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.20120734
+          inWeight: 0.23733948
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -4849,3 +4850,29 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!61 &5110316482042951229
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462186251657780409}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3, y: 2}
+  m_EdgeRadius: 0

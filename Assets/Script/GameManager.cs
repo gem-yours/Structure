@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
     {
         player.ChangeMoveDirection(Vector2.zero);
     }
+
+    public GameObject NearestEnemy()
+    {
+        return GameObject.Find("fireelement");
+    }
     
     // Start is called before the first frame update
     void Start()

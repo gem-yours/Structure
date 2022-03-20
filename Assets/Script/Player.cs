@@ -27,7 +27,8 @@ public class Player : MonoBehaviour
 
     public void Cast(SpellSlot spellSlot)
     {
-        Instantiate(Resources.Load("Effects/Firebolt"),transform.position, transform.rotation);
+        var bolt = Instantiate(Resources.Load("Effects/Firebolt"),transform.position, transform.rotation) as GameObject;
+        bolt.GetComponent<Bolt>().Target(GameManager.instance.NearestEnemy());
     }
 
     private void Move()
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.rotation = Quaternion.identity;
         if (movingDirection != Vector2.zero) {
             Move();
         }

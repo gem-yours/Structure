@@ -8,6 +8,12 @@ public class Bolt : MonoBehaviour
     public float speed = 0.5f;
     private Rigidbody2D rb2D;
 
+    public void Target(GameObject target)
+    {
+        direction = (target.transform.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(direction);
+    }
+
     public void Move()
     {
         var current = rb2D.position;
