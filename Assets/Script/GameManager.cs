@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
         uniqueButton.onClick.AddListener(() => player.Cast(SpellSlot.Unique));
 
-        MapGenerator.Generate(Vector2.zero, 100, 50, Resources.Load("Map/Tile") as GameObject);
+        MapGenerator.Generate(Vector2.zero, 50, 25, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
     }
 
     public void onDrag(Vector2 direction)
