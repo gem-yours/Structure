@@ -19,12 +19,13 @@ public class GameManager : MonoBehaviour
     private Button spell3Button;
     private Button uniqueButton;
 
-    private void Awake() {
+    private void Awake()
+    {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-        } else if (instance == this)
+        } else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -32,6 +33,10 @@ public class GameManager : MonoBehaviour
 
     private void Init()
     {
+        MapGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
+
+        EnemiesManager.instance.Spawn(Vector3.zero);
+
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         playerRb2D = playerObject.GetComponent<Rigidbody2D>();
@@ -50,8 +55,6 @@ public class GameManager : MonoBehaviour
         spell3Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell3));
         uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
         uniqueButton.onClick.AddListener(() => player.Cast(SpellSlot.Unique));
-
-        MapGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
     }
 
     public void onDrag(Vector2 direction)
@@ -64,11 +67,6 @@ public class GameManager : MonoBehaviour
     public void EndDragging()
     {
         player.ChangeMoveDirection(Vector2.zero);
-    }
-
-    public GameObject NearestEnemy()
-    {
-        return GameObject.Find("fireelement");
     }
     
     // Start is called before the first frame update

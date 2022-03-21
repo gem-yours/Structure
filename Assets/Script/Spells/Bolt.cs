@@ -10,6 +10,10 @@ public class Bolt : MonoBehaviour
 
     public void Target(GameObject target)
     {
+        if (target == null)
+        {
+            direction = Vector2.left;            
+        }
         direction = (target.transform.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(direction);
     }
