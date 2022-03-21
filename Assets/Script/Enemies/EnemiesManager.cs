@@ -27,12 +27,15 @@ public class EnemiesManager : MonoBehaviour
 
     public GameObject Spawn(Vector3 location)
     {
+        if(enemies.Count > enemiesLimit) {
+            return null;
+        }
         var enemy = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
         enemies.Add(enemy);
         return enemy;
     }
 
-    public GameObject? NearestEnemy()
+    public GameObject NearestEnemy()
     {
         if (enemies.Count == 0)
         {

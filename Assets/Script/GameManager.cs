@@ -35,8 +35,6 @@ public class GameManager : MonoBehaviour
     {
         MapGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
 
-        EnemiesManager.instance.Spawn(Vector3.zero);
-
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         playerRb2D = playerObject.GetComponent<Rigidbody2D>();
