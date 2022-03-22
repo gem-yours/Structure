@@ -12,7 +12,7 @@ public abstract class Bolt : MonoBehaviour, Spell
 
     public void Target(GameObject target)
     {
-        if (target == null)
+        if (target == null || target.transform == null)
         {
             direction = Vector2.left;            
         }
@@ -35,13 +35,13 @@ public abstract class Bolt : MonoBehaviour, Spell
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "Enemy")
         {
             var enemy = other.gameObject.GetComponent<Enemy>();
             enemy.OnHit(this);
-            Destroy(gameObject);
         }
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update
