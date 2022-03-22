@@ -2,9 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireElement : Enemy
+public class FireElement : MonoBehaviour, Enemy
 {
-    public float speed;
+    public float speed = 0.05f;
+    public float hp { get; private set; } = 1;
+    protected Rigidbody2D rb2D;
+
+
+    public void OnHit(Spell spell)
+    {
+        hp -= spell.damage;
+    }
 
     private void MoveToPlayer()
     {
@@ -23,16 +31,26 @@ public class FireElement : Enemy
         }
         rb2D.transform.rotation = Quaternion.FromToRotation(isLeft == -1 ? Vector3.left : Vector3.right, direction);
     }
-    // Start is called before the first frame update
-    override protected void Start()
+
+    private void checkHp()
     {
-        base.Start();
+        if(hp <= 0)
+        {
+
+            EnemiesManager.instance.Dead(this);
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb2D = GetComponent<Rigidbody2D>(); 
     }
 
     // Update is called once per frame
-    override protected void Update()
+    void Update()
     {
-        base.Update();
         MoveToPlayer();
+        checkHp();
     }
 }

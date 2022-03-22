@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bolt : MonoBehaviour
+public abstract class Bolt : MonoBehaviour, Spell
 {
     public Vector2 direction = Vector2.left;
     public float speed = 0.5f;
+
+    abstract public float damage { get; }
     private Rigidbody2D rb2D;
 
     public void Target(GameObject target)
@@ -34,7 +36,12 @@ public class Bolt : MonoBehaviour
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        Debug.Log(other);
+        if(other.gameObject.tag == "Enemy")
+        {
+            var enemy = other.gameObject.GetComponent<Enemy>();
+            enemy.OnHit(this);
+            Destroy(gameObject);
+        }
     }
 
     // Start is called before the first frame update

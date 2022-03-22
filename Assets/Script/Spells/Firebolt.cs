@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Firebolt : Bolt
 {
+    public override float damage
+    {
+        get { return 10; }
+    }
     // Start is called before the first frame update
     override protected void Start()
     {

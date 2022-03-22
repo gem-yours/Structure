@@ -35,6 +35,23 @@ public class EnemiesManager : MonoBehaviour
         return enemy;
     }
 
+    public bool Dead(Enemy enemy)
+    {
+        var enemyObject = enemies.Find(
+            delegate(GameObject go)
+            {
+                return go.GetComponent<Enemy>() == enemy;
+            }
+        );
+        if (enemyObject == null)
+        {
+            return false;
+        }
+        enemies.Remove(enemyObject);
+        Destroy(enemyObject);
+        return true;
+    }
+
     public GameObject NearestEnemy()
     {
         if (enemies.Count == 0)
