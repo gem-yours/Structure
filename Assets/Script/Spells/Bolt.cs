@@ -33,12 +33,14 @@ public class Bolt : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void OnCollisionEnter2D(Collision2D other) {
+        Debug.Log(other);
+    }
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
-
-        StartCoroutine(Fade());
     }
 
     // Update is called once per frame
