@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Bolt : MonoBehaviour, Spell
 {
-    public Vector2 direction = Vector2.left;
+    public Vector2 direction = Vector2.right;
     public float speed = 0.5f;
 
     abstract public float damage { get; }
@@ -14,9 +14,15 @@ public abstract class Bolt : MonoBehaviour, Spell
     {
         if (target == null || target.transform == null)
         {
-            direction = Vector2.left;            
+            direction = Vector2.right; 
+            return;          
         }
         direction = (target.transform.position - transform.position).normalized;
+        if (direction.magnitude == 0)
+        {
+            direction = Vector2.right;
+            return;
+        }
         transform.rotation = Quaternion.LookRotation(direction);
     }
 
@@ -36,12 +42,16 @@ public abstract class Bolt : MonoBehaviour, Spell
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy")
         {
             var enemy = other.gameObject.GetComponent<Enemy>();
             enemy.OnHit(this);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+        if (other.gameObject.tag == "Wall")
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Start is called before the first frame update

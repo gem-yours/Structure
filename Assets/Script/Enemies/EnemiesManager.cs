@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemiesManager : MonoBehaviour
 {
     public static EnemiesManager instance;
-    public static int enemiesLimit = 10;
+    public static int enemiesLimit = 5;
     private List<GameObject> enemies = new List<GameObject>();
 
     private void Awake()
@@ -52,14 +52,18 @@ public class EnemiesManager : MonoBehaviour
         return true;
     }
 
-    public GameObject NearestEnemy()
+    public GameObject NearestEnemy(Vector3 position)
     {
         if (enemies.Count == 0)
         {
             return null;
         }
-        // TODO: 距離を検索する
-        return enemies[0];
+        enemies.Sort(delegate(GameObject lhs, GameObject rhs){
+            var lhsDistance = (position - lhs.transform.position).magnitude;
+            var rhsDistance = (position - rhs.transform.position).magnitude;
+            return (lhsDistance < rhsDistance) ? 1 : -1;
+        });
+        return enemies[0];       
     }
 
     // Start is called before the first frame update
