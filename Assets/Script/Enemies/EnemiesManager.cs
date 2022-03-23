@@ -30,6 +30,13 @@ public class EnemiesManager : MonoBehaviour
         if(enemies.Count > enemiesLimit) {
             return null;
         }
+
+        // プレイヤーの近くに敵が出現しないようにする
+        if((GameManager.instance.playerRb2D.transform.position - location).magnitude < 10)
+        {
+            return null;
+        }
+
         var enemy = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
         enemies.Add(enemy);
         return enemy;
