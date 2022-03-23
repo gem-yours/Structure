@@ -71,7 +71,7 @@ public class EnemiesManager : MonoBehaviour
         enemies.Sort(delegate(GameObject lhs, GameObject rhs){
             var lhsDistance = (position - lhs.transform.position).magnitude;
             var rhsDistance = (position - rhs.transform.position).magnitude;
-            return (lhsDistance < rhsDistance) ? 1 : -1;
+            return (lhsDistance > rhsDistance) ? 1 : -1;
         });
         return enemies[0];       
     }
