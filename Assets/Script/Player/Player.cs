@@ -12,7 +12,13 @@ public enum SpellSlot {
 }
 public class Player : MonoBehaviour
 {
-    public float speed;
+    public ExpManager expManager { private set; get; } = new ExpManager();
+    public float speed { private set;  get; } = 0.15f;
+    public Vector3 position { 
+        get {
+            return transform.position;
+        }
+    }
     
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
@@ -27,7 +33,7 @@ public class Player : MonoBehaviour
 
     public void Cast(SpellSlot spellSlot)
     {
-        var bolt = Instantiate(Resources.Load("Effects/Firebolt"),transform.position, transform.rotation) as GameObject;
+        var bolt = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
         bolt.GetComponent<Bolt>().Target(EnemiesManager.instance.NearestEnemy(transform.position));
     }
 

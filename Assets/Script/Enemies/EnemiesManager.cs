@@ -32,7 +32,7 @@ public class EnemiesManager : MonoBehaviour
         }
 
         // プレイヤーの近くに敵が出現しないようにする
-        if((GameManager.instance.playerRb2D.transform.position - location).magnitude < 10)
+        if((GameManager.instance.player.position - location).magnitude < 10)
         {
             return null;
         }
@@ -54,6 +54,9 @@ public class EnemiesManager : MonoBehaviour
         {
             return false;
         }
+
+        GameManager.instance.player.expManager.GainExp(enemy.exp);
+
         enemies.Remove(enemyObject);
         Destroy(enemyObject);
         return true;

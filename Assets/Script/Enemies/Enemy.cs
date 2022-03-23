@@ -5,5 +5,6 @@ using UnityEngine;
 public interface Enemy
 {
     float hp { get; }
+    int exp { get; }
     void OnHit(Spell spell);
 }

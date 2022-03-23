@@ -6,10 +6,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public Rigidbody2D playerRb2D;
+    public Player player;
 
     private GameObject playerObject;
-    private Player player;
 
     private GameCamera gameCamera;
 
@@ -37,7 +36,6 @@ public class GameManager : MonoBehaviour
 
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
-        playerRb2D = playerObject.GetComponent<Rigidbody2D>();
 
         gameObject.AddComponent<GameCamera>();
         gameCamera = gameObject.GetComponent<GameCamera>();

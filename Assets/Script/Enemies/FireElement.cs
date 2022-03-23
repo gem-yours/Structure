@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class FireElement : MonoBehaviour, Enemy
 {
-    public float speed = 0.05f;
+    public float speed { get; private set;} = 0.05f;
     public float hp { get; private set; } = 1;
+    public int exp { get; private set; } = 1;
     protected Rigidbody2D rb2D;
 
 
@@ -16,7 +17,7 @@ public class FireElement : MonoBehaviour, Enemy
 
     private void MoveToPlayer()
     {
-        Vector2 direction = (GameManager.instance.playerRb2D.transform.position - rb2D.transform.position).normalized;
+        Vector2 direction = (GameManager.instance.player.position - rb2D.transform.position).normalized;
         Vector2 current = rb2D.transform.position;
         rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed));
 
