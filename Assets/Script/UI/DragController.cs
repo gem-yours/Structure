@@ -22,18 +22,18 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        var canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        var canvas = GameObject.Find("UI").GetComponent<Canvas>();
         if (canvas == null)
             return;
 

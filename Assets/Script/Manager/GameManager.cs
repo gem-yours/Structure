@@ -33,6 +33,16 @@ public class GameManager : MonoBehaviour
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
 
+        player.expManager.onLevelUp = (int level) =>
+        {
+            Pause();
+            // UIManager.instance.ShowPickSpellWindow(
+            //     new FireBall(),
+            //     new FireBall(),
+            //     new FireBall()
+            // );
+        };
+
         gameObject.AddComponent<GameCamera>();
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
@@ -43,13 +53,13 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0;
-        UIManager.instance.active = false;
+        UIManager.instance.isUiActive = false;
     }
 
     public void Resume()
     {
         Time.timeScale = 1;
-        UIManager.instance.active = true;
+        UIManager.instance.isUiActive = true;
     }
 
     public void onDrag(Vector2 direction)
@@ -67,7 +77,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
+        // GameObjct.Findを待たなければならないため
+        // 根本的解決になったいないので、GameObjectの解決をするクラスを作りたい
+        Invoke("Init", 1);
     }
 
     // Update is called once per frame

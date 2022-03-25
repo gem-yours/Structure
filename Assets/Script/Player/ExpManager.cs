@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class ExpManager
 {
+
     public int level { private set; get; } = 1;
     public int exp { private set; get; } = 0;
     public int requireExp { private set; get; } = 5;
+    public delegate void OnLevelUp(int level);
+    public OnLevelUp onLevelUp { set; private get; } = (int level) => { };
 
     public void GainExp(int gainedExp)
     {
@@ -20,6 +23,7 @@ public class ExpManager
         UIManager.instance.level = level;
         UIManager.instance.requireExp = requireExp;
         UIManager.instance.exp = exp;
+        onLevelUp(level);
     }
 
     private void CheckLevelUp()

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Firebolt : Bolt
+public class FireBolt : Bolt
 {
-    public override Sprite image { get; } = Resources.Load("SpellIcon/FireBolt") as Sprite;
+    public override Sprite image { get; } = null;
     public override string description { get; } = "一番近い敵に向かって火の玉を発射する";
     public override float damage
     { get; } = 1;

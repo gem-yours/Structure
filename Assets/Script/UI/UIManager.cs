@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public bool active
+    public bool isUiActive
     {
         get
         {
@@ -66,6 +66,20 @@ public class UIManager : MonoBehaviour
     private TextMeshProUGUI levelText;
     private Slider expBar;
 
+    private GameObject pickSpellWindow;
+    private SpellCard spellCard1;
+    private SpellCard spellCard2;
+    private SpellCard spellCard3;
+
+
+    public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3)
+    {
+        pickSpellWindow.SetActive(true);
+        spellCard1.spell = spell1;
+        spellCard2.spell = spell2;
+        spellCard3.spell = spell3;
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -78,8 +92,8 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void Init()
     {
         root = GameObject.Find("UI");
         attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
@@ -90,6 +104,19 @@ public class UIManager : MonoBehaviour
 
         levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
         expBar = GameObject.Find("ExpBar").GetComponent<Slider>();
+
+        pickSpellWindow = GameObject.Find("PickSpellWindow");
+        spellCard1 = GameObject.Find("SpellCard1").GetComponent<SpellCard>();
+        spellCard2 = GameObject.Find("SpellCard2").GetComponent<SpellCard>();
+        spellCard3 = GameObject.Find("SpellCard3").GetComponent<SpellCard>();
+        pickSpellWindow.SetActive(false);
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Init();
     }
 
     // Update is called once per frame
