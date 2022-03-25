@@ -17,6 +17,7 @@ public class ExpManager
         exp += gainedExp;
 
         CheckLevelUp();
+        UIManager.instance.level = level;
         UIManager.instance.requireExp = requireExp;
         UIManager.instance.exp = exp;
     }
@@ -36,6 +37,6 @@ public class ExpManager
 
     private int CalcRequireExp(int level)
     {
-        return (int)(Mathf.Ceil(level * level / 2))  + 5;
+        return (int)(Mathf.Ceil(level * level / 2)) + 5;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class UIManager : MonoBehaviour
@@ -9,21 +10,39 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public delegate void OnCast(SpellSlot spellSlot);
 
-    public OnCast onCast { set
+    public OnCast onCast
     {
-        attackButton.onClick.AddListener(() => value(SpellSlot.Attack));
-        spell1Button.onClick.AddListener(() => value(SpellSlot.Spell1));
-        spell2Button.onClick.AddListener(() => value(SpellSlot.Spell2));
-        spell3Button.onClick.AddListener(() => value(SpellSlot.Spell3));
-        uniqueButton.onClick.AddListener(() => value(SpellSlot.Unique));
-    } }
+        set
+        {
+            attackButton.onClick.AddListener(() => value(SpellSlot.Attack));
+            spell1Button.onClick.AddListener(() => value(SpellSlot.Spell1));
+            spell2Button.onClick.AddListener(() => value(SpellSlot.Spell2));
+            spell3Button.onClick.AddListener(() => value(SpellSlot.Spell3));
+            uniqueButton.onClick.AddListener(() => value(SpellSlot.Unique));
+        }
+    }
 
-    public int requireExp { set {
-        expBar.maxValue = value;
-    }}
-    public int exp { set {
-        expBar.value = value;
-    }}
+    public int level
+    {
+        set
+        {
+            levelText.text = value.ToString();
+        }
+    }
+    public int requireExp
+    {
+        set
+        {
+            expBar.maxValue = value;
+        }
+    }
+    public int exp
+    {
+        set
+        {
+            expBar.value = value;
+        }
+    }
 
     private Button attackButton;
     private Button spell1Button;
@@ -31,14 +50,17 @@ public class UIManager : MonoBehaviour
     private Button spell3Button;
     private Button uniqueButton;
 
+    private TextMeshProUGUI levelText;
     private Slider expBar;
 
-    private void Awake() {
+    private void Awake()
+    {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-        } else if (instance != this)
+        }
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -52,12 +74,13 @@ public class UIManager : MonoBehaviour
         spell3Button = GameObject.Find("Spell3Button").GetComponent<Button>();
         uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
 
+        levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
         expBar = GameObject.Find("ExpBar").GetComponent<Slider>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
