@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -17,11 +18,20 @@ public class UIManager : MonoBehaviour
         uniqueButton.onClick.AddListener(() => value(SpellSlot.Unique));
     } }
 
+    public int requireExp { set {
+        expBar.maxValue = value;
+    }}
+    public int exp { set {
+        expBar.value = value;
+    }}
+
     private Button attackButton;
     private Button spell1Button;
     private Button spell2Button;
     private Button spell3Button;
     private Button uniqueButton;
+
+    private Slider expBar;
 
     private void Awake() {
         if (instance == null)
@@ -40,7 +50,9 @@ public class UIManager : MonoBehaviour
         spell1Button = GameObject.Find("Spell1Button").GetComponent<Button>();
         spell2Button = GameObject.Find("Spell2Button").GetComponent<Button>();
         spell3Button = GameObject.Find("Spell3Button").GetComponent<Button>();
-        uniqueButton = GameObject.Find("uniqueButton").GetComponent<Button>();
+        uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
+
+        expBar = GameObject.Find("ExpBar").GetComponent<Slider>();
     }
 
     // Update is called once per frame

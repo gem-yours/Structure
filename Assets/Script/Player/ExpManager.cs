@@ -17,8 +17,8 @@ public class ExpManager
         exp += gainedExp;
 
         CheckLevelUp();
-        Debug.Log(string.Concat("level", level));
-        Debug.Log(string.Concat("exp", exp));
+        UIManager.instance.requireExp = requireExp;
+        UIManager.instance.exp = exp;
     }
 
     private void CheckLevelUp()
