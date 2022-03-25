@@ -7,6 +7,8 @@ public abstract class Bolt : MonoBehaviour, Spell
     public Vector2 direction = Vector2.right;
     public float speed = 0.5f;
 
+    abstract public Sprite image { get; }
+    abstract public string description { get; }
     abstract public float damage { get; }
     private Rigidbody2D rb2D;
 
@@ -14,8 +16,8 @@ public abstract class Bolt : MonoBehaviour, Spell
     {
         if (target == null || target.transform == null)
         {
-            direction = Vector2.right; 
-            return;          
+            direction = Vector2.right;
+            return;
         }
         direction = (target.transform.position - transform.position).normalized;
         if (direction.magnitude == 0)
@@ -32,7 +34,7 @@ public abstract class Bolt : MonoBehaviour, Spell
         rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed));
 
 
-        rb2D.transform.rotation =  Quaternion.FromToRotation(Vector3.right, direction);
+        rb2D.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
 
     protected virtual IEnumerator Fade()
@@ -41,7 +43,8 @@ public abstract class Bolt : MonoBehaviour, Spell
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.gameObject.tag == "Enemy")
         {
             var enemy = other.gameObject.GetComponent<Enemy>();

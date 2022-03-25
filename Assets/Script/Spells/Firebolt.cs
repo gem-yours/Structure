@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Firebolt : Bolt
 {
+    public override Sprite image { get; } = Resources.Load("SpellIcon/FireBolt") as Sprite;
+    public override string description { get; } = "一番近い敵に向かって火の玉を発射する";
     public override float damage
-    {
-        get { return 10; }
-    }
+    { get; } = 1;
     // Start is called before the first frame update
     override protected void Start()
     {
