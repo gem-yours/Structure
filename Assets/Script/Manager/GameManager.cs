@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-        } else if (instance != this)
+        }
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -37,7 +38,18 @@ public class GameManager : MonoBehaviour
         gameCamera.target = playerObject;
 
         UIManager.instance.onCast = (SpellSlot slot) => player.Cast(slot);
+    }
 
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        UIManager.instance.active = false;
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1;
+        UIManager.instance.active = true;
     }
 
     public void onDrag(Vector2 direction)
@@ -51,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         player.ChangeMoveDirection(Vector2.zero);
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {

@@ -44,6 +44,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public bool active
+    {
+        get
+        {
+            return root.activeSelf;
+        }
+        set
+        {
+            root.SetActive(value);
+        }
+    }
+
+    private GameObject root;
     private Button attackButton;
     private Button spell1Button;
     private Button spell2Button;
@@ -68,6 +81,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        root = GameObject.Find("UI");
         attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
         spell1Button = GameObject.Find("Spell1Button").GetComponent<Button>();
         spell2Button = GameObject.Find("Spell2Button").GetComponent<Button>();

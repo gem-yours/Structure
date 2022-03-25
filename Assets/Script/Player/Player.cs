@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum SpellSlot {
+public enum SpellSlot
+{
     Attack,
     Spell1,
     Spell2,
@@ -13,13 +14,15 @@ public enum SpellSlot {
 public class Player : MonoBehaviour
 {
     public ExpManager expManager { private set; get; } = new ExpManager();
-    public float speed { private set;  get; } = 0.15f;
-    public Vector3 position { 
-        get {
+    public float speed { private set; get; } = 0.15f;
+    public Vector3 position
+    {
+        get
+        {
             return transform.position;
         }
     }
-    
+
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
     private Animator animator;
@@ -27,7 +30,7 @@ public class Player : MonoBehaviour
     public void ChangeMoveDirection(Vector2 direction)
     {
         movingDirection = direction;
-        
+
         animator.SetBool("isWalking", direction != Vector2.zero);
     }
 
@@ -42,19 +45,16 @@ public class Player : MonoBehaviour
         var current = rb2D.position;
         rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed));
 
-        var isLeft = (movingDirection.x < 0) ? 1 : -1; 
+        var isLeft = (movingDirection.x < 0) ? 1 : -1;
         if (isLeft != 0)
         {
             transform.localScale = new Vector3(
-                Mathf.Abs(transform.localScale.x) * isLeft, 
-                transform.localScale.y, 
+                Mathf.Abs(transform.localScale.x) * isLeft,
+                transform.localScale.y,
                 transform.localScale.z);
         }
     }
 
-    private void OnCollisionEnter(Collision other) {
-        Debug.Log(other);
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +67,8 @@ public class Player : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.identity;
-        if (movingDirection != Vector2.zero) {
+        if (movingDirection != Vector2.zero)
+        {
             Move();
         }
     }
