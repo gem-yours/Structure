@@ -8,15 +8,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public Player player;
 
+
     private GameObject playerObject;
 
     private GameCamera gameCamera;
-
-    private Button attackButton;
-    private Button spell1Button;
-    private Button spell2Button;
-    private Button spell3Button;
-    private Button uniqueButton;
 
     private void Awake()
     {
@@ -41,16 +36,8 @@ public class GameManager : MonoBehaviour
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
 
-        attackButton = GameObject.Find("AttackButton").GetComponent<Button>();
-        attackButton.onClick.AddListener(() => player.Cast(SpellSlot.Attack));
-        spell1Button = GameObject.Find("Spell1Button").GetComponent<Button>();
-        spell1Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell1));
-        spell2Button = GameObject.Find("Spell2Button").GetComponent<Button>();
-        spell2Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell2));
-        spell3Button = GameObject.Find("Spell3Button").GetComponent<Button>();
-        spell3Button.onClick.AddListener(() => player.Cast(SpellSlot.Spell3));
-        uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
-        uniqueButton.onClick.AddListener(() => player.Cast(SpellSlot.Unique));
+        UIManager.instance.onCast = (SpellSlot slot) => player.Cast(slot);
+
     }
 
     public void onDrag(Vector2 direction)
