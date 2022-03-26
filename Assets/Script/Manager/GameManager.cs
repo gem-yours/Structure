@@ -36,11 +36,11 @@ public class GameManager : MonoBehaviour
         player.expManager.onLevelUp = (int level) =>
         {
             Pause();
-            // UIManager.instance.ShowPickSpellWindow(
-            //     new FireBall(),
-            //     new FireBall(),
-            //     new FireBall()
-            // );
+            UIManager.instance.ShowPickSpellWindow(
+                new FireBolt(),
+                new FireBolt(),
+                new FireBolt()
+            );
         };
 
         gameObject.AddComponent<GameCamera>();

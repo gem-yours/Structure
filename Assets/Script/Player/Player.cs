@@ -36,8 +36,10 @@ public class Player : MonoBehaviour
 
     public void Cast(SpellSlot spellSlot)
     {
-        var bolt = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
-        bolt.GetComponent<Bolt>().Target(EnemiesManager.instance.NearestEnemy(transform.position));
+        var boltObject = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
+        var bolt = boltObject.GetComponent<BoltProjectile>();
+        bolt.spell = new FireBolt();
+        bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
     }
 
     private void Move()

@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Bolt : MonoBehaviour, Spell
+public class BoltProjectile : MonoBehaviour
 {
+    public Spell spell { set; private get; }
     public Vector2 direction = Vector2.right;
     public float speed = 0.5f;
 
-    abstract public Sprite image { get; }
-    abstract public string description { get; }
-    abstract public float damage { get; }
     private Rigidbody2D rb2D;
 
     public void Target(GameObject target)
@@ -48,7 +46,7 @@ public abstract class Bolt : MonoBehaviour, Spell
         if (other.gameObject.tag == "Enemy")
         {
             var enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.OnHit(this);
+            enemy.OnHit(spell);
             Destroy(gameObject);
         }
         if (other.gameObject.tag == "Wall")
