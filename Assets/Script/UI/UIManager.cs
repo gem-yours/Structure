@@ -70,14 +70,27 @@ public class UIManager : MonoBehaviour
     private SpellCard spellCard1;
     private SpellCard spellCard2;
     private SpellCard spellCard3;
+    private Button skipButton;
 
 
-    public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3)
+    public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
         pickSpellWindow.SetActive(true);
+
         spellCard1.spell = spell1;
+        spellCard1.onClick = onSpellPicked;
         spellCard2.spell = spell2;
+        spellCard2.onClick = onSpellPicked;
         spellCard3.spell = spell3;
+        spellCard3.onClick = onSpellPicked;
+
+        skipButton.onClick.RemoveAllListeners();
+        skipButton.onClick.AddListener(() => onSpellPicked(null));
+    }
+
+    public void HidePickSpellWindow()
+    {
+        pickSpellWindow.SetActive(false);
     }
 
     private void Awake()
@@ -101,6 +114,8 @@ public class UIManager : MonoBehaviour
         spell2Button = GameObject.Find("Spell2Button").GetComponent<Button>();
         spell3Button = GameObject.Find("Spell3Button").GetComponent<Button>();
         uniqueButton = GameObject.Find("UniqueButton").GetComponent<Button>();
+
+        skipButton = GameObject.Find("SkipButton").GetComponent<Button>();
 
         levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
         expBar = GameObject.Find("ExpBar").GetComponent<Slider>();

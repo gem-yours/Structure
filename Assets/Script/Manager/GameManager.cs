@@ -39,7 +39,12 @@ public class GameManager : MonoBehaviour
             UIManager.instance.ShowPickSpellWindow(
                 new FireBolt(),
                 new FireBolt(),
-                new FireBolt()
+                new FireBolt(),
+                (Spell spell) =>
+                {
+                    UIManager.instance.HidePickSpellWindow();
+                    Resume();
+                }
             );
         };
 
