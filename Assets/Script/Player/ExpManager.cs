@@ -23,7 +23,6 @@ public class ExpManager
         UIManager.instance.level = level;
         UIManager.instance.requireExp = requireExp;
         UIManager.instance.exp = exp;
-        onLevelUp(level);
     }
 
     private void CheckLevelUp()
@@ -35,6 +34,7 @@ public class ExpManager
         exp -= requireExp;
         level++;
         requireExp = CalcRequireExp(level);
+        onLevelUp(level);
 
         CheckLevelUp();
     }
