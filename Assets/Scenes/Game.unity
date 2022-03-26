@@ -1136,6 +1136,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7443754554355556475, guid: cbb7c60f8f0eb4e4b886991af661a436, type: 3}
   m_PrefabInstance: {fileID: 653158501}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &653158504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7000607098965614407, guid: cbb7c60f8f0eb4e4b886991af661a436, type: 3}
+  m_PrefabInstance: {fileID: 653158501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762ed82136e82f14da4532129fb892b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &742388676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,6 +2170,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576523494}
   m_CullTransparentMesh: 1
+--- !u!114 &1576555896 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7000607098965614407, guid: cbb7c60f8f0eb4e4b886991af661a436, type: 3}
+  m_PrefabInstance: {fileID: 596980711}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762ed82136e82f14da4532129fb892b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1633657509 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7000607098965614407, guid: cbb7c60f8f0eb4e4b886991af661a436, type: 3}
+  m_PrefabInstance: {fileID: 852063228}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762ed82136e82f14da4532129fb892b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1711424590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,22 +2636,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37da595e04c59346915efc1efa7e7a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui: {fileID: 0}
-  attack: {fileID: 0}
-  spell1: {fileID: 0}
-  spell2: {fileID: 0}
-  spell3: {fileID: 0}
-  unique: {fileID: 0}
-  levelText: {fileID: 0}
-  expBar: {fileID: 0}
-  pickSpellWindow: {fileID: 0}
-  spellCard1: {fileID: 0}
-  spellCard2: {fileID: 0}
-  spellCard3: {fileID: 0}
-  skipButton: {fileID: 0}
-  tile: {fileID: 0}
-  wall: {fileID: 0}
-  themisto: {fileID: 0}
+  ui: {fileID: 1963684540}
+  attack: {fileID: 134718297}
+  spell1: {fileID: 2012191212}
+  spell2: {fileID: 1711424590}
+  spell3: {fileID: 924496793}
+  unique: {fileID: 46102230}
+  levelText: {fileID: 1390635177}
+  expBar: {fileID: 528499279}
+  pickSpellWindow: {fileID: 1883696005}
+  spellCard1: {fileID: 1576555896}
+  spellCard2: {fileID: 1633657509}
+  spellCard3: {fileID: 653158504}
+  skipButton: {fileID: 187304719}
+  tile: {fileID: 788487153819532817, guid: d1384067c13bd944e84731dbd3fabc6c, type: 3}
+  wall: {fileID: 2635059627558953219, guid: 98f49e66b75d6874882bc330cdd66cbd, type: 3}
+  themisto: {fileID: 5183985018457638631, guid: 601795cc781507d4ea5ae7f4373bef99, type: 3}
 --- !u!1 &1963684540
 GameObject:
   m_ObjectHideFlags: 0

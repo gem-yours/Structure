@@ -56,19 +56,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
-        ObjectResolver.instance.pickSpellWindow.SetActive(true);
-
         ObjectResolver.instance.spellCard1.spell = spell1;
-        ObjectResolver.instance.spellCard1.onClick = onSpellPicked;
+        ObjectResolver.instance.spellCard1.onClick = (Spell spell) => onSpellPicked(spell);
         ObjectResolver.instance.spellCard2.spell = spell2;
         ObjectResolver.instance.spellCard2.onClick = onSpellPicked;
         ObjectResolver.instance.spellCard3.spell = spell3;
         ObjectResolver.instance.spellCard3.onClick = onSpellPicked;
 
+
         ObjectResolver.instance.skipButton.onClick.RemoveAllListeners();
         ObjectResolver.instance.skipButton.onClick.AddListener(() => onSpellPicked(null));
+
+        ObjectResolver.instance.pickSpellWindow.SetActive(true);
     }
 
     public void HidePickSpellWindow()

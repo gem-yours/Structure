@@ -58,38 +58,10 @@ public class ObjectResolver : MonoBehaviour
         }
     }
 
-    private void ResolveUI()
-    {
-        ui = GameObject.Find("UI");
-        attack = GameObject.Find("AttackButton");
-        spell1 = GameObject.Find("Spell1Button");
-        spell2 = GameObject.Find("Spell2Button");
-        spell3 = GameObject.Find("Spell3Button");
-        unique = GameObject.Find("UniqueButton");
-
-        skipButton = GameObject.Find("SkipButton").GetComponent<Button>();
-
-        levelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
-        expBar = GameObject.Find("ExpBar").GetComponent<Slider>();
-
-        pickSpellWindow = GameObject.Find("PickSpellWindow");
-        spellCard1 = GameObject.Find("SpellCard1").GetComponent<SpellCard>();
-        spellCard2 = GameObject.Find("SpellCard2").GetComponent<SpellCard>();
-        spellCard3 = GameObject.Find("SpellCard3").GetComponent<SpellCard>();
-    }
-
-    private void ResolveResources()
-    {
-        tile = Resources.Load("Map/Tile") as GameObject;
-        wall = Resources.Load("Map/Wall") as GameObject;
-        themisto = Resources.Load("Characters/Themisto") as GameObject;
-    }
 
     // Start is called before the first frame update
     void Start()
     {
-        ResolveUI();
-        ResolveResources();
         isResolveFinished = true;
         foreach (OnResolveFinished listener in listeners)
         {

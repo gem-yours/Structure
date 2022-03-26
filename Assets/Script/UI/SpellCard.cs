@@ -13,8 +13,9 @@ public class SpellCard : MonoBehaviour
         set
         {
             _spell = value;
-            image = Resources.Load<Sprite>("SpellIcon/" + value.imageName);
-            description = value.description;
+
+            spellImage.sprite = Resources.Load<Sprite>("SpellIcon/" + value.imageName);
+            spellDescription.text = value.description;
             // TODO: ダメージの表示
         }
         get
@@ -28,36 +29,21 @@ public class SpellCard : MonoBehaviour
     {
         set
         {
+            if (button == null)
+            {
+                button = GetComponent<Button>();
+            }
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => value(spell));
         }
     }
 
-    private Sprite image
-    {
-        set
-        {
-            spellImage.sprite = value;
-        }
-    }
-
-    private string description
-    {
-        set
-        {
-            spellDescription.text = value;
-        }
-    }
-
     private Button button;
-    private Image spellImage;
-    private TextMeshProUGUI spellDescription;
-    // Start is called before the first frame update
-    void Start()
+    public Image spellImage;
+    public TextMeshProUGUI spellDescription;
+
+    private void Start()
     {
-        button = gameObject.GetComponent<Button>();
-        spellImage = GameObject.Find("SpellImage").GetComponent<Image>();
-        spellDescription = GameObject.Find("SpellDescription").GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
