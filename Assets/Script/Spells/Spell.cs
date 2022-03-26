@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface Spell
 {
-    Sprite image { get; }
+    string imageName { get; }
     string description { get; }
     float damage { get; }
 }

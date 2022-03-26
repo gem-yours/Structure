@@ -13,7 +13,7 @@ public class SpellCard : MonoBehaviour
         set
         {
             _spell = value;
-            image = value.image;
+            image = Resources.Load<Sprite>("SpellIcon/" + value.imageName);
             description = value.description;
             // TODO: ダメージの表示
         }
