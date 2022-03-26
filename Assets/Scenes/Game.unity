@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 187304720}
   - component: {fileID: 187304719}
   m_Layer: 5
-  m_Name: Skip
+  m_Name: SkipButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2380,6 +2380,7 @@ GameObject:
   - component: {fileID: 1953335855}
   - component: {fileID: 1953335857}
   - component: {fileID: 1953335858}
+  - component: {fileID: 1953335859}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2505,6 +2506,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 664cb0e7d1c4a73419e80fa87f970e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1953335859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953335851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37da595e04c59346915efc1efa7e7a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ui: {fileID: 0}
+  attack: {fileID: 0}
+  spell1: {fileID: 0}
+  spell2: {fileID: 0}
+  spell3: {fileID: 0}
+  unique: {fileID: 0}
+  levelText: {fileID: 0}
+  expBar: {fileID: 0}
+  pickSpellWindow: {fileID: 0}
+  spellCard1: {fileID: 0}
+  spellCard2: {fileID: 0}
+  spellCard3: {fileID: 0}
+  skipButton: {fileID: 0}
+  tile: {fileID: 0}
+  wall: {fileID: 0}
+  themisto: {fileID: 0}
 --- !u!1 &1963684540
 GameObject:
   m_ObjectHideFlags: 0

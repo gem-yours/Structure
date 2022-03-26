@@ -26,35 +26,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Init()
-    {
-        MapGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
-
-        playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-        player = playerObject.GetComponent<Player>();
-
-        player.expManager.onLevelUp = (int level) =>
-        {
-            Pause();
-            UIManager.instance.ShowPickSpellWindow(
-                new FireBolt(),
-                new FireBolt(),
-                new FireBolt(),
-                (Spell spell) =>
-                {
-                    UIManager.instance.HidePickSpellWindow();
-                    Resume();
-                }
-            );
-        };
-
-        gameObject.AddComponent<GameCamera>();
-        gameCamera = gameObject.GetComponent<GameCamera>();
-        gameCamera.target = playerObject;
-
-        UIManager.instance.onCast = (SpellSlot slot) => player.Cast(slot);
-    }
-
     public void Pause()
     {
         Time.timeScale = 0;
@@ -82,9 +53,34 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // GameObjct.Findを待たなければならないため
-        // 根本的解決になったいないので、GameObjectの解決をするクラスを作りたい
-        Invoke("Init", 1);
+        ObjectResolver.AddListener((resolver) =>
+        {
+            MapGenerator.Generate(Vector2.zero, 25, 10, resolver.tile, resolver.wall);
+
+            playerObject = Instantiate(resolver.themisto, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+            player = playerObject.GetComponent<Player>();
+
+            player.expManager.onLevelUp = (int level) =>
+            {
+                Pause();
+                UIManager.instance.ShowPickSpellWindow(
+                    new FireBolt(),
+                    new FireBolt(),
+                    new FireBolt(),
+                    (Spell spell) =>
+                    {
+                        UIManager.instance.HidePickSpellWindow();
+                        Resume();
+                    }
+                );
+            };
+
+            gameObject.AddComponent<GameCamera>();
+            gameCamera = gameObject.GetComponent<GameCamera>();
+            gameCamera.target = playerObject;
+
+            UIManager.instance.onCast = (SpellSlot slot) => player.Cast(slot);
+        });
     }
 
     // Update is called once per frame
