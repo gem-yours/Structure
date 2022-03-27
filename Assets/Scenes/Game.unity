@@ -2427,6 +2427,8 @@ GameObject:
   - component: {fileID: 1898764535}
   - component: {fileID: 1898764537}
   - component: {fileID: 1898764536}
+  - component: {fileID: 1898764538}
+  - component: {fileID: 1898764539}
   m_Layer: 5
   m_Name: Deck
   m_TagString: Untagged
@@ -2471,11 +2473,11 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 7
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -2488,6 +2490,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898764534}
   m_CullTransparentMesh: 1
+--- !u!114 &1898764538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898764534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a4a7f12e103f294292dcc583e6497e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  candidates: []
+--- !u!210 &1898764539
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898764534}
+  m_Enabled: 1
+  m_SortingLayerID: 1347520265
+  m_SortingLayer: 1
+  m_SortingOrder: 0
 --- !u!1 &1934342083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2570,7 +2596,6 @@ GameObject:
   - component: {fileID: 1953335855}
   - component: {fileID: 1953335857}
   - component: {fileID: 1953335858}
-  - component: {fileID: 1953335859}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2709,34 +2734,7 @@ MonoBehaviour:
   spellCard2: {fileID: 1633657509}
   spellCard3: {fileID: 653158504}
   skipButton: {fileID: 187304719}
---- !u!114 &1953335859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953335851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f37da595e04c59346915efc1efa7e7a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ui: {fileID: 1963684540}
-  attack: {fileID: 134718297}
-  spell1: {fileID: 2012191212}
-  spell2: {fileID: 1711424590}
-  spell3: {fileID: 924496793}
-  unique: {fileID: 46102230}
-  levelText: {fileID: 1390635177}
-  expBar: {fileID: 528499279}
-  pickSpellWindow: {fileID: 1883696005}
-  spellCard1: {fileID: 1576555896}
-  spellCard2: {fileID: 1633657509}
-  spellCard3: {fileID: 653158504}
-  skipButton: {fileID: 187304719}
-  tile: {fileID: 788487153819532817, guid: d1384067c13bd944e84731dbd3fabc6c, type: 3}
-  wall: {fileID: 2635059627558953219, guid: 98f49e66b75d6874882bc330cdd66cbd, type: 3}
-  themisto: {fileID: 5183985018457638631, guid: 601795cc781507d4ea5ae7f4373bef99, type: 3}
+  deckPreview: {fileID: 1898764538}
 --- !u!1 &1963684540
 GameObject:
   m_ObjectHideFlags: 0

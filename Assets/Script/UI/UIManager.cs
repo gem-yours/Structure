@@ -27,6 +27,16 @@ public class UIManager : MonoBehaviour
     public SpellCard spellCard3;
     public Button skipButton;
 
+    public DeckPreview deckPreview;
+
+    public Deck deck
+    {
+        set
+        {
+            deckPreview.deck = value;
+        }
+    }
+
     public OnCast onCast
     {
         set

@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
 
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
+        UIManager.instance.deck = player.deck;
 
         player.expManager.onLevelUp = (int level) =>
         {
@@ -66,6 +67,10 @@ public class GameManager : MonoBehaviour
                 new FireBolt(),
                 (Spell spell) =>
                 {
+                    if (spell != null)
+                    {
+                        player.deck.AddSpell(spell);
+                    }
                     UIManager.instance.HidePickSpellWindow();
                     Resume();
                 }
