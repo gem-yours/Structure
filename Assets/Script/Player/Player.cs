@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 public enum SpellSlot
@@ -22,6 +23,8 @@ public class Player : MonoBehaviour
             return transform.position;
         }
     }
+
+    public Deck deck;
 
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
@@ -63,6 +66,11 @@ public class Player : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        List<Spell> initialSpells = Enumerable.Repeat(new FireBolt() as Spell, 10).ToList();
+        deck = new Deck(
+            initialSpells
+        );
     }
 
     // Update is called once per frame
