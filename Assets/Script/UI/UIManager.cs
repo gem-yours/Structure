@@ -10,15 +10,32 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public delegate void OnCast(SpellSlot spellSlot);
 
+
+    public GameObject ui;
+    public Button attackButton;
+    public Button spell1Button;
+    public Button spell2Button;
+    public Button spell3Button;
+    public Button uniqueButton;
+
+    public TextMeshProUGUI levelText;
+    public Slider expBar;
+
+    public GameObject pickSpellWindow;
+    public SpellCard spellCard1;
+    public SpellCard spellCard2;
+    public SpellCard spellCard3;
+    public Button skipButton;
+
     public OnCast onCast
     {
         set
         {
-            ObjectResolver.instance.attack.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Attack));
-            ObjectResolver.instance.spell1.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell1));
-            ObjectResolver.instance.spell2.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell2));
-            ObjectResolver.instance.spell3.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell3));
-            ObjectResolver.instance.unique.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Unique));
+            attackButton.onClick.AddListener(() => value(SpellSlot.Attack));
+            spell1Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell1));
+            spell2Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell2));
+            spell3Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell3));
+            uniqueButton.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Unique));
         }
     }
 
@@ -26,21 +43,21 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            ObjectResolver.instance.levelText.text = value.ToString();
+            levelText.text = value.ToString();
         }
     }
     public int requireExp
     {
         set
         {
-            ObjectResolver.instance.expBar.maxValue = value;
+            expBar.maxValue = value;
         }
     }
     public int exp
     {
         set
         {
-            ObjectResolver.instance.expBar.value = value;
+            expBar.value = value;
         }
     }
 
@@ -48,34 +65,34 @@ public class UIManager : MonoBehaviour
     {
         get
         {
-            return ObjectResolver.instance.ui.activeSelf;
+            return ui.activeSelf;
         }
         set
         {
-            ObjectResolver.instance.ui.SetActive(value);
+            ui.SetActive(value);
         }
     }
 
 
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
-        ObjectResolver.instance.spellCard1.spell = spell1;
-        ObjectResolver.instance.spellCard1.onClick = (Spell spell) => onSpellPicked(spell);
-        ObjectResolver.instance.spellCard2.spell = spell2;
-        ObjectResolver.instance.spellCard2.onClick = onSpellPicked;
-        ObjectResolver.instance.spellCard3.spell = spell3;
-        ObjectResolver.instance.spellCard3.onClick = onSpellPicked;
+        spellCard1.spell = spell1;
+        spellCard1.onClick = (Spell spell) => onSpellPicked(spell);
+        spellCard2.spell = spell2;
+        spellCard2.onClick = onSpellPicked;
+        spellCard3.spell = spell3;
+        spellCard3.onClick = onSpellPicked;
 
 
-        ObjectResolver.instance.skipButton.onClick.RemoveAllListeners();
-        ObjectResolver.instance.skipButton.onClick.AddListener(() => onSpellPicked(null));
+        skipButton.onClick.RemoveAllListeners();
+        skipButton.onClick.AddListener(() => onSpellPicked(null));
 
-        ObjectResolver.instance.pickSpellWindow.SetActive(true);
+        pickSpellWindow.SetActive(true);
     }
 
     public void HidePickSpellWindow()
     {
-        ObjectResolver.instance.pickSpellWindow.SetActive(false);
+        pickSpellWindow.SetActive(false);
     }
 
     private void Awake()
@@ -94,10 +111,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ObjectResolver.AddListener((resolver) =>
-        {
-            resolver.pickSpellWindow.SetActive(false);
-        });
+        pickSpellWindow.SetActive(false);
     }
 
     // Update is called once per frame
