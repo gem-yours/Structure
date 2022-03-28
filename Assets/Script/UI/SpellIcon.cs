@@ -14,7 +14,7 @@ public class SpellIcon : MonoBehaviour
         {
             _spell = value;
 
-            spellImage.sprite = Resources.Load<Sprite>("SpellIcon/" + value.imageName);
+            spellImage.sprite = Resources.Load<Sprite>(SpellUtil.getImageName(value));
         }
         get
         {

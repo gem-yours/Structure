@@ -12,9 +12,10 @@ public class Deck
     public List<Spell> discardedSpells { private set; get; }
 
     public delegate void OnChange(Deck deck);
+    public delegate void OnDraw(Deck deck, Spell spell);
 
     public OnChange onAdd { set; private get; } = (Deck deck) => { };
-    public OnChange onPick { set; private get; } = (Deck deck) => { };
+    public OnDraw onDraw { set; private get; } = (Deck deck, Spell spell) => { };
     public OnChange onShuffle { set; private get; } = (Deck deck) => { };
 
 
@@ -67,7 +68,7 @@ public class Deck
         return candidates;
     }
 
-    public Spell PickSpell()
+    public Spell DrawSpell()
     {
         if (remaingSpells.Count == 0)
         {
@@ -76,7 +77,7 @@ public class Deck
         var spell = remaingSpells[0];
         discardedSpells.Add(spell);
         remaingSpells.Remove(spell);
-        onPick(this);
+        onDraw(this, spell);
         return spell;
     }
 

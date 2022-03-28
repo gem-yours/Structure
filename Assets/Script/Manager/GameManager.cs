@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
 
-        UIManager.instance.onCast = (SpellSlot slot) => player.Cast(slot);
+        UIManager.instance.onCast = (SpellSlot slot) => player.Attack(slot);
     }
 
     // Update is called once per frame

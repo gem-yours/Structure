@@ -37,14 +37,6 @@ public class Player : MonoBehaviour
         animator.SetBool("isWalking", direction != Vector2.zero);
     }
 
-    public void Cast(SpellSlot spellSlot)
-    {
-        var boltObject = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
-        var bolt = boltObject.GetComponent<BoltProjectile>();
-        bolt.spell = new FireBolt();
-        bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
-    }
-
     private void Move()
     {
         var current = rb2D.position;
@@ -60,6 +52,28 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Attack(SpellSlot spellSlot)
+    {
+        var boltObject = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
+        var bolt = boltObject.GetComponent<BoltProjectile>();
+        bolt.spell = new FireBolt();
+        bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
+    }
+
+    private IEnumerator StartCast(Spell spell)
+    {
+        for (int time = 0; time < spell.magazine; time++)
+        {
+            Debug.Log(deck.remaingSpells.Count);
+            yield return new WaitForSeconds(spell.delay);
+        }
+        DrawSpell();
+    }
+
+    private void DrawSpell()
+    {
+        StartCoroutine(StartCast(deck.DrawSpell()));
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -67,8 +81,13 @@ public class Player : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 
-        List<Spell> initialSpells = Enumerable.Repeat(new FireBolt() as Spell, 10).ToList();
+        List<Spell> initialSpells = Enumerable.Repeat(new FireBolt() as Spell, 3).ToList();
         deck.AddSpells(initialSpells);
+
+        // for (int i = 0; i < 4; i++)
+        // {
+        DrawSpell();
+        // }
     }
 
     // Update is called once per frame

@@ -6,9 +6,7 @@ using System.Linq;
 
 public class DeckPreview : MonoBehaviour
 {
-    private List<Spell> _currentCandidates = new List<Spell> { null, null, null };
-
-    public List<GameObject> spellIcons = new List<GameObject>();
+    private List<SpellIcon> spellIcons = new List<SpellIcon>();
 
     private int numberOfCandidates = 3;
     public Deck deck
@@ -22,7 +20,7 @@ public class DeckPreview : MonoBehaviour
             value.onAdd = (Deck deck) =>
             {
                 // デッキの枚数が3枚以上ある場合は、デッキにカードが追加されても新たに表示する必要はない
-                if (_currentCandidates.FindAll(x => x != null).Count >= 3)
+                if (spellIcons.Select(x => x.spell).ToList().FindAll(x => x != null).Count >= 3)
                 {
                     return;
                 }
@@ -34,30 +32,37 @@ public class DeckPreview : MonoBehaviour
                     if (spell != null)
                     {
                         ShowSpell(spell);
-                        _currentCandidates.Add(spell);
                     }
                 }
 
             };
-            value.onPick = (Deck deck) =>
+            value.onDraw = (Deck deck, Spell spell) =>
             {
-                HideSpell(_currentCandidates[0]);
-
-                var spell = deck.LatestCandidates(numberOfCandidates).Last();
-                if (spell != null)
+                // ドローされたカード=最新のカードを削除する
+                var index = spellIcons.Select(x => x.spell).ToList().FindIndex(x => x == spell);
+                if (index > -1)
                 {
-                    _currentCandidates.Add(spell);
-                    ShowSpell(spell);
+                    HideSpell(spellIcons[index]);
+                }
+
+                // 新たなデッキトップのスペルを表示する
+                var candidates = deck.LatestCandidates(numberOfCandidates);
+                foreach (Spell newSpell in candidates.Except(spellIcons.Select(x => x.spell).ToList()))
+                {
+                    ShowSpell(newSpell);
                 }
             };
             value.onShuffle = (Deck deck) =>
-            {
-                _currentCandidates.RemoveAll(x => true);
-                foreach (Spell spell in _currentCandidates)
                 {
-                    HideSpell(spell);
-                }
-            };
+                    foreach (SpellIcon spellIcon in spellIcons)
+                    {
+                        HideSpell(spellIcon);
+                    }
+                    foreach (Spell spell in deck.LatestCandidates(numberOfCandidates))
+                    {
+                        ShowSpell(spell);
+                    }
+                };
         }
     }
 
@@ -66,19 +71,20 @@ public class DeckPreview : MonoBehaviour
     {
         var spellIcon = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
         spellIcon.transform.localScale = Vector3.one;
-        spellIcon.GetComponent<SpellIcon>().spell = spell;
-        spellIcons.Add(spellIcon);
+        var si = spellIcon.GetComponent<SpellIcon>();
+        si.spell = spell;
+        spellIcons.Add(si);
     }
 
-    private void HideSpell(Spell spell)
+    private void HideSpell(SpellIcon spellIcon)
     {
-        var index = _currentCandidates.FindIndex(x => x == spell);
-        if (index == -1)
+        var index = spellIcons.FindIndex(x => x == spellIcon);
+        if (index <= -1)
         {
+            Debug.Log("not found");
             return;
         }
-        _currentCandidates.RemoveAt(index);
-        Destroy(spellIcons[index]);
+        Destroy(spellIcons[index].gameObject);
         spellIcons.RemoveAt(index);
     }
 
