@@ -37,18 +37,6 @@ public class GameManager : MonoBehaviour
         UIManager.instance.isUiActive = true;
     }
 
-    public void onDrag(Vector2 direction)
-    {
-        // y方向のセンシを下げる
-        var correctedDir = Vector2.Scale(direction, new Vector2(1, 0.5f));
-        player.ChangeMoveDirection(correctedDir);
-    }
-
-    public void EndDragging()
-    {
-        player.ChangeMoveDirection(Vector2.zero);
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -82,6 +70,17 @@ public class GameManager : MonoBehaviour
         gameCamera.target = playerObject;
 
         UIManager.instance.onCast = (SpellSlot slot) => player.Attack(slot);
+
+        UIManager.instance.dragController.onDragging = (Vector2 displacement) =>
+        {
+            // y方向のセンシを下げる
+            var correctedDir = Vector2.Scale(displacement, new Vector2(1, 0.5f));
+            player.ChangeMoveDirection(correctedDir);
+        };
+        UIManager.instance.dragController.onEndDragging = () =>
+        {
+            player.ChangeMoveDirection(Vector2.zero);
+        };
     }
 
     // Update is called once per frame

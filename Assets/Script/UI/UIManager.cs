@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
 
     public DeckPreview deckPreview;
 
+    public DragController dragController;
+
     public Deck deck
     {
         set
@@ -79,6 +81,10 @@ public class UIManager : MonoBehaviour
         }
         set
         {
+            if (!value)
+            {
+                dragController.ForceEndDrag();
+            }
             ui.SetActive(value);
         }
     }

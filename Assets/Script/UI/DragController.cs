@@ -11,61 +11,38 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public bool dragOnSurfaces = true;
 
     public delegate void OnDragging(Vector2 displacement);
+    public OnDragging onDragging { get; set; }
+    public delegate void OnEndDraggging();
+    public OnEndDraggging onEndDragging { get; set; }
 
     private GameObject draggingIcon;
     private RectTransform draggingPlane;
     private Vector2 startPoint;
 
-    private List<IObserver<Vector2>> observers = new List<IObserver<Vector2>>();
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void OnBeginDrag(PointerEventData eventData)
     {
-        var canvas = GameObject.Find("UI").GetComponent<Canvas>();
-        if (canvas == null)
-            return;
-
-        // We have clicked something that can be dragged.
-        // What we want to do is create an icon for this.
-        draggingIcon = new GameObject("icon");
-
-        draggingIcon.transform.SetParent(canvas.transform, false);
-        draggingIcon.transform.SetAsLastSibling();
-
-        var image = draggingIcon.AddComponent<Image>();
-
-        image.sprite = GetComponent<Image>().sprite;
-        image.SetNativeSize();
-
-        if (dragOnSurfaces)
-            draggingPlane = transform as RectTransform;
-        else
-            draggingPlane = canvas.transform as RectTransform;
+        CreateDraggingImage(eventData.position);
 
         SetDraggedPosition(eventData);
 
         startPoint = eventData.position;
-        GameManager.instance.onDrag((eventData.position - startPoint));
+        if (onDragging != null)
+        {
+            onDragging((eventData.position - startPoint));
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (draggingIcon != null)
             SetDraggedPosition(eventData);
+        else
+            CreateDraggingImage(eventData.position);
 
-        GameManager.instance.onDrag((eventData.position - startPoint));
+        if (onDragging != null)
+        {
+            onDragging((eventData.position - startPoint));
+        }
     }
 
     private void SetDraggedPosition(PointerEventData data)
@@ -83,6 +60,38 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         if (draggingIcon != null)
             Destroy(draggingIcon);
-        GameManager.instance.EndDragging();
+        if (onEndDragging != null)
+        {
+            onEndDragging();
+        }
+    }
+
+    public void ForceEndDrag()
+    {
+        OnEndDrag(null);
+    }
+
+    private void CreateDraggingImage(Vector3 position)
+    {
+        var canvas = GameObject.Find("UI").GetComponent<Canvas>();
+        if (canvas == null)
+            return;
+        // We have clicked something that can be dragged.
+        // What we want to do is create an icon for this.
+        draggingIcon = new GameObject("icon");
+
+        draggingIcon.transform.SetParent(canvas.transform, false);
+        draggingIcon.transform.SetAsLastSibling();
+        draggingIcon.transform.position = position;
+
+        var image = draggingIcon.AddComponent<Image>();
+
+        image.sprite = GetComponent<Image>().sprite;
+        image.SetNativeSize();
+
+        if (dragOnSurfaces)
+            draggingPlane = transform as RectTransform;
+        else
+            draggingPlane = canvas.transform as RectTransform;
     }
 }

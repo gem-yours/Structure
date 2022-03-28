@@ -1584,10 +1584,10 @@ RectTransform:
   m_Father: {fileID: 1963684544}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -25, y: 25}
-  m_SizeDelta: {x: 600, y: 400}
+  m_AnchorMin: {x: 0.65, y: 0.025}
+  m_AnchorMax: {x: 0.975, y: 0.475}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &1140682160
 CanvasRenderer:
@@ -2429,6 +2429,7 @@ GameObject:
   - component: {fileID: 1898764536}
   - component: {fileID: 1898764538}
   - component: {fileID: 1898764539}
+  - component: {fileID: 1898764540}
   m_Layer: 5
   m_Name: Deck
   m_TagString: Untagged
@@ -2451,11 +2452,11 @@ RectTransform:
   m_Father: {fileID: 1963684544}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.875, y: 0.5}
-  m_AnchorMax: {x: 0.975, y: 0.975}
+  m_AnchorMin: {x: 0.9, y: 0.5}
+  m_AnchorMax: {x: 0.95, y: 0.975}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1898764536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2480,7 +2481,7 @@ MonoBehaviour:
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
 --- !u!222 &1898764537
 CanvasRenderer:
@@ -2502,7 +2503,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a4a7f12e103f294292dcc583e6497e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  candidates: []
 --- !u!210 &1898764539
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -2514,6 +2514,20 @@ SortingGroup:
   m_SortingLayerID: 1347520265
   m_SortingLayer: 1
   m_SortingOrder: 0
+--- !u!114 &1898764540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898764534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1934342083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2735,6 +2749,7 @@ MonoBehaviour:
   spellCard3: {fileID: 653158504}
   skipButton: {fileID: 187304719}
   deckPreview: {fileID: 1898764538}
+  dragController: {fileID: 1357766568}
 --- !u!1 &1963684540
 GameObject:
   m_ObjectHideFlags: 0
