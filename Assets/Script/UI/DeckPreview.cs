@@ -43,19 +43,10 @@ public class DeckPreview : MonoBehaviour
 
     private GameObject ShowSpell(Spell spell)
     {
-        var go = new GameObject();
-        var image = go.AddComponent<Image>();
-        image.sprite = Resources.Load<Sprite>("SpellIcon/" + spell.imageName);
-        go.AddComponent<LayoutElement>();
-        var fitter = go.AddComponent<AspectRatioFitter>();
-        fitter.aspectMode = AspectRatioFitter.AspectMode.WidthControlsHeight;
-        fitter.aspectRatio = 1;
-        go.transform.SetParent(this.gameObject.transform);
-        go.transform.position = Vector3.zero;
-        go.transform.localScale = Vector3.one;
-
-
-        return go;
+        var spellIcon = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
+        spellIcon.transform.localScale = Vector3.one;
+        spellIcon.GetComponent<SpellIcon>().spell = spell;
+        return spellIcon;
     }
 
     // Start is called before the first frame update
