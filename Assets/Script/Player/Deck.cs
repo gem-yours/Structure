@@ -73,7 +73,7 @@ public class Deck
         {
             Shuffle();
         }
-        var spell = remaingSpells.Last();
+        var spell = remaingSpells[0];
         discardedSpells.Add(spell);
         remaingSpells.Remove(spell);
         onPick(this);
