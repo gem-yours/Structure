@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoltProjectile : MonoBehaviour
+public class BoltProjectile : MonoBehaviour, SpellEffect
 {
     public Spell spell { set; private get; }
     public Vector2 direction = Vector2.right;

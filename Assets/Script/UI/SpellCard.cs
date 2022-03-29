@@ -14,7 +14,7 @@ public class SpellCard : MonoBehaviour
         {
             _spell = value;
 
-            spellImage.sprite = Resources.Load<Sprite>(SpellUtil.getImageName(value));
+            spellImage.sprite = spell.image;
             spellDescription.text = value.description;
             // TODO: ダメージの表示
         }

@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
     {
         for (int time = 0; time < spell.magazine; time++)
         {
-            Debug.Log(deck.remaingSpells.Count);
+            // Instantiate(Resources.Load())
             yield return new WaitForSeconds(spell.delay);
         }
         DrawSpell();
