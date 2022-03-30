@@ -24,7 +24,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    public Deck deck = new Deck();
+    public Deck deck = new Deck(
+        Enumerable.Repeat(new FireBolt() as Spell, 3).ToList()
+        );
 
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
@@ -80,10 +82,6 @@ public class Player : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
-        List<Spell> initialSpells = Enumerable.Repeat(new FireBolt() as Spell, 3).ToList();
-        deck.AddSpells(initialSpells);
-
         // for (int i = 0; i < 4; i++)
         // {
         DrawSpell();

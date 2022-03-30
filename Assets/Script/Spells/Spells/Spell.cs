@@ -10,7 +10,6 @@ public abstract class Spell
     public abstract int magazine { get; }
     public abstract float delay { get; }
 
-
     public Sprite image
     {
         get
@@ -26,4 +25,5 @@ public abstract class Spell
             return Resources.Load<GameObject>("Effects/" + name);
         }
     }
+
 }

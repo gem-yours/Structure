@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+#nullable enable
 public class Deck
 {
     private List<Spell> _spells = new List<Spell>();
@@ -15,6 +16,8 @@ public class Deck
         }
     }
 
+
+    // 山札・捨札はインデックスが大きいものがデッキトップ
     private List<Spell> _remaingSpells = new List<Spell>();
     public List<Spell> remaingSpells
     {
@@ -33,12 +36,13 @@ public class Deck
         }
     }
 
-    public delegate void OnChange(Deck deck);
+    public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(Deck deck, Spell spell);
+    public delegate void OnShuffle(Deck deck);
 
-    public OnChange onAdd { set; private get; } = (Deck deck) => { };
+    public OnAdd onAdd { set; private get; } = (Deck deck, Spell spell) => { };
     public OnDraw onDraw { set; private get; } = (Deck deck, Spell spell) => { };
-    public OnChange onShuffle { set; private get; } = (Deck deck) => { };
+    public OnShuffle onShuffle { set; private get; } = (Deck deck) => { };
 
 
     public Deck() : this(new List<Spell>())
@@ -50,44 +54,31 @@ public class Deck
         this._spells = new List<Spell>(spells);
         _remaingSpells = new List<Spell>(spells);
         _discardedSpells = new List<Spell>();
-    }
-
-    private void _AddSpell(Spell spell)
-    {
-        _spells.Add(spell);
-        _remaingSpells.Add(spell);
+        onShuffle(this);
     }
 
     public void AddSpell(Spell spell)
     {
-        _AddSpell(spell);
-        onAdd(this);
+        _spells.Insert(0, spell);
+        _remaingSpells.Add(spell);
+        onAdd(this, spell);
     }
 
-    public void AddSpells(List<Spell> spells)
+    // 山札の上からnumberOfCandiates個のスペルを返す
+    // 足りない場合はnullを返す
+    public List<Spell?> LatestCandidates(int numberOfCandidates)
     {
-        foreach (Spell spell in spells)
-        {
-            _AddSpell(spell);
-        }
-        onAdd(this);
-    }
-
-    // デッキの上からnumberOfCandiates個のスペルを返す
-    // 足りない場合はnull
-    public List<Spell> LatestCandidates(int numberOfCandidates)
-    {
+        // 指定された個数より山札が少なければ、nullを追加して返す
         if (_remaingSpells.Count <= numberOfCandidates)
         {
-            return _remaingSpells;
+            var candidates = new List<Spell?>(_remaingSpells);
+            while (candidates.Count < numberOfCandidates)
+            {
+                candidates.Add(null);
+            }
+            return candidates;
         }
-
-        var candidates = _remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList();
-        while (candidates.Count < numberOfCandidates)
-        {
-            candidates.Add(null);
-        }
-        return new List<Spell>(candidates);
+        return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
     }
 
     public Spell DrawSpell()

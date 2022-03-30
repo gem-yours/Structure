@@ -1,76 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
+#nullable enable
 public class DeckPreview : MonoBehaviour
 {
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
 
-    private int numberOfCandidates = 3;
+    private int numberOfCandidates = 5;
     public Deck deck
     {
         set
         {
-            if (value == null)
+            value.onAdd = (Deck deck, Spell spell) =>
             {
-                return;
-            }
-            value.onAdd = (Deck deck) =>
-            {
-                var candidates = deck.LatestCandidates(numberOfCandidates);
-                // デッキトップが下に表示されるようにする
-                candidates.Reverse();
-                foreach (Spell spell in candidates)
+                // 表示数が最大の場合は、デッキにカードが追加されても新たに表示する必要はない
+                if (spellIcons.Count == numberOfCandidates)
                 {
-                    // デッキの枚数が3枚以上ある場合は、デッキにカードが追加されても新たに表示する必要はない
-                    if (spellIcons.Select(x => x.spell).ToList().FindAll(x => x != null).Count >= 3)
-                    {
-                        return;
-                    }
-                    if (spell != null)
-                    {
-                        ShowSpell(spell);
-                    }
+                    return;
                 }
+                ShowSpell(spell);
 
             };
             value.onDraw = (Deck deck, Spell spell) =>
             {
                 // ドローされたカード=最新のカードを削除する
                 var index = spellIcons.Select(x => x.spell).ToList().FindIndex(x => x == spell);
-                if (index > -1)
+                if (index < 0)
                 {
-                    HideSpell(spellIcons[index]);
+                    return;
                 }
 
+                HideSpell(spellIcons[index]);
                 // 新たなデッキトップのスペルを表示する
-                var candidates = deck.LatestCandidates(numberOfCandidates);
-                foreach (Spell newSpell in candidates.Except(spellIcons.Select(x => x.spell).ToList()))
+                var candidate = deck.LatestCandidates(numberOfCandidates).Last();
+                ShowSpell(candidate);
+            };
+
+            value.onShuffle = (Deck deck) =>
+            {
+                var tmp = new List<SpellIcon>(spellIcons);
+                foreach (SpellIcon spellIcon in tmp)
                 {
-                    ShowSpell(newSpell);
+                    HideSpell(spellIcon);
+                }
+                foreach (Spell? spell in deck.LatestCandidates(numberOfCandidates))
+                {
+                    ShowSpell(spell);
                 }
             };
-            value.onShuffle = (Deck deck) =>
-                {
-                    var tmp = new List<SpellIcon>(spellIcons);
-                    foreach (SpellIcon spellIcon in tmp)
-                    {
-                        HideSpell(spellIcon);
-                    }
-                    foreach (Spell spell in deck.LatestCandidates(numberOfCandidates))
-                    {
-                        ShowSpell(spell);
-                    }
-                };
+
+            foreach (Spell? spell in value.LatestCandidates(numberOfCandidates))
+            {
+                ShowSpell(spell);
+            }
         }
     }
 
 
-    private void ShowSpell(Spell spell)
+    private void ShowSpell(Spell? spell)
     {
+        if (spell == null)
+        {
+            return;
+        }
         var spellIcon = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
+        if (spellIcon == null)
+        {
+            return;
+        }
         spellIcon.transform.localScale = Vector3.one;
         var si = spellIcon.GetComponent<SpellIcon>();
         si.spell = spell;
@@ -82,7 +83,6 @@ public class DeckPreview : MonoBehaviour
         var index = spellIcons.FindIndex(x => x == spellIcon);
         if (index <= -1)
         {
-            Debug.Log("not found");
             return;
         }
         Destroy(spellIcons[index].gameObject);
