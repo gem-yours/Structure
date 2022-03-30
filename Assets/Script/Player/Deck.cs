@@ -6,10 +6,32 @@ using System.Linq;
 
 public class Deck
 {
-    public List<Spell> spells { private set; get; }
+    private List<Spell> _spells = new List<Spell>();
+    public List<Spell> spells
+    {
+        get
+        {
+            return new List<Spell>(_spells);
+        }
+    }
 
-    public List<Spell> remaingSpells { private set; get; }
-    public List<Spell> discardedSpells { private set; get; }
+    private List<Spell> _remaingSpells = new List<Spell>();
+    public List<Spell> remaingSpells
+    {
+        get
+        {
+            return new List<Spell>(_remaingSpells);
+        }
+    }
+
+    private List<Spell> _discardedSpells = new List<Spell>();
+    public List<Spell> discardedSpells
+    {
+        get
+        {
+            return new List<Spell>(_discardedSpells);
+        }
+    }
 
     public delegate void OnChange(Deck deck);
     public delegate void OnDraw(Deck deck, Spell spell);
@@ -25,15 +47,15 @@ public class Deck
     }
     public Deck(List<Spell> spells)
     {
-        this.spells = new List<Spell>(spells);
-        remaingSpells = new List<Spell>(spells);
-        discardedSpells = new List<Spell>();
+        this._spells = new List<Spell>(spells);
+        _remaingSpells = new List<Spell>(spells);
+        _discardedSpells = new List<Spell>();
     }
 
     private void _AddSpell(Spell spell)
     {
-        spells.Add(spell);
-        remaingSpells.Add(spell);
+        _spells.Add(spell);
+        _remaingSpells.Add(spell);
     }
 
     public void AddSpell(Spell spell)
@@ -55,36 +77,36 @@ public class Deck
     // 足りない場合はnull
     public List<Spell> LatestCandidates(int numberOfCandidates)
     {
-        if (remaingSpells.Count <= numberOfCandidates)
+        if (_remaingSpells.Count <= numberOfCandidates)
         {
-            return remaingSpells;
+            return _remaingSpells;
         }
 
-        var candidates = remaingSpells.Skip(remaingSpells.Count - numberOfCandidates).ToList();
+        var candidates = _remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList();
         while (candidates.Count < numberOfCandidates)
         {
             candidates.Add(null);
         }
-        return candidates;
+        return new List<Spell>(candidates);
     }
 
     public Spell DrawSpell()
     {
-        if (remaingSpells.Count == 0)
+        if (_remaingSpells.Count == 0)
         {
             Shuffle();
         }
-        var spell = remaingSpells[0];
-        discardedSpells.Add(spell);
-        remaingSpells.Remove(spell);
+        var spell = _remaingSpells[0];
+        _discardedSpells.Add(spell);
+        _remaingSpells.Remove(spell);
         onDraw(this, spell);
         return spell;
     }
 
     private void Shuffle()
     {
-        discardedSpells.RemoveAll(x => true);
-        remaingSpells = spells.OrderBy(x => Guid.NewGuid()).ToList();
+        _discardedSpells.RemoveAll(x => true);
+        _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         onShuffle(this);
     }
 }

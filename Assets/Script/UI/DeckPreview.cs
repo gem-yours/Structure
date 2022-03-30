@@ -19,16 +19,16 @@ public class DeckPreview : MonoBehaviour
             }
             value.onAdd = (Deck deck) =>
             {
-                // デッキの枚数が3枚以上ある場合は、デッキにカードが追加されても新たに表示する必要はない
-                if (spellIcons.Select(x => x.spell).ToList().FindAll(x => x != null).Count >= 3)
-                {
-                    return;
-                }
                 var candidates = deck.LatestCandidates(numberOfCandidates);
                 // デッキトップが下に表示されるようにする
                 candidates.Reverse();
                 foreach (Spell spell in candidates)
                 {
+                    // デッキの枚数が3枚以上ある場合は、デッキにカードが追加されても新たに表示する必要はない
+                    if (spellIcons.Select(x => x.spell).ToList().FindAll(x => x != null).Count >= 3)
+                    {
+                        return;
+                    }
                     if (spell != null)
                     {
                         ShowSpell(spell);
@@ -54,7 +54,8 @@ public class DeckPreview : MonoBehaviour
             };
             value.onShuffle = (Deck deck) =>
                 {
-                    foreach (SpellIcon spellIcon in spellIcons)
+                    var tmp = new List<SpellIcon>(spellIcons);
+                    foreach (SpellIcon spellIcon in tmp)
                     {
                         HideSpell(spellIcon);
                     }
