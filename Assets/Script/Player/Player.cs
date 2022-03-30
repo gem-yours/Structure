@@ -64,11 +64,13 @@ public class Player : MonoBehaviour
         bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
     }
 
-    private IEnumerator StartCast(Spell spell)
+    private IEnumerator Casting(Spell spell)
     {
         for (int time = 0; time < spell.magazine; time++)
         {
-            // Instantiate(Resources.Load())
+            var spellEffect = (Instantiate(spell.prefab, transform.position, Quaternion.identity) as GameObject).GetComponent<SpellEffect>();
+            spellEffect.spell = spell;
+            spellEffect.Target(EnemiesManager.instance.NearestEnemy(transform.position));
             yield return new WaitForSeconds(spell.delay);
         }
     }
@@ -86,7 +88,7 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(drawTime);
                 spell = deck.DrawSpell();
             }
-            yield return StartCast(spell);
+            yield return Casting(spell);
         }
     }
 

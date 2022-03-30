@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#nullable enable
 public abstract class Spell
 {
     public abstract string name { get; }
@@ -18,11 +19,11 @@ public abstract class Spell
         }
     }
 
-    public GameObject prefab
+    public Object prefab
     {
         get
         {
-            return Resources.Load<GameObject>("Effects/" + name);
+            return Resources.Load<Object>("Effects/" + name);
         }
     }
 
