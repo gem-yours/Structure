@@ -81,11 +81,11 @@ public class Deck
         return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
     }
 
-    public Spell DrawSpell()
+    public Spell? DrawSpell()
     {
         if (_remaingSpells.Count == 0)
         {
-            Shuffle();
+            return null;
         }
         var spell = _remaingSpells[0];
         _discardedSpells.Add(spell);
@@ -94,7 +94,7 @@ public class Deck
         return spell;
     }
 
-    private void Shuffle()
+    public void Shuffle()
     {
         _discardedSpells.RemoveAll(x => true);
         _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();

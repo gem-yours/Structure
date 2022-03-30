@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     public Deck deck = new Deck(
         Enumerable.Repeat(new FireBolt() as Spell, 3).ToList()
         );
+    public float drawTime { get; } = 0.5f;
+    public float shuffleTime { get; } = 1f;
 
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D rb2D;
@@ -69,12 +71,23 @@ public class Player : MonoBehaviour
             // Instantiate(Resources.Load())
             yield return new WaitForSeconds(spell.delay);
         }
-        DrawSpell();
     }
 
-    private void DrawSpell()
+    private IEnumerator DrawSpell()
     {
-        StartCoroutine(StartCast(deck.DrawSpell()));
+        for (; ; )
+        {
+            yield return new WaitForSeconds(drawTime);
+            var spell = deck.DrawSpell();
+            if (spell == null)
+            {
+                yield return new WaitForSeconds(shuffleTime);
+                deck.Shuffle();
+                yield return new WaitForSeconds(drawTime);
+                spell = deck.DrawSpell();
+            }
+            yield return StartCast(spell);
+        }
     }
 
     // Start is called before the first frame update
@@ -84,7 +97,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         // for (int i = 0; i < 4; i++)
         // {
-        DrawSpell();
+        StartCoroutine(DrawSpell());
         // }
     }
 
