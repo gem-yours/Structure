@@ -16,7 +16,6 @@ public class UIManager : MonoBehaviour
     public Button spell1Button;
     public Button spell2Button;
     public Button spell3Button;
-    public Button uniqueButton;
 
     public TextMeshProUGUI levelText;
     public Slider expBar;
@@ -47,7 +46,6 @@ public class UIManager : MonoBehaviour
             spell1Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell1));
             spell2Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell2));
             spell3Button.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell3));
-            uniqueButton.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Unique));
         }
     }
 

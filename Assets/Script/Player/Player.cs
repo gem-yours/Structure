@@ -10,7 +10,6 @@ public enum SpellSlot
     Spell1,
     Spell2,
     Spell3,
-    Unique
 }
 public class Player : MonoBehaviour
 {
