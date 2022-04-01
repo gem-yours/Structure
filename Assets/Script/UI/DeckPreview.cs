@@ -34,7 +34,9 @@ public class DeckPreview : MonoBehaviour
                     return;
                 }
 
+                UIManager.instance.SetSpell(spellIcons[index]);
                 HideSpell(spellIcons[index]);
+
                 // 新たなデッキトップのスペルを表示する
                 var candidate = deck.LatestCandidates(numberOfCandidates).Last();
                 ShowSpell(candidate);
@@ -85,7 +87,6 @@ public class DeckPreview : MonoBehaviour
         {
             return;
         }
-        Destroy(spellIcons[index].gameObject);
         spellIcons.RemoveAt(index);
     }
 
