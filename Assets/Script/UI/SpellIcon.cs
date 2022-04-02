@@ -36,11 +36,18 @@ public class SpellIcon : MonoBehaviour
     private IEnumerator _Attach(GameObject target)
     {
         var animationDuration = 0.5f;
+        var rotationCurve = AnimationCurve.EaseInOut(0, 0, animationDuration, 0);
+        rotationCurve.AddKey(0.2f, 50);
         for (float current = 0; current < animationDuration; current += Time.deltaTime)
         {
             var displacment = transform.position - target.transform.position;
             var easeInOut = AnimationCurve.EaseInOut(0, displacment.magnitude, animationDuration, 0);
             transform.position = target.transform.position + displacment.normalized * easeInOut.Evaluate(current);
+            var rotationDegree = rotationCurve.Evaluate(current);
+            if (rotationDegree > 0)
+            {
+                transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, rotationDegree));
+            }
             yield return null;
         }
         // transform.position = target.transform.position;
