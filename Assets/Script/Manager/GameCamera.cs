@@ -10,7 +10,7 @@ public class GameCamera : MonoBehaviour
         {
             return _target;
         }
-        set 
+        set
         {
             _target = value;
             initialDistance = transform.position - target.transform.position;
@@ -28,8 +28,9 @@ public class GameCamera : MonoBehaviour
         {
             // 1秒かけてカメラ位置が最遠になるように
             _offset += value.normalized / offsetSize;
-             if (_offset.magnitude > offsetSize) {
-                 _offset = _offset.normalized * offsetSize;
+            if (_offset.magnitude > offsetSize)
+            {
+                _offset = _offset.normalized * offsetSize;
             }
         }
     }
@@ -46,12 +47,13 @@ public class GameCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target == null) {
+        if (target == null)
+        {
             return;
         }
 
         // offsetによってカメラ位置をずらすことで移動を表現したい
         var newPosition = target.transform.position + initialDistance + _offset;
-        transform.position = Vector3.MoveTowards(transform.position, newPosition, speed);        
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, speed);
     }
 }

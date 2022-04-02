@@ -124,7 +124,8 @@ public class UIManager : MonoBehaviour
         if (button == null) return;
 
         icon.transform.SetParent(button.gameObject.transform);
-        icon.MoveTo(button.gameObject.transform.position);
+        Debug.Log(button.gameObject.transform.position);
+        icon.AttachTo(button.gameObject);
     }
 
     public void UnsetSpell(SpellSlot slot)
@@ -150,7 +151,7 @@ public class UIManager : MonoBehaviour
             SpellSlot.Spell1 => spell1Button,
             SpellSlot.Spell2 => spell2Button,
             SpellSlot.Spell3 => spell3Button,
-            _ => throw new System.Exception()
+            _ => throw new System.Exception("SpellSlot should not be null.")
         };
     }
 

@@ -24,17 +24,17 @@ public class SpellIcon : MonoBehaviour
         }
     }
 
-    public void MoveTo(Vector2 destination)
+    public void AttachTo(GameObject target)
     {
-        StartCoroutine(_Move(destination));
+        StartCoroutine(_Attach(target));
     }
 
-    private IEnumerator _Move(Vector2 destination)
+    private IEnumerator _Attach(GameObject target)
     {
         if (rb2D == null) yield break;
-        while (rb2D.position != destination)
+        while ((Vector3)rb2D.position != target.transform.position)
         {
-            rb2D.MovePosition(Vector2.MoveTowards(rb2D.position, destination, 1f));
+            rb2D.MovePosition(Vector2.MoveTowards(rb2D.position, target.transform.position, 1f));
             yield return null;
         }
     }

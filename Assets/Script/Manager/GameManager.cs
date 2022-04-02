@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     private GameObject playerObject;
 
-    private GameCamera gameCamera;
+    public GameCamera gameCamera;
 
     private void Awake()
     {
