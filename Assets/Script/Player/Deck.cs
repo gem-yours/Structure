@@ -87,7 +87,7 @@ public class Deck
         {
             return null;
         }
-        var spell = _remaingSpells[0];
+        var spell = _remaingSpells.Last();
         _discardedSpells.Add(spell);
         _remaingSpells.Remove(spell);
         onDraw(this, spell);

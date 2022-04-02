@@ -28,14 +28,10 @@ public class DeckPreview : MonoBehaviour
             value.onDraw = (Deck deck, Spell spell) =>
             {
                 // ドローされたカード=最新のカードを削除する
-                var index = spellIcons.Select(x => x.spell).ToList().FindIndex(x => x == spell);
-                if (index < 0)
-                {
-                    return;
-                }
+                var icon = spellIcons.Last();
 
-                UIManager.instance.SetSpell(spellIcons[index]);
-                HideSpell(spellIcons[index]);
+                UIManager.instance.SetSpell(icon);
+                HideSpell(icon);
 
                 // 新たなデッキトップのスペルを表示する
                 var candidate = deck.LatestCandidates(numberOfCandidates).Last();
@@ -49,7 +45,9 @@ public class DeckPreview : MonoBehaviour
                 {
                     HideSpell(spellIcon);
                 }
-                foreach (Spell? spell in deck.LatestCandidates(numberOfCandidates))
+                var reversed = deck.LatestCandidates(numberOfCandidates);
+                reversed.Reverse(); // なんで反転がこんなに面倒くさいんですか？
+                foreach (Spell? spell in reversed)
                 {
                     ShowSpell(spell);
                 }
@@ -88,6 +86,30 @@ public class DeckPreview : MonoBehaviour
             return;
         }
         spellIcons.RemoveAt(index);
+
+        var faderObj = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
+        if (faderObj == null) return;
+        faderObj.transform.localScale = Vector3.one;
+
+        var fader = faderObj.GetComponent<SpellIcon>();
+        if (fader == null)
+        {
+            Destroy(faderObj);
+            return;
+        }
+        StartCoroutine(Fade(fader));
+    }
+
+    // 1秒かけて小さくし、アニメーションを作る
+    private IEnumerator Fade(SpellIcon icon)
+    {
+        var numberOfTick = 30f;
+        for (int tick = 0; tick <= numberOfTick; tick++)
+        {
+            icon.transform.localScale = new Vector3(1, 1f - tick / numberOfTick, 1);
+            yield return null;
+        }
+        Destroy(icon.gameObject);
     }
 
     // Start is called before the first frame update

@@ -26,6 +26,10 @@ public class SpellIcon : MonoBehaviour
 
     public void AttachTo(GameObject target)
     {
+        if (target.transform.position == null)
+        {
+            return;
+        }
         StartCoroutine(_Attach(target));
     }
 
@@ -34,7 +38,7 @@ public class SpellIcon : MonoBehaviour
         if (rb2D == null) yield break;
         while ((Vector3)rb2D.position != target.transform.position)
         {
-            rb2D.MovePosition(Vector2.MoveTowards(rb2D.position, target.transform.position, 1f));
+            rb2D.MovePosition(Vector2.MoveTowards(rb2D.position, target.transform.position, 0.5f));
             yield return null;
         }
     }
