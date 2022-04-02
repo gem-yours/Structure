@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
         get
         {
             if (ui == null) return false;
-            return ui.activeSelf;
+            return ui.GetComponent<Canvas>().enabled;
         }
         set
         {
@@ -89,7 +89,8 @@ public class UIManager : MonoBehaviour
             {
                 dragController?.ForceEndDrag();
             }
-            ui?.SetActive(value);
+            if (ui == null) return;
+            ui.GetComponent<Canvas>().enabled = value;
         }
     }
 
@@ -124,7 +125,6 @@ public class UIManager : MonoBehaviour
         if (button == null) return;
 
         icon.transform.SetParent(button.gameObject.transform);
-        Debug.Log(button.gameObject.transform.position);
         icon.AttachTo(button.gameObject);
     }
 
