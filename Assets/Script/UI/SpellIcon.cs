@@ -35,15 +35,15 @@ public class SpellIcon : MonoBehaviour
 
     private IEnumerator _Attach(GameObject target)
     {
-        while ((transform.position - target.transform.position).magnitude > 1)
+        var animationDuration = 0.5f;
+        for (float current = 0; current < animationDuration; current += Time.deltaTime)
         {
-            var direction = (target.transform.position - transform.position);
-            var displacement = direction * 10 * Time.deltaTime;
-            Debug.Log(displacement.magnitude);
-            transform.position = transform.position + displacement;
+            var displacment = transform.position - target.transform.position;
+            var easeInOut = AnimationCurve.EaseInOut(0, displacment.magnitude, animationDuration, 0);
+            transform.position = target.transform.position + displacment.normalized * easeInOut.Evaluate(current);
             yield return null;
         }
-        transform.position = target.transform.position;
+        // transform.position = target.transform.position;
     }
 
     // Start is called before the first frame update

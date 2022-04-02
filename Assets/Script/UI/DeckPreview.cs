@@ -103,10 +103,11 @@ public class DeckPreview : MonoBehaviour
     // 1秒かけて小さくし、アニメーションを作る
     private IEnumerator Fade(SpellIcon icon)
     {
-        var numberOfTick = 30f;
-        for (int tick = 0; tick <= numberOfTick; tick++)
+        var animationDuration = 0.25f;
+        var easeInOut = AnimationCurve.EaseInOut(0, 1, animationDuration, 0);
+        for (float current = 0; current <= animationDuration; current += Time.deltaTime)
         {
-            icon.transform.localScale = new Vector3(1, 1f - Mathf.Pow(tick, 2) / Mathf.Pow(numberOfTick, 2) * Time.deltaTime, 1);
+            icon.transform.localScale = new Vector3(1, easeInOut.Evaluate(current), 1);
             yield return null;
         }
         Destroy(icon.gameObject);
