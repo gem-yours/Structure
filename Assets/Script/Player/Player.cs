@@ -93,6 +93,7 @@ public class Player : MonoBehaviour
 
             }
             yield return Casting(spell);
+            UIManager.instance.UnsetSpell(SpellSlot.Spell1);
         }
     }
 

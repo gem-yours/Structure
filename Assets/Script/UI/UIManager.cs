@@ -124,7 +124,7 @@ public class UIManager : MonoBehaviour
         if (button == null) return;
 
         icon.transform.SetParent(button.gameObject.transform);
-        icon.MoveTo(Vector2.zero);
+        icon.MoveTo(button.gameObject.transform.position);
     }
 
     public void UnsetSpell(SpellSlot slot)
