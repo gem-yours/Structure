@@ -124,8 +124,9 @@ public class UIManager : MonoBehaviour
         var button = GetButtonBySlot((SpellSlot)slot);
         if (button == null) return;
 
-        icon.transform.SetParent(button.gameObject.transform);
+        icon.transform.SetParent(button.transform);
         icon.AttachTo(button.gameObject);
+        // icon.transform.position = button.transform.position;
     }
 
     public void UnsetSpell(SpellSlot slot)

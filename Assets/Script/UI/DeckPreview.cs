@@ -106,7 +106,7 @@ public class DeckPreview : MonoBehaviour
         var numberOfTick = 30f;
         for (int tick = 0; tick <= numberOfTick; tick++)
         {
-            icon.transform.localScale = new Vector3(1, 1f - tick / numberOfTick, 1);
+            icon.transform.localScale = new Vector3(1, 1f - Mathf.Pow(tick, 2) / Mathf.Pow(numberOfTick, 2) * Time.deltaTime, 1);
             yield return null;
         }
         Destroy(icon.gameObject);
