@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
 
     public void SetSpell(SpellIcon icon)
     {
-        var slot = GameManager.instance.player.slot.GetEmptySlot();
+        var slot = GameManager.instance.player.slots.GetEmptySlot();
         if (slot == null) return;
 
         var button = GetButtonBySlot((SpellSlot)slot);

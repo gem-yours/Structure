@@ -30,7 +30,7 @@ public class DeckPreview : MonoBehaviour
                 // ドローされたカード=最新のカードを削除する
                 var icon = spellIcons.Last();
 
-                UIManager.instance.SetSpell(icon);
+                UIManager.instance.SetSpell(icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
                 HideSpell(icon);
 
                 // 新たなデッキトップのスペルを表示する

@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public EquipmentSlot slot = new EquipmentSlot();
+    public EquipmentSlot slots = new EquipmentSlot();
     public Deck deck = new Deck(
         Enumerable.Repeat(new FireBolt() as Spell, 3).ToList()
         );
@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator DrawSpell()
     {
-        for (; ; )
+        for (SpellSlot? slot = slots.GetEmptySlot(); slot != null; slot = slots.GetEmptySlot())
         {
             yield return new WaitForSeconds(drawTime);
             var spell = deck.DrawSpell();
@@ -90,12 +90,11 @@ public class Player : MonoBehaviour
                 deck.Shuffle();
                 yield return new WaitForSeconds(drawTime);
                 spell = deck.DrawSpell();
-
             }
-            yield return Casting(spell);
-            UIManager.instance.UnsetSpell(SpellSlot.Spell1);
+            slots.Equip(spell);
         }
     }
+
 
     // Start is called before the first frame update
     void Start()
