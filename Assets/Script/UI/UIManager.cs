@@ -14,10 +14,10 @@ public class UIManager : MonoBehaviour
 
 
     public GameObject? ui;
-    public Button? attackButton;
-    public Button? spell1Button;
-    public Button? spell2Button;
-    public Button? spell3Button;
+    public DragController? attackController;
+    public DragController? spell1Controller;
+    public DragController? spell2Controller;
+    public DragController? spell3Controller;
 
     public TextMeshProUGUI? levelText;
     public Slider? expBar;
@@ -45,9 +45,12 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            spell1Button?.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell1));
-            spell2Button?.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell2));
-            spell3Button?.GetComponent<Button>().onClick.AddListener(() => value(SpellSlot.Spell3));
+            if (spell1Controller != null)
+                spell1Controller.onClick = () => value(SpellSlot.Spell1);
+            if (spell2Controller != null)
+                spell2Controller.onClick = () => value(SpellSlot.Spell2);
+            if (spell3Controller != null)
+                spell3Controller.onClick = () => value(SpellSlot.Spell3);
         }
     }
 
@@ -145,13 +148,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private Button? GetButtonBySlot(SpellSlot slot)
+    private DragController? GetButtonBySlot(SpellSlot slot)
     {
         return slot switch
         {
-            SpellSlot.Spell1 => spell1Button,
-            SpellSlot.Spell2 => spell2Button,
-            SpellSlot.Spell3 => spell3Button,
+            SpellSlot.Spell1 => spell1Controller,
+            SpellSlot.Spell2 => spell2Controller,
+            SpellSlot.Spell3 => spell3Controller,
             _ => throw new System.Exception("SpellSlot should not be null.")
         };
     }
