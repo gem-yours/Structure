@@ -145,11 +145,8 @@ public class UIManager : MonoBehaviour
         pickSpellWindow!.SetActive(false);
     }
 
-    public void SetSpell(SpellIcon icon)
+    public void SetSpell(SpellSlot slot, SpellIcon icon)
     {
-        var slot = GameManager.instance.player.slots.GetEmptySlot();
-        if (slot == null) return;
-
         var button = GetButtonBySlot((SpellSlot)slot);
         if (button == null) return;
 

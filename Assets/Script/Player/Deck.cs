@@ -7,6 +7,7 @@ using System.Linq;
 #nullable enable
 public class Deck
 {
+    public EquipmentSlot slots = new EquipmentSlot();
     private List<Spell> _spells = new List<Spell>();
     public List<Spell> spells
     {
@@ -37,31 +38,28 @@ public class Deck
     }
 
     public delegate void OnAdd(Deck deck, Spell spell);
-    public delegate void OnDraw(Deck deck, Spell spell);
+    public delegate void OnDraw(SpellSlot slot, Spell spell);
     public delegate void OnShuffle(Deck deck);
 
-    public OnAdd onAdd { set; private get; } = (Deck deck, Spell spell) => { };
-    public OnDraw onDraw { set; private get; } = (Deck deck, Spell spell) => { };
-    public OnShuffle onShuffle { set; private get; } = (Deck deck) => { };
+    public OnAdd? onAdd { set; private get; } = null;
+    public OnDraw? onDraw { set; private get; } = null;
+    public OnShuffle? onShuffle { set; private get; } = null;
 
+    private float drawTime = 0.75f;
+    private float shuffleTime = 2f;
 
-    public Deck() : this(new List<Spell>())
-    {
-
-    }
-    public Deck(List<Spell> spells)
+    public Deck(List<Spell> spells, float drawTime, float shuffleTime)
     {
         this._spells = new List<Spell>(spells);
         _remaingSpells = new List<Spell>(spells);
         _discardedSpells = new List<Spell>();
-        onShuffle(this);
     }
 
     public void AddSpell(Spell spell)
     {
         _spells.Insert(0, spell);
         _remaingSpells.Add(spell);
-        onAdd(this, spell);
+        if (onAdd != null) onAdd(this, spell);
     }
 
     // 山札の上からnumberOfCandiates個のスペルを返す
@@ -81,23 +79,90 @@ public class Deck
         return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
     }
 
-    public Spell? DrawSpell()
+    public IEnumerator DrawSpell()
     {
+        if (slots.GetEmptySlot() == null) yield break;
+
         if (_remaingSpells.Count == 0)
         {
-            return null;
+            if (slots.isEmpty)
+            {
+                yield return Shuffle();
+            }
+            else
+            {
+                yield break;
+            }
         }
+
+        yield return new WaitForSeconds(drawTime);
+
         var spell = _remaingSpells.Last();
+        var slot = slots.Equip(spell);
         _discardedSpells.Add(spell);
         _remaingSpells.Remove(spell);
-        onDraw(this, spell);
-        return spell;
+        if (onDraw != null && slot != null) onDraw((SpellSlot)slot, spell);
+
     }
 
-    public void Shuffle()
+    public IEnumerator Shuffle()
     {
+        yield return new WaitForSeconds(shuffleTime);
         _discardedSpells.RemoveAll(x => true);
         _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
-        onShuffle(this);
+        if (onShuffle != null) onShuffle(this);
+    }
+}
+
+public enum SpellSlot
+{
+    Spell1,
+    Spell2,
+    Spell3,
+}
+
+
+public class EquipmentSlot
+{
+    public Dictionary<SpellSlot, Spell?> currentSpells = new Dictionary<SpellSlot, Spell?>();
+
+    public bool isEmpty
+    {
+        get
+        {
+            return
+            currentSpells[SpellSlot.Spell1] == null &&
+            currentSpells[SpellSlot.Spell2] == null &&
+            currentSpells[SpellSlot.Spell3] == null;
+        }
+    }
+
+    public EquipmentSlot()
+    {
+        currentSpells.Add(SpellSlot.Spell1, null);
+        currentSpells.Add(SpellSlot.Spell2, null);
+        currentSpells.Add(SpellSlot.Spell3, null);
+    }
+
+    public SpellSlot? GetEmptySlot()
+    {
+        if (currentSpells[SpellSlot.Spell1] == null) return SpellSlot.Spell1;
+        if (currentSpells[SpellSlot.Spell2] == null) return SpellSlot.Spell2;
+
+        if (currentSpells[SpellSlot.Spell3] == null) return SpellSlot.Spell3;
+        return null;
+    }
+
+    public SpellSlot? Equip(Spell spell)
+    {
+        var slot = GetEmptySlot();
+        if (slot == null) return null;
+        currentSpells[(SpellSlot)slot] = spell;
+        return slot;
+    }
+
+    public Spell? GetSpell(SpellSlot slot)
+    {
+        return currentSpells[slot];
     }
 }

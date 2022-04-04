@@ -10,7 +10,7 @@ public class DeckPreview : MonoBehaviour
 {
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
 
-    private int numberOfCandidates = 5;
+    private int numberOfCandidates = 2;
     public Deck deck
     {
         set
@@ -18,23 +18,22 @@ public class DeckPreview : MonoBehaviour
             value.onAdd = (Deck deck, Spell spell) =>
             {
                 // 表示数が最大の場合は、デッキにカードが追加されても新たに表示する必要はない
-                if (spellIcons.Count == numberOfCandidates)
+                if (spellIcons.Count >= numberOfCandidates)
                 {
                     return;
                 }
                 ShowSpell(spell);
 
             };
-            value.onDraw = (Deck deck, Spell spell) =>
+            value.onDraw = (SpellSlot slot, Spell spell) =>
             {
                 // ドローされたカード=最新のカードを削除する
                 var icon = spellIcons.Last();
-
-                UIManager.instance.SetSpell(icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
+                UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
                 HideSpell(icon);
 
                 // 新たなデッキトップのスペルを表示する
-                var candidate = deck.LatestCandidates(numberOfCandidates).Last();
+                var candidate = value.LatestCandidates(numberOfCandidates).Last();
                 ShowSpell(candidate);
             };
 

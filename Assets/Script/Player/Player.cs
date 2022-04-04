@@ -4,12 +4,6 @@ using UnityEngine;
 using System.Linq;
 
 #nullable enable
-public enum SpellSlot
-{
-    Spell1,
-    Spell2,
-    Spell3,
-}
 public class Player : MonoBehaviour
 {
     public GameObject? directionIndicator;
@@ -23,13 +17,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public EquipmentSlot slots = new EquipmentSlot();
     public Deck deck = new Deck(
-        Enumerable.Repeat(new FireBolt() as Spell, 3).ToList()
+        Enumerable.Repeat(new FireBolt() as Spell, 3).ToList(),
+        0.75f,
+        2f
         );
-    public float drawTime { get; } = 0.5f;
-    public float shuffleTime { get; } = 1f;
-
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D? rb2D;
     private Animator? animator;
@@ -90,7 +82,7 @@ public class Player : MonoBehaviour
     public void Cast(SpellSlot slot)
     {
         IndicateDirection(Vector2.zero);
-        var spell = slots.GetSpell(slot);
+        var spell = deck.slots.GetSpell(slot);
         if (spell == null) return;
 
         StartCoroutine(Casting(spell));
@@ -110,18 +102,9 @@ public class Player : MonoBehaviour
 
     private IEnumerator DrawSpell()
     {
-        for (SpellSlot? slot = slots.GetEmptySlot(); slot != null; slot = slots.GetEmptySlot())
+        for (SpellSlot? slot = deck.slots.GetEmptySlot(); slot != null;)
         {
-            yield return new WaitForSeconds(drawTime);
-            var spell = deck.DrawSpell();
-            while (spell == null)
-            {
-                yield return new WaitForSeconds(shuffleTime);
-                deck.Shuffle();
-                yield return new WaitForSeconds(drawTime);
-                spell = deck.DrawSpell();
-            }
-            slots.Equip(spell);
+            yield return deck.DrawSpell();
         }
     }
 
@@ -141,40 +124,6 @@ public class Player : MonoBehaviour
         if (movingDirection != Vector2.zero)
         {
             Move();
-        }
-    }
-
-    public class EquipmentSlot
-    {
-        public Dictionary<SpellSlot, Spell?> currentSpells = new Dictionary<SpellSlot, Spell?>();
-
-        public EquipmentSlot()
-        {
-            currentSpells.Add(SpellSlot.Spell1, null);
-            currentSpells.Add(SpellSlot.Spell2, null);
-            currentSpells.Add(SpellSlot.Spell3, null);
-        }
-
-        public SpellSlot? GetEmptySlot()
-        {
-            if (currentSpells[SpellSlot.Spell1] == null) return SpellSlot.Spell1;
-            if (currentSpells[SpellSlot.Spell2] == null) return SpellSlot.Spell2;
-
-            if (currentSpells[SpellSlot.Spell3] == null) return SpellSlot.Spell3;
-            return null;
-        }
-
-        public SpellSlot? Equip(Spell spell)
-        {
-            var slot = GetEmptySlot();
-            if (slot == null) return null;
-            currentSpells[(SpellSlot)slot] = spell;
-            return slot;
-        }
-
-        public Spell? GetSpell(SpellSlot slot)
-        {
-            return currentSpells[slot];
         }
     }
 }
