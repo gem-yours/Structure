@@ -81,6 +81,15 @@ public class GameManager : MonoBehaviour
         {
             player.ChangeMoveDirection(Vector2.zero);
         };
+
+        UIManager.instance.onDragging = (SpellSlot slot, Vector2 displacement) =>
+        {
+            player.IndicateDirection(displacement);
+        };
+        UIManager.instance.onEndDragging = (SpellSlot slot) =>
+        {
+            player.IndicateDirection(Vector2.zero);
+        };
     }
 
     // Update is called once per frame

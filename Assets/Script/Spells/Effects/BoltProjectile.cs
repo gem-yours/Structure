@@ -23,7 +23,7 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
             direction = Vector2.right;
             return;
         }
-        transform.rotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
     }
 
     public void Move()

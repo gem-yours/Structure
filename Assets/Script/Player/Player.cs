@@ -12,6 +12,7 @@ public enum SpellSlot
 }
 public class Player : MonoBehaviour
 {
+    public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public float speed { private set; get; } = 0.15f;
     public Vector3 position
@@ -54,6 +55,24 @@ public class Player : MonoBehaviour
                 transform.localScale.y,
                 transform.localScale.z);
         }
+    }
+
+    public void IndicateDirection(Vector2 direction)
+    {
+        if (directionIndicator == null) return;
+
+        if (direction.magnitude < 50)
+        {
+            directionIndicator.SetActive(false);
+            return;
+        }
+        directionIndicator.SetActive(true);
+        directionIndicator.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
+        directionIndicator.transform.localScale = new Vector3(
+            0.1f,
+            (0.1f - Mathf.Abs(direction.normalized.y) * 0.1f) / 2 + 0.05f,
+            0.1f
+        );
     }
 
     public void Attack(SpellSlot spellSlot)

@@ -10,8 +10,8 @@ public class UIManager : MonoBehaviour
 #pragma warning disable CS8618
     public static UIManager instance;
 #pragma warning restore CS8618
-    public delegate void OnCast(SpellSlot spellSlot);
-
+    public delegate void OnSpellAction(SpellSlot spellSlot);
+    public delegate void OnSpellDragging(SpellSlot spellSlot, Vector2 displacement);
 
     public GameObject? ui;
     public DragController? attackController;
@@ -41,7 +41,33 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public OnCast onCast
+    public OnSpellDragging onDragging
+    {
+        set
+        {
+            if (spell1Controller != null)
+                spell1Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
+            if (spell2Controller != null)
+                spell2Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
+            if (spell3Controller != null)
+                spell3Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
+        }
+    }
+
+    public OnSpellAction onEndDragging
+    {
+        set
+        {
+            if (spell1Controller != null)
+                spell1Controller.onEndDragging = () => value(SpellSlot.Spell1);
+            if (spell2Controller != null)
+                spell2Controller.onEndDragging = () => value(SpellSlot.Spell2);
+            if (spell3Controller != null)
+                spell3Controller.onEndDragging = () => value(SpellSlot.Spell3);
+        }
+    }
+
+    public OnSpellAction onCast
     {
         set
         {

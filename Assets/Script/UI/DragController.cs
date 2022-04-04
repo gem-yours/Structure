@@ -98,6 +98,7 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (image != null)
         {
             image.sprite = draggingImage;
+            image.enabled = draggingImage != null;
             image.SetNativeSize();
         }
 
