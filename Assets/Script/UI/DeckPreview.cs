@@ -45,6 +45,11 @@ public class DeckPreview : MonoBehaviour
                 }
             };
 
+            value.onRemove = (SpellSlot slot) =>
+            {
+                UIManager.instance.UnsetSpell(slot);
+            };
+
             foreach (Spell? spell in value.LatestCandidates(numberOfCandidates))
             {
                 ShowSpell(spell);

@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
     public void Cast(SpellSlot slot)
     {
         IndicateDirection(Vector2.zero);
-        var spell = deck.slots.GetSpell(slot);
+        var spell = deck.GetSpell(slot);
         if (spell == null) return;
 
         StartCoroutine(Casting(spell));
@@ -96,13 +96,19 @@ public class Player : MonoBehaviour
             if (spellEffect == null) break;
             spellEffect.spell = spell;
             spellEffect.Target(EnemiesManager.instance.NearestEnemy(transform.position));
-            yield return new WaitForSeconds(spell.delay);
+            // 最後の一発はディレイを入れる必要がない
+            if (time != spell.magazine - 1)
+            {
+                yield return new WaitForSeconds(spell.delay);
+            }
         }
+        deck.DiscardSpell(spell);
+        yield return DrawSpell();
     }
 
     private IEnumerator DrawSpell()
     {
-        for (SpellSlot? slot = deck.slots.GetEmptySlot(); slot != null;)
+        while (deck.canDraw)
         {
             yield return deck.DrawSpell();
         }

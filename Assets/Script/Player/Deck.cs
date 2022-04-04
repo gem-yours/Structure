@@ -7,7 +7,7 @@ using System.Linq;
 #nullable enable
 public class Deck
 {
-    public EquipmentSlot slots = new EquipmentSlot();
+    private EquipmentSlot slots = new EquipmentSlot();
     private List<Spell> _spells = new List<Spell>();
     public List<Spell> spells
     {
@@ -40,10 +40,12 @@ public class Deck
     public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(SpellSlot slot, Spell spell);
     public delegate void OnShuffle(Deck deck);
+    public delegate void OnRemove(SpellSlot slot);
 
     public OnAdd? onAdd { set; private get; } = null;
     public OnDraw? onDraw { set; private get; } = null;
     public OnShuffle? onShuffle { set; private get; } = null;
+    public OnRemove? onRemove { set; private get; } = null;
 
     private float drawTime = 0.75f;
     private float shuffleTime = 2f;
@@ -53,6 +55,19 @@ public class Deck
         this._spells = new List<Spell>(spells);
         _remaingSpells = new List<Spell>(spells);
         _discardedSpells = new List<Spell>();
+    }
+
+    public bool canDraw
+    {
+        get
+        {
+            return slots.GetEmptySlot() != null;
+        }
+    }
+
+    public Spell? GetSpell(SpellSlot slot)
+    {
+        return slots.GetSpell(slot);
     }
 
     public void AddSpell(Spell spell)
@@ -112,6 +127,13 @@ public class Deck
         _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
     }
+
+    public void DiscardSpell(Spell spell)
+    {
+        var slot = slots.RemoveSpell(spell);
+        if (slot == null) return;
+        if (onRemove != null) onRemove((SpellSlot)slot);
+    }
 }
 
 public enum SpellSlot
@@ -164,5 +186,18 @@ public class EquipmentSlot
     public Spell? GetSpell(SpellSlot slot)
     {
         return currentSpells[slot];
+    }
+
+    public SpellSlot? RemoveSpell(Spell spell)
+    {
+        var key = currentSpells.Keys.ToArray()
+        .Select(x => (SpellSlot?)x)
+        .DefaultIfEmpty(null)
+        .FirstOrDefault(key => (key != null) ? currentSpells[(SpellSlot)key] == spell : false);
+        if (key != null)
+        {
+            currentSpells[(SpellSlot)key] = null;
+        }
+        return key;
     }
 }
