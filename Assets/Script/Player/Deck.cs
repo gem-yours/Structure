@@ -47,6 +47,8 @@ public class Deck
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
+    private bool isShuffling = false;
+
     private float drawTime = 0.75f;
     private float shuffleTime = 2f;
 
@@ -61,7 +63,7 @@ public class Deck
     {
         get
         {
-            return slots.GetEmptySlot() != null;
+            return slots.GetEmptySlot() != null && !isShuffling;
         }
     }
 
@@ -96,6 +98,7 @@ public class Deck
 
     public IEnumerator DrawSpell()
     {
+        if (!canDraw) yield break;
         if (slots.GetEmptySlot() == null) yield break;
 
         if (_remaingSpells.Count == 0)
@@ -112,6 +115,9 @@ public class Deck
 
         yield return new WaitForSeconds(drawTime);
 
+        // ドローを待っている間に山札が尽きている可能性がある
+        if (_remaingSpells.Count == 0) yield break;
+
         var spell = _remaingSpells.Last();
         var slot = slots.Equip(spell);
         _discardedSpells.Add(spell);
@@ -122,10 +128,12 @@ public class Deck
 
     public IEnumerator Shuffle()
     {
+        isShuffling = true;
         yield return new WaitForSeconds(shuffleTime);
         _discardedSpells.RemoveAll(x => true);
         _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
+        isShuffling = false;
     }
 
     public void DiscardSpell(Spell spell)
