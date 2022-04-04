@@ -69,9 +69,10 @@ public class Player : MonoBehaviour
         );
     }
 
-    public void Attack(SpellSlot spellSlot)
+    public void Attack()
     {
-        var boltObject = Instantiate(Resources.Load("Effects/Firebolt"), transform.position, transform.rotation) as GameObject;
+        var spell = new FireBolt();
+        var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
         if (boltObject == null) return;
         var bolt = boltObject.GetComponent<BoltProjectile?>();
         if (bolt == null) return;

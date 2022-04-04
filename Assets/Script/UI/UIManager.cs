@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
 #pragma warning disable CS8618
     public static UIManager instance;
 #pragma warning restore CS8618
+
+    public delegate void OnAttack();
     public delegate void OnSpellAction(SpellSlot spellSlot);
     public delegate void OnSpellDragging(SpellSlot spellSlot, Vector2 displacement);
 
@@ -41,6 +43,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public OnAttack onAttack
+    {
+        set
+        {
+            if (attackController != null)
+            {
+                attackController.onClick = () => value();
+            }
+        }
+    }
+
     public OnSpellDragging onDragging
     {
         set
@@ -67,7 +80,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public OnSpellAction onCast
+    public OnSpellAction onClick
     {
         set
         {

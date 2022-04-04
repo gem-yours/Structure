@@ -69,8 +69,6 @@ public class GameManager : MonoBehaviour
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
 
-        UIManager.instance.onCast = (SpellSlot slot) => player.Attack(slot);
-
         UIManager.instance.dragController.onDragging = (Vector2 displacement) =>
         {
             // y方向のセンシを下げる
@@ -89,6 +87,10 @@ public class GameManager : MonoBehaviour
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {
             player.Cast(slot);
+        };
+        UIManager.instance.onAttack = () =>
+        {
+            player.Attack();
         };
     }
 

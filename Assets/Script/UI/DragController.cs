@@ -78,7 +78,8 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log(eventData);
+        if (onClick != null)
+            onClick();
     }
 
     private void CreateDraggingImage(Vector3 position)
