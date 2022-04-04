@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
     private Rigidbody2D? rb2D;
     private Animator? animator;
 
+    private float draggingThreshold = 50;
+
     public void ChangeMoveDirection(Vector2 direction)
     {
         movingDirection = direction;
@@ -61,7 +63,7 @@ public class Player : MonoBehaviour
     {
         if (directionIndicator == null) return;
 
-        if (direction.magnitude < 50)
+        if (direction.magnitude < draggingThreshold)
         {
             directionIndicator.SetActive(false);
             return;
@@ -83,6 +85,15 @@ public class Player : MonoBehaviour
         if (bolt == null) return;
         bolt.spell = new FireBolt();
         bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
+    }
+
+    public void Cast(SpellSlot slot)
+    {
+        IndicateDirection(Vector2.zero);
+        var spell = slots.GetSpell(slot);
+        if (spell == null) return;
+
+        StartCoroutine(Casting(spell));
     }
 
     private IEnumerator Casting(Spell spell)

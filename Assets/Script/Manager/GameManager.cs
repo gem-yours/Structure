@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         };
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {
-            player.IndicateDirection(Vector2.zero);
+            player.Cast(slot);
         };
     }
 
