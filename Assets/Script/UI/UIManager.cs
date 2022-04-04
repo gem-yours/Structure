@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
             var child = button.transform.GetChild(i).gameObject;
             if (child != null && child.GetComponent<SpellIcon>() != null)
             {
-                Destroy(child);
+                Destroy(child.gameObject);
                 break;
             }
         }

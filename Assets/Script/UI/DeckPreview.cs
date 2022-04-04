@@ -10,24 +10,20 @@ public class DeckPreview : MonoBehaviour
 {
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
 
-    private int numberOfCandidates = 2;
+    private int numberOfCandidates = 3;
+
+    private bool isDrawing = false;
     public Deck deck
     {
         set
         {
             value.onAdd = (Deck deck, Spell spell) =>
             {
-                // 表示数が最大の場合は、デッキにカードが追加されても新たに表示する必要はない
-                if (spellIcons.Count >= numberOfCandidates)
-                {
-                    return;
-                }
-                ShowSpell(spell);
-
+                // StartCoroutine(OnAdd(spell));
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
             {
-                StartCoroutine(OnDraw(value, slot));
+                StartCoroutine(OnDraw(value, spell, slot));
             };
 
             value.onShuffle = (Deck deck) =>
@@ -37,9 +33,14 @@ public class DeckPreview : MonoBehaviour
                 {
                     HideSpell(spellIcon);
                 }
-                var reversed = deck.LatestCandidates(numberOfCandidates);
-                reversed.Reverse(); // なんで反転がこんなに面倒くさいんですか？
-                foreach (Spell? spell in reversed)
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    // たまにバグって何か残ることがある
+                    // 対症療法だが、ずっと表示が壊れているよりは良いはず
+                    Destroy(transform.GetChild(i).gameObject);
+                }
+
+                foreach (Spell? spell in deck.LatestCandidates(numberOfCandidates))
                 {
                     ShowSpell(spell);
                 }
@@ -64,13 +65,24 @@ public class DeckPreview : MonoBehaviour
         {
             return;
         }
+        if (spellIcons.Count > numberOfCandidates - 1)
+        {
+            return;
+        }
         var spellIcon = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
         if (spellIcon == null)
         {
             return;
         }
         spellIcon.transform.localScale = Vector3.one;
-        spellIcon.transform.SetSiblingIndex(spellIcons.Count - 1);
+
+        // 最後に追加したスペルが一番上に表示されるようにする
+        for (var i = 0; i < spellIcons.Count; i++)
+        {
+            spellIcons[spellIcons.Count - 1 - i].transform.SetSiblingIndex(i + 1);
+        }
+        spellIcon.transform.SetSiblingIndex(0);
+
         var si = spellIcon.GetComponent<SpellIcon>();
         si.spell = spell;
         spellIcons.Add(si);
@@ -110,17 +122,39 @@ public class DeckPreview : MonoBehaviour
         Destroy(fader.gameObject);
     }
 
-    private IEnumerator OnDraw(Deck deck, SpellSlot slot)
+
+    private IEnumerator OnAdd(Spell spell)
     {
+        Debug.Log(isDrawing);
+        // ドロー中であれば、ドロー終了時に描画されるため何もしない
+        if (isDrawing)
+        {
+            yield break;
+        }
+        ShowSpell(spell);
+    }
+
+    private IEnumerator OnDraw(Deck deck, Spell spell, SpellSlot slot)
+    {
+        while (isDrawing)
+        {
+            yield return null;
+        }
+        isDrawing = true;
         // ドローされたカードを候補から削除する
-        var icon = spellIcons.Last();
+        var icon = spellIcons.Find(x => x.spell == spell);
+        if (icon == null) yield break;
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
         HideSpell(icon);
 
         yield return Fade();
 
-        // 新たなデッキトップのスペルを表示する
-        var candidate = deck.LatestCandidates(numberOfCandidates).Last();
-        ShowSpell(candidate);
+        foreach (var candidate in deck.LatestCandidates(numberOfCandidates).Except(spellIcons.Select(x => x.spell)))
+        {
+            ShowSpell(candidate);
+        }
+        // 新たなスペルを表示する
+        yield return null; // 最低1fは表示させないとサイズがおかしくなる
+        isDrawing = false;
     }
 }

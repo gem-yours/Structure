@@ -8,6 +8,14 @@ using System.Linq;
 public class Deck
 {
     private EquipmentSlot slots = new EquipmentSlot();
+
+    public int numberOfEquipments
+    {
+        get
+        {
+            return slots.numberOfEquipments;
+        }
+    }
     private List<Spell> _spells = new List<Spell>();
     public List<Spell> spells
     {
@@ -42,7 +50,15 @@ public class Deck
     public delegate void OnShuffle(Deck deck);
     public delegate void OnRemove(SpellSlot slot);
 
-    public OnAdd? onAdd { set; private get; } = null;
+
+    private List<OnAdd> onAdds = new List<OnAdd>();
+    public OnAdd onAdd
+    {
+        set
+        {
+            onAdds.Add(value);
+        }
+    }
     public OnDraw? onDraw { set; private get; } = null;
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
@@ -74,32 +90,29 @@ public class Deck
 
     public void AddSpell(Spell spell)
     {
-        _spells.Insert(0, spell);
-        _remaingSpells.Add(spell);
-        if (onAdd != null) onAdd(this, spell);
+        _spells.Add(spell);
+        // if (isShuffling)
+        // {
+        // TODO: 山札にスペルを追加する 
+        _discardedSpells.Add(spell);
+        return;
+        // }
+        // _remaingSpells.Insert(0, spell);
+        // foreach (OnAdd listener in onAdds)
+        // {
+        //     listener(this, spell);
+        // }
     }
 
     // 山札の上からnumberOfCandiates個のスペルを返す
-    // 足りない場合はnullを返す
     public List<Spell?> LatestCandidates(int numberOfCandidates)
     {
-        // 指定された個数より山札が少なければ、nullを追加して返す
-        if (_remaingSpells.Count <= numberOfCandidates)
-        {
-            var candidates = new List<Spell?>(_remaingSpells);
-            while (candidates.Count < numberOfCandidates)
-            {
-                candidates.Add(null);
-            }
-            return candidates;
-        }
         return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
     }
 
     public IEnumerator DrawSpell()
     {
         if (!canDraw) yield break;
-        if (slots.GetEmptySlot() == null) yield break;
 
         if (_remaingSpells.Count == 0)
         {
@@ -164,6 +177,17 @@ public class EquipmentSlot
             currentSpells[SpellSlot.Spell1] == null &&
             currentSpells[SpellSlot.Spell2] == null &&
             currentSpells[SpellSlot.Spell3] == null;
+        }
+    }
+
+    public int numberOfEquipments
+    {
+        get
+        {
+            return
+            ((currentSpells[SpellSlot.Spell1] == null) ? 0 : 1) +
+            ((currentSpells[SpellSlot.Spell2] == null) ? 0 : 1) +
+            ((currentSpells[SpellSlot.Spell3] == null) ? 0 : 1);
         }
     }
 

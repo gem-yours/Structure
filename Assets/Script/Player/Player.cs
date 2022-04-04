@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     }
 
     public Deck deck = new Deck(
-        Enumerable.Repeat(new FireBolt() as Spell, 3).ToList(),
+        new List<Spell> { new FireBolt(), new FireBolt(), new FireBolt(), new FireBolt(), new FireBolt() },
         0.75f,
         2f
         );
@@ -121,6 +121,11 @@ public class Player : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        deck.onAdd = (Deck deck, Spell spell) =>
+        {
+            StartCoroutine(DrawSpell());
+        };
         StartCoroutine(DrawSpell());
     }
 
