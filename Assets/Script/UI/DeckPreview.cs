@@ -27,14 +27,7 @@ public class DeckPreview : MonoBehaviour
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
             {
-                // ドローされたカード=最新のカードを削除する
-                var icon = spellIcons.Last();
-                UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
-                HideSpell(icon);
-
-                // 新たなデッキトップのスペルを表示する
-                var candidate = value.LatestCandidates(numberOfCandidates).Last();
-                ShowSpell(candidate);
+                StartCoroutine(OnDraw(value, slot));
             };
 
             value.onShuffle = (Deck deck) =>
@@ -72,6 +65,7 @@ public class DeckPreview : MonoBehaviour
             return;
         }
         spellIcon.transform.localScale = Vector3.one;
+        spellIcon.transform.SetSiblingIndex(spellIcons.Count - 1);
         var si = spellIcon.GetComponent<SpellIcon>();
         si.spell = spell;
         spellIcons.Add(si);
@@ -85,42 +79,43 @@ public class DeckPreview : MonoBehaviour
             return;
         }
         spellIcons.RemoveAt(index);
+    }
 
+    // 1秒かけて小さくし、アニメーションを作る
+    private IEnumerator Fade()
+    {
         var faderObj = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, this.gameObject.transform) as GameObject;
-        if (faderObj == null) return;
+        if (faderObj == null) yield break;
         faderObj.transform.localScale = Vector3.one;
+        faderObj.transform.SetSiblingIndex(transform.childCount);
 
         var fader = faderObj.GetComponent<SpellIcon>();
         if (fader == null)
         {
             Destroy(faderObj);
-            return;
+            yield break;
         }
-        StartCoroutine(Fade(fader));
-    }
-
-    // 1秒かけて小さくし、アニメーションを作る
-    private IEnumerator Fade(SpellIcon icon)
-    {
         var animationDuration = 0.25f;
         var easeInOut = AnimationCurve.EaseInOut(0, 1, animationDuration, 0);
         for (float current = 0; current <= animationDuration; current += Time.deltaTime)
         {
-            icon.transform.localScale = new Vector3(1, easeInOut.Evaluate(current), 1);
+            fader.transform.localScale = new Vector3(1, easeInOut.Evaluate(current), 1);
             yield return null;
         }
-        Destroy(icon.gameObject);
+        Destroy(fader.gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private IEnumerator OnDraw(Deck deck, SpellSlot slot)
     {
+        // ドローされたカードを候補から削除する
+        var icon = spellIcons.Last();
+        UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
+        HideSpell(icon);
 
-    }
+        yield return Fade();
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        // 新たなデッキトップのスペルを表示する
+        var candidate = deck.LatestCandidates(numberOfCandidates).Last();
+        ShowSpell(candidate);
     }
 }
