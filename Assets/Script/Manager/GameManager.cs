@@ -50,9 +50,9 @@ public class GameManager : MonoBehaviour
         {
             Pause();
             UIManager.instance.ShowPickSpellWindow(
-                new FireBolt(),
-                new FireBolt(),
-                new FireBolt(),
+                new Explosion(),
+                new Ignis(),
+                new Ignis(),
                 (Spell spell) =>
                 {
                     if (spell != null)

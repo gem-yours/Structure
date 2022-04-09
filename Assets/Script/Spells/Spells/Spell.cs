@@ -6,6 +6,7 @@ using UnityEngine;
 #nullable enable
 public abstract class Spell : IEquatable<Spell>
 {
+    public abstract string identifier { get; }
     public abstract string name { get; }
     public abstract string description { get; }
     public abstract float damage { get; }
@@ -16,7 +17,7 @@ public abstract class Spell : IEquatable<Spell>
     {
         get
         {
-            return Resources.Load<Sprite>("SpellIcon/" + name);
+            return Resources.Load<Sprite>("SpellIcon/" + identifier);
         }
     }
 
@@ -24,7 +25,7 @@ public abstract class Spell : IEquatable<Spell>
     {
         get
         {
-            return Resources.Load<UnityEngine.Object>("Effects/" + name);
+            return Resources.Load<UnityEngine.Object>("Effects/" + identifier);
         }
     }
 

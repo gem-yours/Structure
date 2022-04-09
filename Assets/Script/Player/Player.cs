@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     }
 
     public Deck deck = new Deck(
-        new List<Spell> { new FireBolt(), new FireBolt(), new FireBolt(), new FireBolt(), new FireBolt() },
+        new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() },
         0.75f,
         2f
         );
@@ -71,12 +71,12 @@ public class Player : MonoBehaviour
 
     public void Attack()
     {
-        var spell = new FireBolt();
+        var spell = new Ignis();
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
         if (boltObject == null) return;
         var bolt = boltObject.GetComponent<BoltProjectile?>();
         if (bolt == null) return;
-        bolt.spell = new FireBolt();
+        bolt.spell = new Ignis();
         bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
     }
 

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireBolt : Spell
+public class Ignis : Spell
 {
-    override public string name { get; } = "FireBolt";
+    override public string identifier { get; } = "Ignis";
+    override public string name { get; } = "イグニス";
     override public string description { get; } = "一番近い敵に向かって火の玉を発射する";
     override public float damage { get; } = 1;
     override public int magazine { get; } = 1;
