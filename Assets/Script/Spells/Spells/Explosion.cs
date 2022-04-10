@@ -10,4 +10,7 @@ public class Explosion : Spell
     override public float damage { get; } = 10;
     override public int magazine { get; } = 1;
     override public float delay { get; } = 1f;
+    override public float duration { get; } = 1f;
+    override public float speed { get; } = 0.25f;
+    override public float range { get; } = 0.25f;
 }

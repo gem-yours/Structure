@@ -10,4 +10,7 @@ public class Ignis : Spell
     override public float damage { get; } = 1;
     override public int magazine { get; } = 1;
     override public float delay { get; } = 1f;
+    public override float duration { get; } = 0f;
+    override public float speed { get; } = 0.5f;
+    override public float range { get; } = 1f;
 }
