@@ -14,6 +14,10 @@ public class Player : MonoBehaviour
         new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() }
         );
 
+#pragma warning disable CS8618
+    private DrawManager drawManager;
+#pragma warning restore CS8618
+
     public delegate GameObject? NearestEnemy(Vector2 location);
     public NearestEnemy nearestEnemy = (Vector2 location) => { return null; };
 
@@ -108,15 +112,7 @@ public class Player : MonoBehaviour
     {
         while (true)
         {
-            if (deck.needShuffle)
-            {
-                yield return new WaitForSeconds(shuffleTime);
-                // deck.Shuffle();
-            }
-            if (!deck.canDraw) yield return null;
-
-            yield return new WaitForSeconds(drawTime);
-            var spell = deck.Draw();
+            yield return drawManager.DrawSpell();
         }
     }
 
@@ -126,6 +122,8 @@ public class Player : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        drawManager = new DrawManager(deck, drawTime, shuffleTime);
 
         deck.onAdd = (Deck deck, Spell spell) =>
         {
@@ -142,5 +140,35 @@ public class Player : MonoBehaviour
         {
             Move();
         }
+    }
+}
+
+public class DrawManager
+{
+    Deck deck;
+
+    float drawTime;
+    float shuffleTime;
+
+    public DrawManager(Deck deck, float drawTime, float shuffleTime)
+    {
+        this.deck = deck;
+        this.drawTime = drawTime;
+        this.shuffleTime = shuffleTime;
+    }
+
+    public IEnumerator DrawSpell()
+    {
+
+        if (deck.needShuffle)
+        {
+            yield return new WaitForSeconds(shuffleTime);
+            deck.Shuffle();
+        }
+
+        if (!deck.canDraw) yield return null;
+
+        yield return new WaitForSeconds(drawTime);
+        deck.Draw();
     }
 }
