@@ -14,7 +14,8 @@ public class EnemiesManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-        } else if (instance != this)
+        }
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -22,30 +23,39 @@ public class EnemiesManager : MonoBehaviour
 
     private void Init()
     {
-        
+
     }
 
     public GameObject Spawn(Vector3 location)
     {
-        if(enemies.Count > enemiesLimit) {
-            return null;
-        }
-
-        // プレイヤーの近くに敵が出現しないようにする
-        if((GameManager.instance.player.position - location).magnitude < 10)
+        if (enemies.Count > enemiesLimit)
         {
             return null;
         }
 
-        var enemy = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
-        enemies.Add(enemy);
-        return enemy;
+        // プレイヤーの近くに敵が出現しないようにする
+        if ((GameManager.instance.player.transform.position - location).magnitude < 10)
+        {
+            return null;
+        }
+
+        var enemyObj = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
+        enemies.Add(enemyObj);
+        var enemy = enemyObj.GetComponent<Enemy>();
+        enemy.onDead = (Enemy enemy) =>
+        {
+            Dead(enemy);
+        };
+        enemy.target = GameManager.instance.player.gameObject;
+
+
+        return enemyObj;
     }
 
     public bool Dead(Enemy enemy)
     {
         var enemyObject = enemies.Find(
-            delegate(GameObject go)
+            delegate (GameObject go)
             {
                 return go.GetComponent<Enemy>() == enemy;
             }
@@ -68,12 +78,13 @@ public class EnemiesManager : MonoBehaviour
         {
             return null;
         }
-        enemies.Sort(delegate(GameObject lhs, GameObject rhs){
+        enemies.Sort(delegate (GameObject lhs, GameObject rhs)
+        {
             var lhsDistance = (position - lhs.transform.position).magnitude;
             var rhsDistance = (position - rhs.transform.position).magnitude;
             return (lhsDistance > rhsDistance) ? 1 : -1;
         });
-        return enemies[0];       
+        return enemies[0];
     }
 
     // Start is called before the first frame update
@@ -85,6 +96,6 @@ public class EnemiesManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
