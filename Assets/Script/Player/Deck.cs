@@ -27,21 +27,21 @@ public class Deck
 
 
     // 山札・捨札はインデックスが大きいものがデッキトップ
-    private List<Spell> _remaingSpells = new List<Spell>();
-    public List<Spell> remaingSpells
+    private List<Spell> _drawPile = new List<Spell>();
+    public List<Spell> drawPile
     {
         get
         {
-            return new List<Spell>(_remaingSpells);
+            return new List<Spell>(_drawPile);
         }
     }
 
-    private List<Spell> _discardedSpells = new List<Spell>();
-    public List<Spell> discardedSpells
+    private List<Spell> _discardPile = new List<Spell>();
+    public List<Spell> discardPile
     {
         get
         {
-            return new List<Spell>(_discardedSpells);
+            return new List<Spell>(_discardPile);
         }
     }
 
@@ -71,8 +71,8 @@ public class Deck
     public Deck(List<Spell> spells, float drawTime, float shuffleTime)
     {
         this._spells = new List<Spell>(spells);
-        _remaingSpells = new List<Spell>(spells);
-        _discardedSpells = new List<Spell>();
+        _drawPile = new List<Spell>(spells);
+        _discardPile = new List<Spell>();
     }
 
     public bool canDraw
@@ -94,7 +94,7 @@ public class Deck
         // if (isShuffling)
         // {
         // TODO: 山札にスペルを追加する 
-        _discardedSpells.Add(spell);
+        _discardPile.Add(spell);
         return;
         // }
         // _remaingSpells.Insert(0, spell);
@@ -107,14 +107,14 @@ public class Deck
     // 山札の上からnumberOfCandiates個のスペルを返す
     public List<Spell?> LatestCandidates(int numberOfCandidates)
     {
-        return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
+        return new List<Spell?>(_drawPile.Skip(_drawPile.Count - numberOfCandidates).ToList());
     }
 
     public IEnumerator DrawSpell()
     {
         if (!canDraw) yield break;
 
-        if (_remaingSpells.Count == 0)
+        if (_drawPile.Count == 0)
         {
             if (slots.isEmpty)
             {
@@ -129,12 +129,12 @@ public class Deck
         yield return new WaitForSeconds(drawTime);
 
         // ドローを待っている間に山札が尽きている可能性がある
-        if (_remaingSpells.Count == 0) yield break;
+        if (_drawPile.Count == 0) yield break;
 
-        var spell = _remaingSpells.Last();
+        var spell = _drawPile.Last();
         var slot = slots.Equip(spell);
-        _discardedSpells.Add(spell);
-        _remaingSpells.Remove(spell);
+        _discardPile.Add(spell);
+        _drawPile.Remove(spell);
         if (onDraw != null && slot != null) onDraw((SpellSlot)slot, spell);
 
     }
@@ -143,8 +143,8 @@ public class Deck
     {
         isShuffling = true;
         yield return new WaitForSeconds(shuffleTime);
-        _discardedSpells.RemoveAll(x => true);
-        _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
+        _discardPile.RemoveAll(x => true);
+        _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
         isShuffling = false;
     }
