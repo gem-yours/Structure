@@ -65,6 +65,18 @@ public class GameManager : MonoBehaviour
             );
         };
 
+        player.expManager.onExpGain = (int level, int exp, int requireExp) =>
+        {
+            UIManager.instance.level = level;
+            UIManager.instance.requireExp = requireExp;
+            UIManager.instance.exp = exp;
+        };
+
+        player.nearestEnemy = (Vector2 location) =>
+        {
+            return EnemiesManager.instance.NearestEnemy(location);
+        };
+
         gameObject.AddComponent<GameCamera>();
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;

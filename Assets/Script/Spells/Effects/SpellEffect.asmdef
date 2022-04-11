@@ -1,0 +1,17 @@
+{
+    "name": "SpellEffect",
+    "rootNamespace": "",
+    "references": [
+        "GUID:548522a5bfb01234a899c5fe918a0a2a",
+        "GUID:14453bfc1ab6be44986f91a64cdafa9c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

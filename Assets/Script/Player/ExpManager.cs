@@ -10,6 +10,8 @@ public class ExpManager
     public int requireExp { private set; get; } = 50000;
     public delegate void OnLevelUp(int level);
     public OnLevelUp onLevelUp { set; private get; } = (int level) => { };
+    public delegate void OnExpGain(int level, int exp, int requireExp);
+    public OnExpGain onExpGain { set; private get; } = (int level, int exp, int requireExp) => { };
 
     public void GainExp(int gainedExp)
     {
@@ -20,9 +22,7 @@ public class ExpManager
         exp += gainedExp;
 
         CheckLevelUp();
-        UIManager.instance.level = level;
-        UIManager.instance.requireExp = requireExp;
-        UIManager.instance.exp = exp;
+        onExpGain(level, exp, requireExp);
     }
 
     private void CheckLevelUp()

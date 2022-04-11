@@ -51,7 +51,7 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
         if (other.gameObject.tag == "Enemy")
         {
             var enemy = other.gameObject.GetComponent<Enemy>();
-            enemy.OnHit(spell);
+            enemy.OnHit(spell.damage);
             OnHit();
         }
         if (other.gameObject.tag == "Wall")

@@ -9,19 +9,16 @@ public class Player : MonoBehaviour
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public float speed { private set; get; } = 0.15f;
-    public Vector3 position
-    {
-        get
-        {
-            return transform.position;
-        }
-    }
 
     public Deck deck = new Deck(
         new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() },
         0.75f,
         2f
         );
+
+    public delegate GameObject? NearestEnemy(Vector2 location);
+    public NearestEnemy nearestEnemy = (Vector2 location) => { return null; };
+
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D? rb2D;
     private Animator? animator;
@@ -77,7 +74,7 @@ public class Player : MonoBehaviour
         var bolt = boltObject.GetComponent<BoltProjectile?>();
         if (bolt == null) return;
         bolt.spell = new Ignis();
-        bolt.Target(EnemiesManager.instance.NearestEnemy(transform.position));
+        bolt.Target(nearestEnemy(transform.position));
     }
 
     public void Cast(SpellSlot slot)
@@ -96,7 +93,7 @@ public class Player : MonoBehaviour
             var spellEffect = (Instantiate(spell.prefab, transform.position, Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
             if (spellEffect == null) break;
             spellEffect.spell = spell;
-            spellEffect.Target(EnemiesManager.instance.NearestEnemy(transform.position));
+            spellEffect.Target(nearestEnemy(transform.position));
             // 最後の一発はディレイを入れる必要がない
             if (time != spell.magazine - 1)
             {

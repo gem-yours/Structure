@@ -6,5 +6,9 @@ public interface Enemy
 {
     float hp { get; }
     int exp { get; }
-    void OnHit(Spell spell);
+
+    GameObject target { set; }
+    delegate void OnDead(Enemy enemy);
+    OnDead onDead { set; }
+    void OnHit(float damage);
 }
