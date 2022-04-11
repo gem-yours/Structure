@@ -112,7 +112,7 @@ public class Player : MonoBehaviour
     {
         while (true)
         {
-            yield return drawManager.DrawSpell();
+            yield return drawManager.Draw();
         }
     }
 
@@ -157,7 +157,7 @@ public class DrawManager
         this.shuffleTime = shuffleTime;
     }
 
-    public IEnumerator DrawSpell()
+    public IEnumerator Draw()
     {
 
         if (deck.needShuffle)

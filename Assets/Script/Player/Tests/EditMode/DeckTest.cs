@@ -13,7 +13,7 @@ public class DeckTest
 #pragma warning restore CS8618
 
     [SetUp]
-    public void OneTimeSetup()
+    public void Setup()
     {
         spells = new List<Spell> {
             new Ignis(),
@@ -132,15 +132,5 @@ public class DeckTest
         };
         deck.Shuffle();
         Assert.True(isCalled);
-    }
-
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator DeckTestWithEnumeratorPasses()
-    {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
     }
 }
