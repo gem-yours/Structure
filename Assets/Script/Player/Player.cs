@@ -11,13 +11,14 @@ public class Player : MonoBehaviour
     public float speed { private set; get; } = 0.15f;
 
     public Deck deck = new Deck(
-        new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() },
-        0.75f,
-        2f
+        new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() }
         );
 
     public delegate GameObject? NearestEnemy(Vector2 location);
     public NearestEnemy nearestEnemy = (Vector2 location) => { return null; };
+
+    private float drawTime = 0.25f;
+    private float shuffleTime = 2f;
 
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D? rb2D;
@@ -100,15 +101,22 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(spell.delay);
             }
         }
-        deck.DiscardSpell(spell);
-        yield return DrawSpell();
+        deck.Discard(spell);
     }
 
     private IEnumerator DrawSpell()
     {
-        while (deck.canDraw)
+        while (true)
         {
-            yield return deck.DrawSpell();
+            if (deck.needShuffle)
+            {
+                yield return new WaitForSeconds(shuffleTime);
+                // deck.Shuffle();
+            }
+            if (!deck.canDraw) yield return null;
+
+            yield return new WaitForSeconds(drawTime);
+            var spell = deck.Draw();
         }
     }
 
