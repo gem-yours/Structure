@@ -7,7 +7,9 @@ public class ExpManager
 
     public int level { private set; get; } = 1;
     public int exp { private set; get; } = 0;
-    public int requireExp { private set; get; } = 50000;
+
+    private static int initialRequireExp = 5;
+    public int requireExp { private set; get; } = initialRequireExp;
     public delegate void OnLevelUp(int level);
     public OnLevelUp onLevelUp { set; private get; } = (int level) => { };
     public delegate void OnExpGain(int level, int exp, int requireExp);
@@ -41,6 +43,6 @@ public class ExpManager
 
     private int CalcRequireExp(int level)
     {
-        return (int)(Mathf.Ceil(level * level / 2)) + 5;
+        return (int)(Mathf.Ceil(level * level / 2)) + initialRequireExp;
     }
 }
