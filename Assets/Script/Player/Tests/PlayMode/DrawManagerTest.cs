@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -31,12 +32,26 @@ public class DrawManagerTest
     [UnityTest]
     public IEnumerator DrawTest()
     {
-        // while (deck.canDraw)
-        // {
-        //     yield return drawManager.Draw();
-        // }
-        yield return new WaitForSeconds(1);
-        Assert.AreEqual(0, deck.drawPile);
-        Assert.AreEqual(0, deck.discardPile);
+        while (deck.canDraw)
+        {
+            yield return drawManager.Draw();
+        }
+        Assert.AreEqual(spells.Skip(3), deck.drawPile);
+        Assert.AreEqual(spells.Take(3), deck.discardPile);
+    }
+
+    [UnityTest]
+    public IEnumerator CheckAddWhileDraw()
+    {
+        var newSpell = new Ignis();
+
+        yield return drawManager.Draw();
+        deck.Add(newSpell);
+        yield return drawManager.Draw();
+        yield return drawManager.Draw();
+
+        spells.Add(newSpell);
+        Assert.AreEqual(spells.Take(3), deck.discardPile);
+        Assert.AreEqual(spells.Skip(3).ToList().Count, deck.drawPile.Count);
     }
 }

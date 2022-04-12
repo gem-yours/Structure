@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -36,8 +37,8 @@ public class DeckTest
     {
         for (int i = 0; i < deck.spells.Count; i++)
         {
-            var spell = deck.Draw();
-            if (spell != null) deck.Discard(spell);
+            var (spell, _) = deck.Draw();
+            if (spell != null) deck.Use(spell);
         }
         Assert.AreEqual(spells, deck.discardPile);
     }
@@ -47,8 +48,8 @@ public class DeckTest
     {
         for (int i = 0; i < deck.spells.Count; i++)
         {
-            var spell = deck.Draw();
-            if (spell != null) deck.Discard(spell);
+            var (spell, _) = deck.Draw();
+            if (spell != null) deck.Use(spell);
         }
         Assert.True(deck.needShuffle);
     }
@@ -67,7 +68,7 @@ public class DeckTest
     public void CheckAddCorrectly()
     {
         var spell = new Ignis();
-        deck.AddSpell(spell);
+        deck.Add(spell);
         spells.Add(spell);
         Assert.AreEqual(deck.drawPile, spells);
     }
@@ -75,8 +76,8 @@ public class DeckTest
     [Test]
     public void CanDrawCorrectSpell()
     {
-        var spell = deck.Draw();
-        spell = spells[0];
+        var (spell, _) = deck.Draw();
+        spell = spells.First();
     }
 
     [Test]
@@ -84,8 +85,8 @@ public class DeckTest
     {
         for (int i = 0; i < deck.spells.Count; i++)
         {
-            var spell = deck.Draw();
-            if (spell != null) deck.Discard(spell);
+            var (spell, _) = deck.Draw();
+            if (spell != null) deck.Use(spell);
         }
         deck.Shuffle();
         Assert.AreEqual(0, deck.discardPile.Count);
@@ -104,7 +105,7 @@ public class DeckTest
         };
         deck.Draw();
         Assert.AreEqual(slot, SpellSlot.Spell1);
-        Assert.AreEqual(spell, spells[0]);
+        Assert.AreEqual(spell, spells.First());
     }
 
     [Test]
@@ -116,7 +117,7 @@ public class DeckTest
             spell = sl;
         };
         var newSpell = new Explosion();
-        deck.AddSpell(newSpell);
+        deck.Add(newSpell);
         Assert.AreEqual(newSpell, spell);
         spells.Add(newSpell);
         Assert.AreEqual(spells, deck.drawPile);
@@ -132,5 +133,46 @@ public class DeckTest
         };
         deck.Shuffle();
         Assert.True(isCalled);
+    }
+
+    [Test]
+    public void CheckAddAfterDraw()
+    {
+        var newSpell = new Ignis();
+        deck.Add(newSpell);
+        spells.Add(newSpell);
+        var (drawed, _) = deck.Draw();
+        Assert.AreEqual(spells.First(), drawed);
+        Assert.AreEqual(spells.Skip(1), deck.drawPile);
+    }
+
+    [Test]
+    public void CheckAddWhileDraw()
+    {
+        var newSpell = new Ignis();
+
+        deck.Draw();
+        deck.Add(newSpell);
+        deck.Draw();
+        deck.Draw();
+
+        spells.Add(newSpell);
+        Assert.AreEqual(spells.Take(3), deck.discardPile);
+        Assert.AreEqual(spells.Skip(3).ToList().Count, deck.drawPile.Count);
+    }
+
+    [Test]
+    public void CheckCorrectlyUseSpell()
+    {
+        var (spell, slot) = deck.Draw();
+        Assert.AreNotEqual(null, slot);
+
+        // 上のassertがあるのでnullはありえない。コンパイラの警告を抑制するためにnullチェックしている。
+        if (slot is SpellSlot nonNullSlot)
+        {
+            Assert.AreEqual(spell, deck.GetSpell(nonNullSlot));
+            if (spell != null) deck.Use(spell);
+            Assert.AreEqual(null, deck.GetSpell(nonNullSlot));
+        }
     }
 }

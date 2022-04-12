@@ -91,11 +91,11 @@ public class Deck
         return slots.GetSpell(slot);
     }
 
-    public void AddSpell(Spell spell)
+    public void Add(Spell spell)
     {
         _spells.Add(spell);
-
         _drawPile.Add(spell);
+
         foreach (OnAdd listener in onAdds)
         {
             listener(this, spell);
@@ -108,16 +108,24 @@ public class Deck
         return new List<Spell?>(_drawPile.Skip(_drawPile.Count - numberOfCandidates).ToList());
     }
 
-    public Spell? Draw()
+    public (Spell?, SpellSlot?) Draw()
     {
-        if (!canDraw) return null;
+        if (!canDraw) return (null, null);
 
         var spell = _drawPile.First();
         var slot = slots.Equip(spell);
-        _discardPile.Add(spell);
-        _drawPile.Remove(spell);
-        if (onDraw != null && slot != null) onDraw((SpellSlot)slot, spell);
-        return spell;
+
+        if (slot != null)
+        {
+            _discardPile.Add(spell);
+            _drawPile.Remove(spell);
+            if (onDraw != null) onDraw((SpellSlot)slot, spell);
+            return (spell, slot);
+        }
+        else
+        {
+            return (null, null);
+        }
     }
 
     public void Shuffle()
@@ -127,7 +135,7 @@ public class Deck
         if (onShuffle != null) onShuffle(this);
     }
 
-    public void Discard(Spell spell)
+    public void Use(Spell spell)
     {
         var slot = slots.RemoveSpell(spell);
         if (slot == null) return;

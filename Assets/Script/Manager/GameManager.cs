@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (spell != null)
                     {
-                        player.deck.AddSpell(spell);
+                        player.deck.Add(spell);
                     }
                     UIManager.instance.HidePickSpellWindow();
                     Resume();

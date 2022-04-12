@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(spell.delay);
             }
         }
-        deck.Discard(spell);
+        deck.Use(spell);
     }
 
     private IEnumerator DrawSpell()
