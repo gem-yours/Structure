@@ -30,7 +30,6 @@ public class ExplodeEffect : MonoBehaviour
         for (float current = 0; current < expandingDuration; current += Time.deltaTime)
         {
             if (circleCollider2D != null) circleCollider2D.radius = easeInOut.Evaluate(current);
-            Debug.Log(circleCollider2D.radius);
             yield return null;
         }
 

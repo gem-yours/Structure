@@ -19,7 +19,7 @@ public class DeckPreview : MonoBehaviour
         {
             value.onAdd = (Deck deck, Spell spell) =>
             {
-                // StartCoroutine(OnAdd(spell));
+                StartCoroutine(OnAdd(spell));
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
             {
@@ -125,7 +125,6 @@ public class DeckPreview : MonoBehaviour
 
     private IEnumerator OnAdd(Spell spell)
     {
-        Debug.Log(isDrawing);
         // ドロー中であれば、ドロー終了時に描画されるため何もしない
         if (isDrawing)
         {
@@ -143,7 +142,11 @@ public class DeckPreview : MonoBehaviour
         isDrawing = true;
         // ドローされたカードを候補から削除する
         var icon = spellIcons.Find(x => x.spell == spell);
-        if (icon == null) yield break;
+        if (icon == null)
+        {
+            isDrawing = false;
+            yield break;
+        }
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
         HideSpell(icon);
 

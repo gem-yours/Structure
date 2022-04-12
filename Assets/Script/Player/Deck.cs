@@ -26,22 +26,22 @@ public class Deck
     }
 
 
-    // 山札・捨札はインデックスが大きいものがデッキトップ
-    private List<Spell> _remaingSpells = new List<Spell>();
-    public List<Spell> remaingSpells
+    // 山札・捨札はインデックスが小さいものがデッキトップ
+    private List<Spell> _drawPile = new List<Spell>();
+    public List<Spell> drawPile
     {
         get
         {
-            return new List<Spell>(_remaingSpells);
+            return new List<Spell>(_drawPile);
         }
     }
 
-    private List<Spell> _discardedSpells = new List<Spell>();
-    public List<Spell> discardedSpells
+    private List<Spell> _discardPile = new List<Spell>();
+    public List<Spell> discardPile
     {
         get
         {
-            return new List<Spell>(_discardedSpells);
+            return new List<Spell>(_discardPile);
         }
     }
 
@@ -63,23 +63,26 @@ public class Deck
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
-    private bool isShuffling = false;
-
-    private float drawTime = 0.75f;
-    private float shuffleTime = 2f;
-
-    public Deck(List<Spell> spells, float drawTime, float shuffleTime)
+    public Deck(List<Spell> spells)
     {
         this._spells = new List<Spell>(spells);
-        _remaingSpells = new List<Spell>(spells);
-        _discardedSpells = new List<Spell>();
+        _drawPile = new List<Spell>(spells);
+        _discardPile = new List<Spell>();
     }
 
     public bool canDraw
     {
         get
         {
-            return slots.GetEmptySlot() != null && !isShuffling;
+            return drawPile.Count > 0 && slots.GetEmptySlot() != null;
+        }
+    }
+
+    public bool needShuffle
+    {
+        get
+        {
+            return drawPile.Count == 0 && slots.numberOfEquipments == 0;
         }
     }
 
@@ -88,68 +91,51 @@ public class Deck
         return slots.GetSpell(slot);
     }
 
-    public void AddSpell(Spell spell)
+    public void Add(Spell spell)
     {
         _spells.Add(spell);
-        // if (isShuffling)
-        // {
-        // TODO: 山札にスペルを追加する 
-        _discardedSpells.Add(spell);
-        return;
-        // }
-        // _remaingSpells.Insert(0, spell);
-        // foreach (OnAdd listener in onAdds)
-        // {
-        //     listener(this, spell);
-        // }
+        _drawPile.Add(spell);
+
+        foreach (OnAdd listener in onAdds)
+        {
+            listener(this, spell);
+        }
     }
 
     // 山札の上からnumberOfCandiates個のスペルを返す
     public List<Spell?> LatestCandidates(int numberOfCandidates)
     {
-        return new List<Spell?>(_remaingSpells.Skip(_remaingSpells.Count - numberOfCandidates).ToList());
+        return new List<Spell?>(_drawPile.Take(numberOfCandidates).ToList());
     }
 
-    public IEnumerator DrawSpell()
+    public (Spell?, SpellSlot?) Draw()
     {
-        if (!canDraw) yield break;
+        if (!canDraw) return (null, null);
 
-        if (_remaingSpells.Count == 0)
-        {
-            if (slots.isEmpty)
-            {
-                yield return Shuffle();
-            }
-            else
-            {
-                yield break;
-            }
-        }
-
-        yield return new WaitForSeconds(drawTime);
-
-        // ドローを待っている間に山札が尽きている可能性がある
-        if (_remaingSpells.Count == 0) yield break;
-
-        var spell = _remaingSpells.Last();
+        var spell = _drawPile.First();
         var slot = slots.Equip(spell);
-        _discardedSpells.Add(spell);
-        _remaingSpells.Remove(spell);
-        if (onDraw != null && slot != null) onDraw((SpellSlot)slot, spell);
 
+        if (slot != null)
+        {
+            _discardPile.Add(spell);
+            _drawPile.Remove(spell);
+            if (onDraw != null) onDraw((SpellSlot)slot, spell);
+            return (spell, slot);
+        }
+        else
+        {
+            return (null, null);
+        }
     }
 
-    public IEnumerator Shuffle()
+    public void Shuffle()
     {
-        isShuffling = true;
-        yield return new WaitForSeconds(shuffleTime);
-        _discardedSpells.RemoveAll(x => true);
-        _remaingSpells = _spells.OrderBy(x => Guid.NewGuid()).ToList();
+        _discardPile.RemoveAll(x => true);
+        _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
-        isShuffling = false;
     }
 
-    public void DiscardSpell(Spell spell)
+    public void Use(Spell spell)
     {
         var slot = slots.RemoveSpell(spell);
         if (slot == null) return;
