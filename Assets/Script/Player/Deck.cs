@@ -74,7 +74,7 @@ public class Deck
     {
         get
         {
-            return slots.GetEmptySlot() != null && !needShuffle;
+            return drawPile.Count > 0 && slots.GetEmptySlot() != null;
         }
     }
 
@@ -82,7 +82,7 @@ public class Deck
     {
         get
         {
-            return drawPile.Count == 0;
+            return drawPile.Count == 0 && slots.numberOfEquipments == 0;
         }
     }
 
@@ -105,7 +105,7 @@ public class Deck
     // 山札の上からnumberOfCandiates個のスペルを返す
     public List<Spell?> LatestCandidates(int numberOfCandidates)
     {
-        return new List<Spell?>(_drawPile.Skip(_drawPile.Count - numberOfCandidates).ToList());
+        return new List<Spell?>(_drawPile.Take(numberOfCandidates).ToList());
     }
 
     public (Spell?, SpellSlot?) Draw()

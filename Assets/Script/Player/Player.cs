@@ -166,7 +166,10 @@ public class DrawManager
             deck.Shuffle();
         }
 
-        if (!deck.canDraw) yield return null;
+        if (!deck.canDraw)
+        {
+            yield break;
+        }
 
         yield return new WaitForSeconds(drawTime);
         deck.Draw();
