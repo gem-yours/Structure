@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 #nullable enable
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, Living
 {
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
 
     public delegate GameObject? NearestEnemy(Vector2 location);
     public NearestEnemy nearestEnemy = (Vector2 location) => { return null; };
+
+    public Living.DamageAnimation? damageAnimation { set; private get; }
+    public Living.DeadAnimation? deadAnimation { set; private get; }
 
     private float drawTime = 0.25f;
     private float shuffleTime = 2f;
@@ -71,6 +74,12 @@ public class Player : MonoBehaviour
         );
     }
 
+    public void OnHit(float damage)
+    {
+        animator?.SetTrigger("damaged");
+        if (damageAnimation != null) StartCoroutine(damageAnimation());
+    }
+
     public void Attack()
     {
         var spell = new Ignis();
@@ -116,6 +125,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            var enemy = collision.gameObject.GetComponent<Enemy>();
+            OnHit(enemy.damage);
+        }
+
+    }
 
     // Start is called before the first frame update
     void Start()
