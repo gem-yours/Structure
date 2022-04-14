@@ -5,7 +5,7 @@ using UnityEngine;
 public class FireElement : MonoBehaviour, Enemy, Living
 {
     public float speed { get; private set; } = 0.05f;
-    public float hp { get; private set; } = 1;
+    public float hp { get; private set; } = 100;
     public int exp { get; private set; } = 1;
 
     public GameObject target { set; private get; }
