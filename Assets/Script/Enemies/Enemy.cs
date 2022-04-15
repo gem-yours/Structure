@@ -5,6 +5,7 @@ using UnityEngine;
 public interface Enemy
 {
     float hp { get; }
+    float damage { get; }
     int exp { get; }
 
     GameObject target { set; }

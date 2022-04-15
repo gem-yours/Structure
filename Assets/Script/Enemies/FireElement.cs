@@ -2,20 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireElement : MonoBehaviour, Enemy
+public class FireElement : MonoBehaviour, Enemy, Living
 {
     public float speed { get; private set; } = 0.05f;
-    public float hp { get; private set; } = 1;
+    public float hp { get; private set; } = 2;
+    public float damage { get; private set; } = 1;
     public int exp { get; private set; } = 1;
 
     public GameObject target { set; private get; }
     public Enemy.OnDead onDead { set; private get; } = (Enemy enemy) => { };
 
+    public Living.DamageAnimation damageAnimation { set; private get; }
+
+    public Living.DeadAnimation deadAnimation { set; private get; }
+
     protected Rigidbody2D rb2D;
+
+    private bool isDead = false;
 
     public void OnHit(float damage)
     {
+        if (damage <= 0) return;
         hp -= damage;
+        StartCoroutine(damageAnimation());
+        checkHp();
     }
 
     private void MoveToPlayer()
@@ -38,11 +48,16 @@ public class FireElement : MonoBehaviour, Enemy
 
     private void checkHp()
     {
-        if (hp <= 0)
-        {
+        if (hp > 0 || isDead) return;
+        Destroy(rb2D);
+        isDead = true;
+        StartCoroutine(dead());
+    }
 
-            onDead(this);
-        }
+    private IEnumerator dead()
+    {
+        yield return deadAnimation();
+        onDead(this);
     }
 
     // Start is called before the first frame update
@@ -54,7 +69,7 @@ public class FireElement : MonoBehaviour, Enemy
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
         MoveToPlayer();
-        checkHp();
     }
 }

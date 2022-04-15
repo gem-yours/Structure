@@ -12,7 +12,7 @@ public class ExplodeEffect : MonoBehaviour
     private Spell? spell;
     private ParticleSystem? particle;
     private CircleCollider2D? circleCollider2D;
-    private float maxRadius = 3;
+    private float maxRadius = 1.5f;
 
     public void Explode(Spell spell)
     {
