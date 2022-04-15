@@ -27,6 +27,9 @@ public class Player : MonoBehaviour, Living
     private float drawTime = 0.25f;
     private float shuffleTime = 2f;
 
+    private bool isInvincible = false;
+    private float invincibleDuration = 1f;
+
     private Vector2 movingDirection = Vector2.zero;
     private Rigidbody2D? rb2D;
     private Animator? animator;
@@ -74,12 +77,6 @@ public class Player : MonoBehaviour, Living
         );
     }
 
-    public void OnHit(float damage)
-    {
-        animator?.SetTrigger("damaged");
-        if (damageAnimation != null) StartCoroutine(damageAnimation());
-    }
-
     public void Attack()
     {
         var spell = new Ignis();
@@ -125,14 +122,25 @@ public class Player : MonoBehaviour, Living
         }
     }
 
+
+    public IEnumerator OnHit(float damage)
+    {
+        isInvincible = true;
+        animator?.SetTrigger("damaged");
+        // TODO: Coroutine内で別のCoroutineを起動するのは良いやり方なのか？
+        if (damageAnimation != null) StartCoroutine(damageAnimation());
+        yield return new WaitForSeconds(invincibleDuration);
+        isInvincible = false;
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
+            if (isInvincible) return;
             var enemy = collision.gameObject.GetComponent<Enemy>();
-            OnHit(enemy.damage);
+            StartCoroutine(OnHit(enemy.damage));
         }
-
     }
 
     // Start is called before the first frame update
