@@ -101,7 +101,8 @@ public class Player : MonoBehaviour, Living
     {
         for (int time = 0; time < spell.magazine; time++)
         {
-            var spellEffect = (Instantiate(spell.prefab, transform.position, Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
+            // インジケータに合わせて発射位置をずらす
+            var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
             if (spellEffect == null) break;
             spellEffect.spell = spell;
             spellEffect.Target(nearestEnemy(transform.position));
