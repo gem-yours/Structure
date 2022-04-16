@@ -99,7 +99,7 @@
 						"Id": "Param_Angle_Rotation2"
 					},
 					"VertexIndex": 2,
-					"Scale": 5,
+					"Scale": 1,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -110,7 +110,7 @@
 						"Id": "Param_Angle_Rotation3"
 					},
 					"VertexIndex": 3,
-					"Scale": 10,
+					"Scale": 2,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -121,7 +121,7 @@
 						"Id": "Param_Angle_Rotation4"
 					},
 					"VertexIndex": 4,
-					"Scale": 15,
+					"Scale": 4,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -132,7 +132,7 @@
 						"Id": "Param_Angle_Rotation5"
 					},
 					"VertexIndex": 5,
-					"Scale": 25,
+					"Scale": 6,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -143,7 +143,7 @@
 						"Id": "Param_Angle_Rotation6"
 					},
 					"VertexIndex": 6,
-					"Scale": 35,
+					"Scale": 8,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
