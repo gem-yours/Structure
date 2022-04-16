@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Cast.fade
   m_EditorClassIdentifier: 
   MotionName: Assets/Characters/Themisto/Cast.motion3.json
-  FadeInTime: 1
+  FadeInTime: 0.5
   FadeOutTime: 1
   ParameterIds:
   - ParamAngleX

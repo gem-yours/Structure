@@ -24,6 +24,8 @@ public class Player : MonoBehaviour, Living
     public Living.DamageAnimation? damageAnimation { set; private get; }
     public Living.DeadAnimation? deadAnimation { set; private get; }
 
+    private bool isAttacking = false;
+
     private float drawTime = 0.25f;
     private float shuffleTime = 2f;
 
@@ -79,13 +81,33 @@ public class Player : MonoBehaviour, Living
 
     public void Attack()
     {
+        if (isAttacking) return;
+        StartCoroutine(_Attack());
+    }
+
+    private IEnumerator _Attack()
+    {
+        isAttacking = true;
+        animator?.SetTrigger("attack");
+        yield return new WaitForSeconds(0.75f);
         var spell = new Ignis();
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
-        if (boltObject == null) return;
+        if (boltObject == null)
+        {
+            isAttacking = false;
+            yield break;
+        }
         var bolt = boltObject.GetComponent<BoltProjectile?>();
-        if (bolt == null) return;
+        if (bolt == null)
+        {
+            isAttacking = false;
+            yield break;
+        }
         bolt.spell = new Ignis();
         bolt.Target(nearestEnemy(transform.position));
+
+        yield return new WaitForSeconds(0.25f);
+        isAttacking = false;
     }
 
     public void Cast(SpellSlot slot)
