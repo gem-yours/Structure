@@ -24,6 +24,8 @@ public class Player : MonoBehaviour, Living
     public Living.DamageAnimation? damageAnimation { set; private get; }
     public Living.DeadAnimation? deadAnimation { set; private get; }
 
+    private bool isAttacking = false;
+
     private float drawTime = 0.25f;
     private float shuffleTime = 2f;
 
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour, Living
     private Animator? animator;
 
     private float draggingThreshold = 50;
+    private Vector2 indicatorDirection = Vector2.zero;
 
     public void ChangeMoveDirection(Vector2 direction)
     {
@@ -61,6 +64,8 @@ public class Player : MonoBehaviour, Living
 
     public void IndicateDirection(Vector2 direction)
     {
+        indicatorDirection = direction;
+
         if (directionIndicator == null) return;
 
         if (direction.magnitude < draggingThreshold)
@@ -79,32 +84,63 @@ public class Player : MonoBehaviour, Living
 
     public void Attack()
     {
+        if (isAttacking) return;
+        StartCoroutine(_Attack());
+    }
+
+    private IEnumerator _Attack()
+    {
+        isAttacking = true;
+        animator?.SetTrigger("attack");
+        yield return new WaitForSeconds(0.75f);
         var spell = new Ignis();
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
-        if (boltObject == null) return;
+        if (boltObject == null)
+        {
+            isAttacking = false;
+            yield break;
+        }
         var bolt = boltObject.GetComponent<BoltProjectile?>();
-        if (bolt == null) return;
+        if (bolt == null)
+        {
+            isAttacking = false;
+            yield break;
+        }
         bolt.spell = new Ignis();
-        bolt.Target(nearestEnemy(transform.position));
+        var enemy = nearestEnemy(transform.position);
+        if (enemy != null)
+        {
+            bolt.Target(enemy.transform.position);
+        }
+        else
+        {
+            // 敵がいないときは向いてる方向に発射する
+            bolt.Target(transform.position + Vector3.right * transform.localScale.x);
+        }
+
+        yield return new WaitForSeconds(0.25f);
+        isAttacking = false;
     }
 
     public void Cast(SpellSlot slot)
     {
-        IndicateDirection(Vector2.zero);
+        if (indicatorDirection.magnitude < draggingThreshold) return;
         var spell = deck.GetSpell(slot);
         if (spell == null) return;
 
-        StartCoroutine(Casting(spell));
+        StartCoroutine(Casting(spell, indicatorDirection));
+        IndicateDirection(Vector2.zero);
     }
 
-    private IEnumerator Casting(Spell spell)
+    private IEnumerator Casting(Spell spell, Vector2 direction)
     {
         for (int time = 0; time < spell.magazine; time++)
         {
-            var spellEffect = (Instantiate(spell.prefab, transform.position, Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
+            // インジケータに合わせて発射位置をずらす
+            var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
             if (spellEffect == null) break;
             spellEffect.spell = spell;
-            spellEffect.Target(nearestEnemy(transform.position));
+            spellEffect.Target(transform.position + (Vector3)direction);
             // 最後の一発はディレイを入れる必要がない
             if (time != spell.magazine - 1)
             {

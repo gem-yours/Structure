@@ -10,14 +10,9 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
     private Rigidbody2D rb2D;
     private Coroutine fadingCoroutine;
 
-    public void Target(GameObject target)
+    public void Target(Vector2 target)
     {
-        if (target == null || target.transform == null)
-        {
-            direction = Vector2.right;
-            return;
-        }
-        direction = (target.transform.position - transform.position).normalized;
+        direction = ((Vector3)target - transform.position).normalized;
         if (direction.magnitude == 0)
         {
             direction = Vector2.right;
