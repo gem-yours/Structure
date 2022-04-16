@@ -5,5 +5,5 @@ using UnityEngine;
 public interface SpellEffect
 {
     Spell spell { set; }
-    void Target(GameObject target);
+    void Target(Vector2 target);
 }
