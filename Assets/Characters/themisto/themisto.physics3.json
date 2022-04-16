@@ -88,7 +88,7 @@
 						"Id": "Param_Angle_Rotation"
 					},
 					"VertexIndex": 1,
-					"Scale": 10,
+					"Scale": 1,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -99,7 +99,7 @@
 						"Id": "Param_Angle_Rotation2"
 					},
 					"VertexIndex": 2,
-					"Scale": 15,
+					"Scale": 5,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -110,7 +110,7 @@
 						"Id": "Param_Angle_Rotation3"
 					},
 					"VertexIndex": 3,
-					"Scale": 20,
+					"Scale": 10,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -121,7 +121,7 @@
 						"Id": "Param_Angle_Rotation4"
 					},
 					"VertexIndex": 4,
-					"Scale": 25,
+					"Scale": 15,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -132,7 +132,7 @@
 						"Id": "Param_Angle_Rotation5"
 					},
 					"VertexIndex": 5,
-					"Scale": 30,
+					"Scale": 25,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -154,7 +154,7 @@
 						"Id": "Param_Angle_Rotation_1_ArtMesh19"
 					},
 					"VertexIndex": 7,
-					"Scale": 10,
+					"Scale": 1,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
