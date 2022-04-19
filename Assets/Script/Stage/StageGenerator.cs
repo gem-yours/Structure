@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class StageGenerator : MonoBehaviour
 {
     public static void Generate(Vector2 center, int column, int row, GameObject tile, GameObject wall)
     {
@@ -55,7 +55,7 @@ public class MapGenerator : MonoBehaviour
     /// 指定した範囲を壁で塗りつぶす
     private static void GenerateWallEdge(Vector2 start, Vector2 end, GameObject wall, Vector2 size)
     {
-        
+
         for (float x = Mathf.Min(start.x, end.x); x < Mathf.Max(start.x, end.x); x++)
         {
             for (float y = Mathf.Min(start.y, end.y); y < Mathf.Max(start.y, end.y); y++)

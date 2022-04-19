@@ -19,6 +19,8 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
             return;
         }
         transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
+        // ターゲットに向けて少しずらさないと意図せず壁にぶつかることがある
+        transform.position += (Vector3)direction;
     }
 
     public void Move()

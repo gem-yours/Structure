@@ -142,9 +142,17 @@ public class Player : MonoBehaviour, Living
 
     public void Cast(SpellSlot slot)
     {
-        if (indicatorDirection.magnitude < draggingThreshold) return;
+        if (indicatorDirection.magnitude < draggingThreshold)
+        {
+            IndicateDirection(Vector2.zero);
+            return;
+        }
         var spell = deck.GetSpell(slot);
-        if (spell == null) return;
+        if (spell == null)
+        {
+            IndicateDirection(Vector2.zero);
+            return;
+        }
 
         StartCoroutine(Casting(spell, indicatorDirection));
         IndicateDirection(Vector2.zero);
