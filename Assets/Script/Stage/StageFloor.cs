@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class StageFloor : MonoBehaviour
 {
     private float spawnRate = 0.01f;
 
     private IEnumerator AttemptSpawn()
     {
-        for(;;)
+        for (; ; )
         {
             Spawn();
             yield return new WaitForSeconds(1);

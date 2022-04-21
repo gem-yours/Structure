@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     {
         StageGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
 
+        WorldMap.Generator.Generate();
+
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         UIManager.instance.deck = player.deck;
