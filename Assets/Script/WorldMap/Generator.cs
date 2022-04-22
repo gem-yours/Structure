@@ -9,7 +9,7 @@ namespace WorldMap
     {
         public static void Generate()
         {
-            var area = new LocalArea(20, 100);
+            var area = new LocalArea(20, 100, 5, 20);
             Debug.Log(area.ToString());
         }
     }

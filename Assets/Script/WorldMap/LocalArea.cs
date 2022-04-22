@@ -9,58 +9,89 @@ namespace WorldMap
 {
     public class LocalArea
     {
-        private List<List<TileContainer>> tiles;
-        List<Room> rooms = new List<Room>();
+        public List<Room> rooms = new List<Room>();
+        public int roomsNumber = 1;
 
-        public LocalArea(int columns, int rows)
+
+        private List<List<TileContainer>> tiles;
+        private int maxRoomsNumber;
+
+        public LocalArea(int columns, int rows, int maxRoomsNumber = 100, int minimumAreaSize = 0)
         {
+            this.maxRoomsNumber = maxRoomsNumber;
             tiles = Enumerable.Range(0, columns).Select(x =>
             {
                 return Enumerable.Range(0, rows).Select(x => new TileContainer(new Empty())).ToList();
             }).ToList();
-            TryToCreateRooms(tiles, Mathf.Max(columns, rows) * 3);
+
+            TryToCreateRooms(tiles, minimumAreaSize, Direction.Column);
         }
 
-        private void TryToCreateRooms(List<List<TileContainer>> localArea, int minimumArea)
+        private void TryToCreateRooms(List<List<TileContainer>> localArea, int minimumArea, Direction direction)
         {
-            if (localArea.GetArea() < minimumArea)
+            Debug.Log(localArea.GetArea());
+            // 部屋の数が最大数に達している場合はこれ以上分割しない
+            if (localArea.GetArea() < minimumArea ||
+                roomsNumber >= maxRoomsNumber)
             {
                 CreateRoom(localArea);
                 return;
             }
-            var (area1, area2) = SplitArea(localArea);
+
+            var (area1, area2) = SplitArea(localArea, direction);
             if (area1 == null && area2 == null)
             {
+                // 分割に失敗したらそのまま部屋を作成する
                 CreateRoom(localArea);
                 return;
             }
-            if (area1 != null) TryToCreateRooms(area1, minimumArea);
-            if (area2 != null) TryToCreateRooms(area2, minimumArea);
+
+            // 分割に成功すると部屋の数が1つ増える
+            roomsNumber++;
+
+            if (area1 != null)
+            {
+                TryToCreateRooms(area1, minimumArea, direction.Reverse());
+            }
+            if (area2 != null)
+            {
+                TryToCreateRooms(area2, minimumArea, direction.Reverse());
+            }
         }
 
-        private (List<List<TileContainer>>?, List<List<TileContainer>>?) SplitArea(List<List<TileContainer>> map)
+        private (List<List<TileContainer>>?, List<List<TileContainer>>?) SplitArea(List<List<TileContainer>> map, Direction direction)
         {
-            if (map.Count > 6)
+            var minimumEdge = 4;
+            switch (direction)
             {
-                // 3行は残しておかないと壁しかない部屋ができてしまう
-                var border = Random.Range(3, map.Count - 1 - 3);
-                var first = map.GetRange(0, border);
-                var second = map.GetRange(border, map.Count - border);
-                return (first, second);
-            }
-
-            var row = map.FirstOrDefault();
-            if (row.Count > 6)
-            {
-                var border = Random.Range(3, row.Count - 1 - 3);
-                var first = new List<List<TileContainer>>();
-                var second = new List<List<TileContainer>>();
-                for (int i = 0; i < map.Count; i++)
-                {
-                    first.Add(map[i].GetRange(0, border));
-                    second.Add(map[i].GetRange(border, row.Count - border));
-                }
-                return (first, second);
+                case Direction.Column:
+                    {
+                        if (map.Count < minimumEdge * 2)
+                        {
+                            break;
+                        }
+                        var border = Random.Range(minimumEdge, map.Count - 1 - minimumEdge);
+                        var first = map.GetRange(0, border);
+                        var second = map.GetRange(border, map.Count - border);
+                        return (first, second);
+                    }
+                case Direction.Row:
+                    {
+                        var row = map.FirstOrDefault();
+                        if (row.Count < minimumEdge * 2)
+                        {
+                            break;
+                        }
+                        var border = Random.Range(minimumEdge, row.Count - 1 - minimumEdge);
+                        var first = new List<List<TileContainer>>();
+                        var second = new List<List<TileContainer>>();
+                        for (int i = 0; i < map.Count; i++)
+                        {
+                            first.Add(map[i].GetRange(0, border));
+                            second.Add(map[i].GetRange(border, row.Count - border));
+                        }
+                        return (first, second);
+                    }
             }
 
             return (null, null);
@@ -124,11 +155,33 @@ namespace WorldMap
         }
     }
 
+
+    public enum Direction
+    {
+        Column,
+        Row
+    }
+
     public static class AreaExtension
     {
         public static int GetArea<T>(this List<List<T>> tiles)
         {
             return tiles.Count * tiles.FirstOrDefault().Count;
+        }
+    }
+
+    public static class DirectionExtension
+    {
+        public static Direction Reverse(this Direction direction)
+        {
+            if (direction == Direction.Column)
+            {
+                return Direction.Row;
+            }
+            else
+            {
+                return Direction.Column;
+            }
         }
     }
 }
