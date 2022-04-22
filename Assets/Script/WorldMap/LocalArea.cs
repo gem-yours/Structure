@@ -13,7 +13,7 @@ namespace WorldMap
         public int numberOfRoom = 1;
 
 
-        private List<List<TileContainer>> tiles;
+        public List<List<TileContainer>> tiles { get; private set; }
         private int maximumNumberOfRoom;
 
         public LocalArea(int columns, int rows, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
@@ -62,7 +62,7 @@ namespace WorldMap
 
         private (List<List<TileContainer>>, List<List<TileContainer>>)? SplitArea(List<List<TileContainer>> map, Direction direction)
         {
-            var minimumEdge = 4;
+            var minimumEdge = 7;
             switch (direction)
             {
                 case Direction.Column:

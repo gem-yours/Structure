@@ -13,36 +13,47 @@ namespace WorldMap
         {
             this.tile = tile;
         }
+
+        public Object Resource()
+        {
+            return Resources.Load("Map/" + tile.resourcePath);
+        }
     }
     public interface Tile
     {
         string rawValue { get; }
+        string resourcePath { get; }
     }
 
     public class Empty : Tile
     {
         public string rawValue { get; } = "*";
+        public string resourcePath { get; } = "";
     }
 
     public class NorthWall : Tile
     {
         public string rawValue { get; } = "~";
+        public string resourcePath { get; } = "Wall";
     }
 
     public class SouthWall : Tile
     {
         public string rawValue { get; } = "=";
+        public string resourcePath { get; } = "Wall";
     }
 
     public class HorizontalWall : Tile
     {
         public string rawValue { get; } = "+";
+        public string resourcePath { get; } = "Wall";
 
     }
 
     public class Floor : Tile
     {
         public string rawValue { get; } = "#";
+        public string resourcePath { get; } = "Tile";
 
     }
 }

@@ -40,9 +40,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StageGenerator.Generate(Vector2.zero, 25, 10, Resources.Load("Map/Tile") as GameObject, Resources.Load("Map/Wall") as GameObject);
-
-        WorldMap.Generator.Generate();
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(150, 200, 10, 1000),
+            Vector2.zero - new Vector2(10, 10)
+            );
 
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
