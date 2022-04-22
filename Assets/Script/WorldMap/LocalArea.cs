@@ -29,19 +29,20 @@ namespace WorldMap
 
         private void TryToCreateRooms(List<List<TileContainer>> localArea, int minimumArea, Direction direction)
         {
-            Debug.Log(localArea.GetArea());
             // 部屋の数が最大数に達している場合はこれ以上分割しない
-            if (localArea.GetArea() < minimumArea ||
-                roomsNumber >= maxRoomsNumber)
+            if (roomsNumber >= maxRoomsNumber)
             {
                 CreateRoom(localArea);
                 return;
             }
 
-            var (area1, area2) = SplitArea(localArea, direction);
-            if (area1 == null && area2 == null)
+            var (area1, area2) = SplitArea(localArea, direction) ?? default;
+
+            // 分割に失敗したか、分割した結果最小の面積を下回った場合は分割せず部屋を作成する
+            // TODO: 最小の面積を下回った場合、分割位置を変えることで分割できないか確かめる
+            if (area1 == null && area2 == null ||
+                area1?.GetArea() < minimumArea || area2?.GetArea() < minimumArea)
             {
-                // 分割に失敗したらそのまま部屋を作成する
                 CreateRoom(localArea);
                 return;
             }
@@ -59,7 +60,7 @@ namespace WorldMap
             }
         }
 
-        private (List<List<TileContainer>>?, List<List<TileContainer>>?) SplitArea(List<List<TileContainer>> map, Direction direction)
+        private (List<List<TileContainer>>, List<List<TileContainer>>)? SplitArea(List<List<TileContainer>> map, Direction direction)
         {
             var minimumEdge = 4;
             switch (direction)
@@ -94,7 +95,7 @@ namespace WorldMap
                     }
             }
 
-            return (null, null);
+            return null;
         }
 
         private void CreateRoom(List<List<TileContainer>> localArea)
