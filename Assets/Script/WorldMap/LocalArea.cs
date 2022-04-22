@@ -10,53 +10,53 @@ namespace WorldMap
     public class LocalArea
     {
         public List<Room> rooms = new List<Room>();
-        public int roomsNumber = 1;
+        public int numberOfRoom = 1;
 
 
         private List<List<TileContainer>> tiles;
-        private int maxRoomsNumber;
+        private int maximumNumberOfRoom;
 
-        public LocalArea(int columns, int rows, int maxRoomsNumber = 100, int minimumAreaSize = 0)
+        public LocalArea(int columns, int rows, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
         {
-            this.maxRoomsNumber = maxRoomsNumber;
+            this.maximumNumberOfRoom = maximumNumberOfRoom;
             tiles = Enumerable.Range(0, columns).Select(x =>
             {
                 return Enumerable.Range(0, rows).Select(x => new TileContainer(new Empty())).ToList();
             }).ToList();
 
-            TryToCreateRooms(tiles, minimumAreaSize, Direction.Column);
+            TryToCreateRooms(tiles, minimumRoomSize, Direction.Column);
         }
 
-        private void TryToCreateRooms(List<List<TileContainer>> localArea, int minimumArea, Direction direction)
+        private void TryToCreateRooms(List<List<TileContainer>> area, int minimumRoomSize, Direction direction)
         {
             // 部屋の数が最大数に達している場合はこれ以上分割しない
-            if (roomsNumber >= maxRoomsNumber)
+            if (numberOfRoom >= maximumNumberOfRoom)
             {
-                CreateRoom(localArea);
+                CreateRoom(area);
                 return;
             }
 
-            var (area1, area2) = SplitArea(localArea, direction) ?? default;
+            var (area1, area2) = SplitArea(area, direction) ?? default;
 
             // 分割に失敗したか、分割した結果最小の面積を下回った場合は分割せず部屋を作成する
             // TODO: 最小の面積を下回った場合、分割位置を変えることで分割できないか確かめる
             if (area1 == null && area2 == null ||
-                area1?.GetArea() < minimumArea || area2?.GetArea() < minimumArea)
+                area1?.GetSize() <= minimumRoomSize || area2?.GetSize() <= minimumRoomSize)
             {
-                CreateRoom(localArea);
+                CreateRoom(area);
                 return;
             }
 
             // 分割に成功すると部屋の数が1つ増える
-            roomsNumber++;
+            numberOfRoom++;
 
             if (area1 != null)
             {
-                TryToCreateRooms(area1, minimumArea, direction.Reverse());
+                TryToCreateRooms(area1, minimumRoomSize, direction.Reverse());
             }
             if (area2 != null)
             {
-                TryToCreateRooms(area2, minimumArea, direction.Reverse());
+                TryToCreateRooms(area2, minimumRoomSize, direction.Reverse());
             }
         }
 
@@ -165,7 +165,7 @@ namespace WorldMap
 
     public static class AreaExtension
     {
-        public static int GetArea<T>(this List<List<T>> tiles)
+        public static int GetSize<T>(this List<List<T>> tiles)
         {
             return tiles.Count * tiles.FirstOrDefault().Count;
         }
