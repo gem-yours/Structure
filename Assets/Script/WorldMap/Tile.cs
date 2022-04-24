@@ -14,7 +14,7 @@ namespace WorldMap
             this.tile = tile;
         }
 
-        public Object Resource()
+        public Object? Resource()
         {
             return Resources.Load("Map/" + tile.resourcePath);
         }

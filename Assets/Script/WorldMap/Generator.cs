@@ -14,7 +14,9 @@ namespace WorldMap
             {
                 foreach (int y in Enumerable.Range(0, area.tiles[x].Count))
                 {
-                    Instantiate(area.tiles[x][y].Resource(), offset + new Vector2(y, x), Quaternion.identity);
+                    var obj = area.tiles[x][y].Resource();
+                    if (obj == null) continue;
+                    Instantiate(obj, offset + new Vector2(y, x), Quaternion.identity);
                 }
             }
 

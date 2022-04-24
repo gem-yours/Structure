@@ -15,6 +15,7 @@ namespace WorldMap
 
         public List<List<TileContainer>> tiles { get; private set; }
         private int maximumNumberOfRoom;
+        private List<List<List<TileContainer>>> queue = new List<List<List<TileContainer>>>();
 
         public LocalArea(int columns, int rows, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
         {
@@ -24,40 +25,53 @@ namespace WorldMap
                 return Enumerable.Range(0, rows).Select(x => new TileContainer(new Empty())).ToList();
             }).ToList();
 
-            TryToCreateRooms(tiles, minimumRoomSize, Direction.Column);
+            queue.Add(tiles);
+            TryToCreateRooms(minimumRoomSize, Direction.Column);
         }
 
-        private void TryToCreateRooms(List<List<TileContainer>> area, int minimumRoomSize, Direction direction)
+        private void TryToCreateRooms(int minimumRoomSize, Direction direction)
         {
-            // 部屋の数が最大数に達している場合はこれ以上分割しない
-            if (numberOfRoom >= maximumNumberOfRoom)
+            var dir = direction;
+            while (queue.Count > 0)
             {
-                CreateRoom(area);
-                return;
+                // 部屋の候補の数が最大数に達している場合はこれ以上分割しない
+                if (queue.Count >= maximumNumberOfRoom)
+                {
+                    break;
+                }
+                var area = queue.PopLargest();
+                if (area == null)
+                {
+                    return;
+                }
+
+                var (area1, area2) = SplitArea(area, dir) ?? default;
+
+                // 分割に失敗したか、分割した結果最小の面積を下回った場合は分割せず部屋を作成する
+                // TODO: 最小の面積を下回った場合、分割位置を変えることで分割できないか確かめる
+                if (area1 == null && area2 == null ||
+                    area1?.GetSize() <= minimumRoomSize || area2?.GetSize() <= minimumRoomSize)
+                {
+                    CreateRoom(area);
+                    continue;
+                }
+
+                if (area1 != null)
+                {
+                    queue.Add(area1);
+                }
+                if (area2 != null)
+                {
+                    queue.Add(area2);
+                }
+                dir = dir.Reverse();
             }
 
-            var (area1, area2) = SplitArea(area, direction) ?? default;
-
-            // 分割に失敗したか、分割した結果最小の面積を下回った場合は分割せず部屋を作成する
-            // TODO: 最小の面積を下回った場合、分割位置を変えることで分割できないか確かめる
-            if (area1 == null && area2 == null ||
-                area1?.GetSize() <= minimumRoomSize || area2?.GetSize() <= minimumRoomSize)
+            foreach (int i in Enumerable.Range(0, queue.Count))
             {
-                CreateRoom(area);
-                return;
+                CreateRoom(queue[i]);
             }
-
-            // 分割に成功すると部屋の数が1つ増える
-            numberOfRoom++;
-
-            if (area1 != null)
-            {
-                TryToCreateRooms(area1, minimumRoomSize, direction.Reverse());
-            }
-            if (area2 != null)
-            {
-                TryToCreateRooms(area2, minimumRoomSize, direction.Reverse());
-            }
+            queue.RemoveAll((List<List<TileContainer>> _) => true);
         }
 
         private (List<List<TileContainer>>, List<List<TileContainer>>)? SplitArea(List<List<TileContainer>> map, Direction direction)
@@ -100,6 +114,11 @@ namespace WorldMap
 
         private void CreateRoom(List<List<TileContainer>> localArea)
         {
+            if (numberOfRoom > maximumNumberOfRoom)
+            {
+                return;
+            }
+            numberOfRoom++;
             rooms.Add(new Room(localArea));
         }
 
@@ -121,42 +140,6 @@ namespace WorldMap
     }
 
 
-    public class Room
-    {
-        List<List<TileContainer>> tiles;
-
-        public Room(List<List<TileContainer>> tiles)
-        {
-            this.tiles = tiles;
-            for (int x = 0; x < tiles.Count; x++)
-            {
-                for (int y = 0; y < tiles[x].Count; y++)
-                {
-                    tiles[x][y].tile = new Floor();
-                }
-            }
-
-            var north = tiles.FirstOrDefault();
-            foreach (int index in Enumerable.Range(0, north.Count))
-            {
-                north[index].tile = new NorthWall();
-            }
-
-            var south = tiles.LastOrDefault();
-            foreach (int index in Enumerable.Range(0, south.Count))
-            {
-                south[index].tile = new SouthWall();
-            }
-
-            foreach (int index in Enumerable.Range(0, tiles.Count))
-            {
-                tiles[index][0].tile = new HorizontalWall();
-                tiles[index][tiles[index].Count - 1].tile = new HorizontalWall();
-            }
-        }
-    }
-
-
     public enum Direction
     {
         Column,
@@ -168,6 +151,27 @@ namespace WorldMap
         public static int GetSize<T>(this List<List<T>> tiles)
         {
             return tiles.Count * tiles.FirstOrDefault().Count;
+        }
+    }
+
+    public static class AreaQueueExtension
+    {
+        public static List<List<T>>? PopLargest<T>(this List<List<List<T>>> queue)
+        {
+            if (queue.Count < 1)
+            {
+                return null;
+            }
+            var tmp = queue[0];
+            foreach (int i in Enumerable.Range(0, queue.Count))
+            {
+                if (tmp.GetSize() < queue[i].GetSize())
+                {
+                    tmp = queue[i];
+                }
+            }
+            queue.Remove(tmp);
+            return tmp;
         }
     }
 
