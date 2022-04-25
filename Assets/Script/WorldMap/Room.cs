@@ -11,7 +11,7 @@ namespace WorldMap
         {
             get
             {
-                return new Vector2(tiles.Count / 2, tiles[0].Count / 2);
+                return new Vector2(tiles.Count / 2, tiles[0].Count / 2) + offset;
             }
         }
 
@@ -29,10 +29,11 @@ namespace WorldMap
         }
 
         private List<List<TileContainer>> tiles;
+        private Vector2 offset;
 
-
-        public Room(List<List<TileContainer>> tiles)
+        public Room(List<List<TileContainer>> tiles, Vector2? offset)
         {
+            this.offset = offset ?? Vector2.zero;
             this.tiles = tiles;
             for (int x = 0; x < tiles.Count; x++)
             {

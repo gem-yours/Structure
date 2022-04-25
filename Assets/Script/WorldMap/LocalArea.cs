@@ -28,8 +28,7 @@ namespace WorldMap
             queue.Add(tiles);
             TryToCreateRooms(minimumRoomSize, Direction.Column);
 
-            // CreateAisles(tiles, rooms);
-            // CreateAisle(rooms[0], rooms[1]);
+            CreateAisles(tiles, rooms);
         }
 
         private void TryToCreateRooms(int minimumRoomSize, Direction direction)
@@ -122,7 +121,7 @@ namespace WorldMap
                 return;
             }
             numberOfRoom++;
-            rooms.Add(new Room(localArea));
+            rooms.Add(new Room(localArea, tiles.GetOffset(localArea[0][0])));
         }
 
 
@@ -149,19 +148,19 @@ namespace WorldMap
         }
 
 
-        private bool IsAdjacent(Room room, Room target, List<List<TileContainer>> tiles, List<Room> rooms)
+        public static bool IsAdjacent(Room room, Room target, List<List<TileContainer>> tiles, List<Room> rooms)
         {
             var rect = new Rect(
                 Mathf.Min(room.center.x, target.center.x),
                 Mathf.Min(room.center.y, target.center.y),
-                Mathf.Abs(room.center.x - target.center.x),
-                Mathf.Abs(room.center.y - target.center.y)
+                Mathf.Max(Mathf.Abs(room.center.x - target.center.x), 1),
+                Mathf.Max(Mathf.Abs(room.center.y - target.center.y), 1)
             );
 
             // 部屋の中心を対角線とする四角形のなかに空白タイルや他の部屋がなければ隣接している
-            foreach (int x in Enumerable.Range((int)rect.xMin, (int)rect.xMax))
+            foreach (int x in Enumerable.Range((int)rect.xMin, Mathf.Max((int)rect.xMax - (int)rect.xMin, 1)))
             {
-                foreach (int y in Enumerable.Range((int)rect.yMin, (int)rect.yMax))
+                foreach (int y in Enumerable.Range((int)rect.yMin, Mathf.Max((int)rect.yMax - (int)rect.yMin, 1)))
                 {
                     if (tiles[x][y].tile.rawValue == new Empty().rawValue)
                     {
@@ -189,7 +188,7 @@ namespace WorldMap
         private void CreateAisle(Room from, Room to)
         {
             var aisle = to.center - from.center;
-            Debug.Log(aisle);
+            Debug.Log(from.center + " " + aisle);
         }
 
         public override string ToString()
@@ -221,6 +220,21 @@ namespace WorldMap
         public static int GetSize<T>(this List<List<T>> tiles)
         {
             return tiles.Count * tiles.FirstOrDefault().Count;
+        }
+
+        public static Vector2 GetOffset<T>(this List<List<T>> tiles, T target) where T : System.IEquatable<T>
+        {
+            foreach (int x in Enumerable.Range(0, tiles.Count))
+            {
+                foreach (int y in Enumerable.Range(0, tiles[x].Count))
+                {
+                    if (tiles[x][y].Equals(target))
+                    {
+                        return new Vector2(x, y);
+                    }
+                }
+            }
+            return Vector2.zero;
         }
     }
 
