@@ -27,6 +27,9 @@ namespace WorldMap
 
             queue.Add(tiles);
             TryToCreateRooms(minimumRoomSize, Direction.Column);
+
+            // CreateAisles(tiles, rooms);
+            // CreateAisle(rooms[0], rooms[1]);
         }
 
         private void TryToCreateRooms(int minimumRoomSize, Direction direction)
@@ -35,7 +38,7 @@ namespace WorldMap
             while (queue.Count > 0)
             {
                 // 部屋の候補の数が最大数に達している場合はこれ以上分割しない
-                if (queue.Count >= maximumNumberOfRoom)
+                if (numberOfRoom + queue.Count - Random.Range(0, maximumNumberOfRoom / 2) >= maximumNumberOfRoom)
                 {
                     break;
                 }
@@ -122,6 +125,73 @@ namespace WorldMap
             rooms.Add(new Room(localArea));
         }
 
+
+        private void CreateAisles(List<List<TileContainer>> tiles, List<Room> rooms)
+        {
+            // 隣接している部屋を調べる
+            var adjancentCandidates = new List<Room>(rooms);
+            while (adjancentCandidates.Count > 0)
+            {
+                var room = adjancentCandidates.FirstOrDefault();
+                rooms.RemoveAt(0);
+
+                // ある程度距離が近い部屋のみを隣接しているか判定する方がパフォーマンスは良いはず。要検証
+                var closeRooms = rooms.CloseRooms(room, 5);
+                foreach (Room closeRoom in closeRooms)
+                {
+                    if (!IsAdjacent(room, closeRoom, tiles, rooms))
+                    {
+                        return;
+                    }
+                    CreateAisle(room, closeRoom);
+                }
+            }
+        }
+
+
+        private bool IsAdjacent(Room room, Room target, List<List<TileContainer>> tiles, List<Room> rooms)
+        {
+            var rect = new Rect(
+                Mathf.Min(room.center.x, target.center.x),
+                Mathf.Min(room.center.y, target.center.y),
+                Mathf.Abs(room.center.x - target.center.x),
+                Mathf.Abs(room.center.y - target.center.y)
+            );
+
+            // 部屋の中心を対角線とする四角形のなかに空白タイルや他の部屋がなければ隣接している
+            foreach (int x in Enumerable.Range((int)rect.xMin, (int)rect.xMax))
+            {
+                foreach (int y in Enumerable.Range((int)rect.yMin, (int)rect.yMax))
+                {
+                    if (tiles[x][y].tile.rawValue == new Empty().rawValue)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            foreach (Room r in rooms)
+            {
+                if (r == room || r == target)
+                {
+                    continue;
+                }
+                if (rect.Contains(r.center))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        private void CreateAisle(Room from, Room to)
+        {
+            var aisle = to.center - from.center;
+            Debug.Log(aisle);
+        }
+
         public override string ToString()
         {
             var sb = new StringBuilder("area\n", tiles.Count * tiles.FirstOrDefault().Count);
@@ -187,6 +257,21 @@ namespace WorldMap
             {
                 return Direction.Column;
             }
+        }
+    }
+
+    public static class RoomsExtension
+    {
+        public static List<Room> CloseRooms(this List<Room> rooms, Room room, int size)
+        {
+            var tmp = new List<Room>(rooms);
+            tmp.Sort((Room lhs, Room rhs) =>
+            {
+                return (lhs.Distance(room) > rhs.Distance(room)) ? 1 : -1;
+            });
+
+            tmp.RemoveRange(size, tmp.Count - size - 1);
+            return tmp;
         }
     }
 }

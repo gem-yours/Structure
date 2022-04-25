@@ -7,7 +7,29 @@ namespace WorldMap
 {
     public class Room
     {
-        List<List<TileContainer>> tiles;
+        public Vector2 center
+        {
+            get
+            {
+                return new Vector2(tiles.Count / 2, tiles[0].Count / 2);
+            }
+        }
+
+        public int size
+        {
+            get
+            {
+                return tiles.GetSize();
+            }
+        }
+
+        public float Distance(Room room)
+        {
+            return (room.center - center).magnitude;
+        }
+
+        private List<List<TileContainer>> tiles;
+
 
         public Room(List<List<TileContainer>> tiles)
         {

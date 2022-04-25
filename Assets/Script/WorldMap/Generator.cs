@@ -16,7 +16,8 @@ namespace WorldMap
                 {
                     var obj = area.tiles[x][y].Resource();
                     if (obj == null) continue;
-                    Instantiate(obj, offset + new Vector2(y, x), Quaternion.identity);
+                    // タイルの中心を中央から左下にするため+0.5している
+                    Instantiate(obj, offset + new Vector2(y + 0.5f, x + 0.5f), Quaternion.identity);
                 }
             }
 
