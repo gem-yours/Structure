@@ -21,7 +21,7 @@ namespace WorldMap
 
         public bool Equals(TileContainer other)
         {
-            return tile.rawValue == other.tile.rawValue;
+            return this == other;
         }
     }
     public interface Tile

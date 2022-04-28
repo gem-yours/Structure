@@ -132,15 +132,15 @@ namespace WorldMap
             while (adjancentCandidates.Count > 0)
             {
                 var room = adjancentCandidates.FirstOrDefault();
-                rooms.RemoveAt(0);
+                adjancentCandidates.RemoveAt(0);
 
                 // ある程度距離が近い部屋のみを隣接しているか判定する方がパフォーマンスは良いはず。要検証
-                var closeRooms = rooms.CloseRooms(room, 5);
+                var closeRooms = adjancentCandidates;
                 foreach (Room closeRoom in closeRooms)
                 {
                     if (!IsAdjacent(room, closeRoom, tiles, rooms))
                     {
-                        return;
+                        continue;
                     }
                     CreateAisle(room, closeRoom);
                 }
@@ -150,12 +150,7 @@ namespace WorldMap
 
         public static bool IsAdjacent(Room room, Room target, List<List<TileContainer>> tiles, List<Room> rooms)
         {
-            var rect = new Rect(
-                Mathf.Min(room.center.x, target.center.x),
-                Mathf.Min(room.center.y, target.center.y),
-                Mathf.Max(Mathf.Abs(room.center.x - target.center.x), 1),
-                Mathf.Max(Mathf.Abs(room.center.y - target.center.y), 1)
-            );
+            var rect = room.CenterToCenter(target);
 
             // 部屋の中心を対角線とする四角形のなかに空白タイルや他の部屋がなければ隣接している
             foreach (int x in Enumerable.Range((int)rect.xMin, Mathf.Max((int)rect.xMax - (int)rect.xMin, 1)))
@@ -187,8 +182,14 @@ namespace WorldMap
 
         private void CreateAisle(Room from, Room to)
         {
-            var aisle = to.center - from.center;
-            Debug.Log(from.center + " " + aisle);
+            var rect = from.CenterToCenter(to);
+            foreach (int x in Enumerable.Range((int)rect.xMin, Mathf.Max((int)rect.xMax - (int)rect.xMin, 1)))
+            {
+                foreach (int y in Enumerable.Range((int)rect.yMin, Mathf.Max((int)rect.yMax - (int)rect.yMin, 1)))
+                {
+                    tiles[x][y].tile = new Floor();
+                }
+            }
         }
 
         public override string ToString()

@@ -60,6 +60,22 @@ namespace WorldMap
                 tiles[index][0].tile = new HorizontalWall();
                 tiles[index][tiles[index].Count - 1].tile = new HorizontalWall();
             }
+
+            Vector2 c = (this.center - offset) ?? Vector2.zero;
+            Debug.Log(c + " " + tiles.Count + " " + tiles[0].Count);
+            if (c != null)
+                tiles[(int)c.x][(int)c.y].tile = new Empty();
+        }
+
+        // 中心を結んだ線を対角線とする四角形を作成する
+        public Rect CenterToCenter(Room other)
+        {
+            return new Rect(
+                Mathf.Min(center.x, other.center.x),
+                Mathf.Min(center.y, other.center.y),
+                Mathf.Max(Mathf.Abs(center.x - other.center.x), 1),
+                Mathf.Max(Mathf.Abs(center.y - other.center.y), 1)
+            );
         }
 
         public void MakeGate()
