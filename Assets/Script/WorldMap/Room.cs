@@ -60,11 +60,6 @@ namespace WorldMap
                 tiles[index][0].tile = new HorizontalWall();
                 tiles[index][tiles[index].Count - 1].tile = new HorizontalWall();
             }
-
-            Vector2 c = (this.center - offset) ?? Vector2.zero;
-            Debug.Log(c + " " + tiles.Count + " " + tiles[0].Count);
-            if (c != null)
-                tiles[(int)c.x][(int)c.y].tile = new Empty();
         }
 
         // 中心を結んだ線を対角線とする四角形を作成する
