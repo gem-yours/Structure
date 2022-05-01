@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Stage;
 
 public class BoltProjectile : MonoBehaviour, SpellEffect
 {
@@ -53,6 +54,8 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
         }
         if (other.gameObject.tag == "Wall")
         {
+            var wall = other.gameObject.GetComponent<Wall>();
+            wall.OnHit(spell.damage);
             OnHit();
         }
     }
