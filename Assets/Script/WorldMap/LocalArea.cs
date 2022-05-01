@@ -29,8 +29,6 @@ namespace WorldMap
 
             queue.Add(ground);
             TryToCreateRooms(minimumRoomSize, Direction.Column);
-
-            CreateAisles(ground, rooms);
         }
 
         private void TryToCreateRooms(int minimumRoomSize, Direction direction)
@@ -90,29 +88,6 @@ namespace WorldMap
         }
 
 
-        private void CreateAisles(Ground ground, List<Room> rooms)
-        {
-            // 隣接している部屋を調べる
-            var adjancentCandidates = new List<Room>(rooms);
-            while (adjancentCandidates.Count > 0)
-            {
-                var room = adjancentCandidates.FirstOrDefault();
-                adjancentCandidates.RemoveAt(0);
-
-                // ある程度距離が近い部屋のみを隣接しているか判定する方がパフォーマンスは良いはず。要検証
-                var closeRooms = adjancentCandidates;
-                foreach (Room closeRoom in closeRooms)
-                {
-                    if (!IsAdjacent(room, closeRoom, ground.tiles, rooms))
-                    {
-                        continue;
-                    }
-                    CreateAisle(room, closeRoom);
-                }
-            }
-        }
-
-
         public static bool IsAdjacent(Room room, Room target, List<List<TileContainer>> tiles, List<Room> rooms)
         {
             var rect = room.CenterToCenter(target);
@@ -144,39 +119,6 @@ namespace WorldMap
             return true;
         }
 
-
-        private void CreateAisle(Room from, Room to)
-        {
-            List<TileContainer>? fromTerrain = null;
-            List<TileContainer>? toTerrain = null;
-            var rect = from.CenterToCenter(to);
-            foreach (int x in Enumerable.Range((int)rect.xMin, Mathf.Max((int)rect.xMax - (int)rect.xMin, 1)))
-            {
-                foreach (int y in Enumerable.Range((int)rect.yMin, Mathf.Max((int)rect.yMax - (int)rect.yMin, 1)))
-                {
-                    var tile = ground.Get(x, y);
-                    if (tile == null) continue;
-                    if (fromTerrain == null)
-                    {
-                        fromTerrain = from.GetTerrain(tile);
-                    }
-                    if (toTerrain == null)
-                    {
-                        toTerrain = to.GetTerrain(tile);
-                    }
-                    if (fromTerrain != null || toTerrain != null) break;
-                }
-            }
-            if (fromTerrain == null || toTerrain == null) return;
-            var largerTerrain = (fromTerrain.Count > toTerrain.Count) ? fromTerrain : toTerrain;
-            var smallerTerrain = (fromTerrain.Count <= toTerrain.Count) ? fromTerrain : toTerrain;
-            foreach (int i in Enumerable.Range(0, smallerTerrain.Count))
-            {
-                largerTerrain[i].tile = new Empty();
-                smallerTerrain[i].tile = new Empty();
-            }
-
-        }
 
         public override string ToString()
         {
