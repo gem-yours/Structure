@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#nullable enable
 namespace WorldMap
 {
     public class Room
@@ -28,6 +29,7 @@ namespace WorldMap
             return (room.center - center).magnitude;
         }
 
+        // TODO: Groundクラスでタイルを管理する
         private List<List<TileContainer>> tiles;
         private Vector2 offset;
 
@@ -43,22 +45,22 @@ namespace WorldMap
                 }
             }
 
-            var north = tiles.FirstOrDefault();
-            foreach (int index in Enumerable.Range(0, north.Count))
+            var leading = tiles.FirstOrDefault();
+            foreach (int index in Enumerable.Range(0, leading.Count))
             {
-                north[index].tile = new NorthWall();
+                leading[index].tile = new HorizontalWall();
             }
 
-            var south = tiles.LastOrDefault();
-            foreach (int index in Enumerable.Range(0, south.Count))
+            var trailing = tiles.LastOrDefault();
+            foreach (int index in Enumerable.Range(0, trailing.Count))
             {
-                south[index].tile = new SouthWall();
+                trailing[index].tile = new HorizontalWall();
             }
 
             foreach (int index in Enumerable.Range(0, tiles.Count))
             {
-                tiles[index][0].tile = new HorizontalWall();
-                tiles[index][tiles[index].Count - 1].tile = new HorizontalWall();
+                tiles[index][0].tile = new SouthWall();
+                tiles[index][tiles[index].Count - 1].tile = new NorthWall();
             }
         }
 
@@ -71,6 +73,46 @@ namespace WorldMap
                 Mathf.Max(Mathf.Abs(center.x - other.center.x), 1),
                 Mathf.Max(Mathf.Abs(center.y - other.center.y), 1)
             );
+        }
+
+        public Vector2? GetPosition(TileContainer container)
+        {
+            foreach (int x in Enumerable.Range(0, tiles.Count))
+            {
+                foreach (int y in Enumerable.Range(0, tiles[x].Count))
+                {
+                    if (tiles[x][y] == container)
+                    {
+                        return new Vector2(x, y);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public List<TileContainer>? GetTerrain(TileContainer container)
+        {
+            // tmpがunwrapされないので別の変数を用意する
+            var tmp = GetPosition(container);
+            if (tmp == null) return null;
+            var position = (Vector2)tmp;
+
+            if (container.Equals(new SouthWall()) ||
+                container.Equals(new NorthWall()))
+            {
+                var terrain = new List<TileContainer>();
+                foreach (int x in Enumerable.Range(0, tiles.Count))
+                {
+                    terrain.Add(tiles[x][(int)position.y]);
+                }
+                return terrain;
+            }
+            if (container.Equals(new HorizontalWall()))
+            {
+                // TODO: 端っこを含まないようにする
+                return tiles[(int)position.x];
+            }
+            return null;
         }
 
         public void MakeGate()

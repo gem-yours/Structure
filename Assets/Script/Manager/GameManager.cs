@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(150, 200, 10, 1000),
+            new WorldMap.LocalArea(50, 50, 5),
             Vector2.zero - new Vector2(10, 10)
             );
 

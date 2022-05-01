@@ -39,7 +39,7 @@ namespace WorldMap
             while (queue.Count > 0)
             {
                 // 部屋の候補の数が最大数に達している場合はこれ以上分割しない
-                if (numberOfRoom + queue.Count - Random.Range(0, maximumNumberOfRoom / 2) >= maximumNumberOfRoom)
+                if (numberOfRoom + queue.Count - Random.Range(0, maximumNumberOfRoom / 2) > maximumNumberOfRoom)
                 {
                     break;
                 }
@@ -49,7 +49,7 @@ namespace WorldMap
                     return;
                 }
 
-                var (area1, area2) = ground.SplitArea(Direction.Column) ?? default;
+                var (area1, area2) = ground.SplitArea(dir) ?? default;
 
                 // 分割に失敗したか、分割した結果最小の面積を下回った場合は分割せず部屋を作成する
                 // TODO: 最小の面積を下回った場合、分割位置を変えることで分割できないか確かめる
@@ -147,15 +147,35 @@ namespace WorldMap
 
         private void CreateAisle(Room from, Room to)
         {
+            List<TileContainer>? fromTerrain = null;
+            List<TileContainer>? toTerrain = null;
             var rect = from.CenterToCenter(to);
             foreach (int x in Enumerable.Range((int)rect.xMin, Mathf.Max((int)rect.xMax - (int)rect.xMin, 1)))
             {
                 foreach (int y in Enumerable.Range((int)rect.yMin, Mathf.Max((int)rect.yMax - (int)rect.yMin, 1)))
                 {
-                    var container = ground.Get(x, y);
-                    if (container != null) container.tile = new Floor();
+                    var tile = ground.Get(x, y);
+                    if (tile == null) continue;
+                    if (fromTerrain == null)
+                    {
+                        fromTerrain = from.GetTerrain(tile);
+                    }
+                    if (toTerrain == null)
+                    {
+                        toTerrain = to.GetTerrain(tile);
+                    }
+                    if (fromTerrain != null || toTerrain != null) break;
                 }
             }
+            if (fromTerrain == null || toTerrain == null) return;
+            var largerTerrain = (fromTerrain.Count > toTerrain.Count) ? fromTerrain : toTerrain;
+            var smallerTerrain = (fromTerrain.Count <= toTerrain.Count) ? fromTerrain : toTerrain;
+            foreach (int i in Enumerable.Range(0, smallerTerrain.Count))
+            {
+                largerTerrain[i].tile = new Empty();
+                smallerTerrain[i].tile = new Empty();
+            }
+
         }
 
         public override string ToString()

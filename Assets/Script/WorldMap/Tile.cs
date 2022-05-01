@@ -5,7 +5,7 @@ using UnityEngine;
 #nullable enable
 namespace WorldMap
 {
-    public class TileContainer : System.IEquatable<TileContainer>
+    public class TileContainer : System.IEquatable<TileContainer>, System.IEquatable<Tile>
     {
         public Tile tile;
 
@@ -21,7 +21,12 @@ namespace WorldMap
 
         public bool Equals(TileContainer other)
         {
-            return this == other;
+            return tile.rawValue == other.tile.rawValue;
+        }
+
+        public bool Equals(Tile other)
+        {
+            return tile.rawValue == other.rawValue;
         }
     }
     public interface Tile

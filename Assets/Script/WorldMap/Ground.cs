@@ -41,6 +41,13 @@ namespace WorldMap
             this.tiles = tiles;
         }
 
+        public Ground(List<TileContainer> tiles)
+        {
+            var tmp = new List<List<TileContainer>>();
+            tmp.Add(tiles);
+            this.tiles = tmp;
+        }
+
         public List<TileContainer>? GetRow(int x)
         {
             if (x < 0 || x > tiles.Count)
