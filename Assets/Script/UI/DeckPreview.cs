@@ -112,13 +112,14 @@ public class DeckPreview : MonoBehaviour
             Destroy(faderObj);
             yield break;
         }
-        var animationDuration = 0.25f;
-        var easeInOut = AnimationCurve.EaseInOut(0, 1, animationDuration, 0);
-        for (float current = 0; current <= animationDuration; current += Time.deltaTime)
-        {
-            fader.transform.localScale = new Vector3(1, easeInOut.Evaluate(current), 1);
-            yield return null;
-        }
+
+        yield return AnimationUtil.EaseInOut(
+            0.25f,
+            (float current) =>
+            {
+                fader.transform.localScale = new Vector3(1, current, 1);
+            }
+            );
         Destroy(fader.gameObject);
     }
 

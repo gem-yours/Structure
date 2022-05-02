@@ -36,21 +36,14 @@ public class SpellIcon : MonoBehaviour
     private IEnumerator _Attach(GameObject target)
     {
         var animationDuration = 0.5f;
-        var rotationCurve = AnimationCurve.EaseInOut(0, 0, animationDuration, 0);
-        rotationCurve.AddKey(0.2f, 50);
-        for (float current = 0; current < animationDuration; current += Time.deltaTime)
-        {
-            var displacment = transform.position - target.transform.position;
-            var easeInOut = AnimationCurve.EaseInOut(0, displacment.magnitude, animationDuration, 0);
-            transform.position = target.transform.position + displacment.normalized * easeInOut.Evaluate(current);
-            var rotationDegree = rotationCurve.Evaluate(current);
-            if (rotationDegree > 0)
+        yield return AnimationUtil.EaseInOut(
+            animationDuration,
+            (current) =>
             {
-                transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, rotationDegree));
+                var displacment = transform.position - target.transform.position;
+                transform.position = target.transform.position + displacment * current;
             }
-            yield return null;
-        }
-        // transform.position = target.transform.position;
+        );
     }
 
     // Start is called before the first frame update

@@ -1,3 +1,16 @@
 {
-	"name": "Stage"
+    "name": "Stage",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9a1fda5549728d9458a0153e3047932e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -132,7 +132,7 @@ public class Player : MonoBehaviour, Living
         else
         {
             // 敵がいないときは向いてる方向に発射する
-            bolt.Target(transform.position + Vector3.right * transform.localScale.x);
+            bolt.Target(transform.position + Vector3.left * transform.localScale.x);
         }
 
         yield return new WaitForSeconds(0.5f);
