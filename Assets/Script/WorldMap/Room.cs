@@ -48,13 +48,13 @@ namespace WorldMap
             var leading = tiles.FirstOrDefault();
             foreach (int index in Enumerable.Range(0, leading.Count))
             {
-                leading[index].tile = new HorizontalWall();
+                leading[index].tile = new VerticalWall();
             }
 
             var trailing = tiles.LastOrDefault();
             foreach (int index in Enumerable.Range(0, trailing.Count))
             {
-                trailing[index].tile = new HorizontalWall();
+                trailing[index].tile = new VerticalWall();
             }
 
             foreach (int index in Enumerable.Range(0, tiles.Count))
@@ -107,7 +107,7 @@ namespace WorldMap
                 }
                 return terrain;
             }
-            if (container.Equals(new HorizontalWall()))
+            if (container.Equals(new VerticalWall()))
             {
                 // TODO: 端っこを含まないようにする
                 return tiles[(int)position.x];

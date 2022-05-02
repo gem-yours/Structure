@@ -53,7 +53,7 @@ namespace WorldMap
         public string resourcePath { get; } = "Wall";
     }
 
-    public class HorizontalWall : Tile
+    public class VerticalWall : Tile
     {
         public string rawValue { get; } = "+";
         public string resourcePath { get; } = "Wall";
