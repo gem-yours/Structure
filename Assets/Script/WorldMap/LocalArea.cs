@@ -17,6 +17,8 @@ namespace WorldMap
         private int maximumNumberOfRoom;
         private List<Ground> queue = new List<Ground>();
 
+        public LocalArea(Vector2 size, int maximumNumberOfRoom = 100, int minimumRoomSize = 0) : this((int)size.x, (int)size.y, maximumNumberOfRoom, minimumRoomSize) { }
+
         public LocalArea(int columns, int rows, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
         {
             this.maximumNumberOfRoom = maximumNumberOfRoom;

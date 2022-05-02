@@ -40,10 +40,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(50, 50, 5),
-            Vector2.zero - new Vector2(10, 10)
-            );
+        GenerateMap(10, 100, 10);
 
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
@@ -109,9 +106,45 @@ public class GameManager : MonoBehaviour
         };
     }
 
-    // Update is called once per frame
-    void Update()
+    private void GenerateMap(int centerSize, int mapSize, int maxNumberOfRoom)
     {
+        var center = new Vector2(centerSize, centerSize);
+        var map = new Vector2(mapSize, mapSize - centerSize);
 
+        // 中心
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(center, 1),
+            Vector2.Scale(-center, new Vector2(0.5f, 0.5f))
+        );
+
+        // 左下
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(map, (int)(Random.value * maxNumberOfRoom)),
+            new Vector2(-map.x + center.x / 2, -map.y - center.y / 2)
+        );
+        // 左上
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(map.Swap(), (int)(Random.value * maxNumberOfRoom)),
+            new Vector2(-map.x + center.x / 2, -center.y / 2)
+        );
+        // 右上
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(map, (int)(Random.value * maxNumberOfRoom)),
+            new Vector2(-center.x / 2, center.y / 2)
+        );
+        // 右下
+        WorldMap.Generator.Generate(
+            new WorldMap.LocalArea(map.Swap(), (int)(Random.value * maxNumberOfRoom)),
+            new Vector2(center.x / 2, -map.y - center.y / 2)
+        );
+
+    }
+}
+
+static class VectorExtension
+{
+    public static Vector2 Swap(this Vector2 vector)
+    {
+        return new Vector2(vector.y, vector.x);
     }
 }
