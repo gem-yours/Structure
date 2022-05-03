@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenerateMap(10, 100, 10);
+        GenerateMap(10, 75, 10);
 
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
@@ -119,25 +119,24 @@ public class GameManager : MonoBehaviour
 
         // 左下
         WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(map, (int)(Random.value * maxNumberOfRoom)),
+            new WorldMap.LocalArea(map, (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)),
             new Vector2(-map.x + center.x / 2, -map.y - center.y / 2)
         );
         // 左上
         WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(map.Swap(), (int)(Random.value * maxNumberOfRoom)),
+            new WorldMap.LocalArea(map.Swap(), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)),
             new Vector2(-map.x + center.x / 2, -center.y / 2)
         );
         // 右上
         WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(map, (int)(Random.value * maxNumberOfRoom)),
+            new WorldMap.LocalArea(map, (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)),
             new Vector2(-center.x / 2, center.y / 2)
         );
         // 右下
         WorldMap.Generator.Generate(
-            new WorldMap.LocalArea(map.Swap(), (int)(Random.value * maxNumberOfRoom)),
+            new WorldMap.LocalArea(map.Swap(), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)),
             new Vector2(center.x / 2, -map.y - center.y / 2)
         );
-
     }
 }
 
