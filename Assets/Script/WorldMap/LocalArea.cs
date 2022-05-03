@@ -33,6 +33,22 @@ namespace WorldMap
             TryToCreateRooms(minimumRoomSize, Direction.Column);
         }
 
+
+        public Room? GetRoom(Vector2 position)
+        {
+            foreach (int i in Enumerable.Range(0, rooms.Count))
+            {
+                var room = rooms[i];
+                var tile = ground.Get((int)position.x, (int)position.y);
+                if (tile == null) continue;
+                if (room.GetPosition(tile) != null)
+                {
+                    return room;
+                }
+            }
+            return null;
+        }
+
         private void TryToCreateRooms(int minimumRoomSize, Direction direction)
         {
             var dir = direction;

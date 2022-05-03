@@ -75,6 +75,11 @@ namespace WorldMap
             );
         }
 
+        public bool isContain(TileContainer container)
+        {
+            return GetPosition(container) == null;
+        }
+
         public Vector2? GetPosition(TileContainer container)
         {
             foreach (int x in Enumerable.Range(0, tiles.Count))
