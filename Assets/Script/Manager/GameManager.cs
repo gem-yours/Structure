@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public Player player;
     public Room currentRoom = null;
 
+    public int centerSize { get; private set; } = 10;
+    public int areaSize { get; private set; } = 75;
+
     private List<LocalArea> localAreas = new List<LocalArea>();
     private GameObject playerObject;
 
@@ -47,8 +50,6 @@ public class GameManager : MonoBehaviour
         player = playerObject.GetComponent<Player>();
         UIManager.instance.deck = player.deck;
 
-        var centerSize = 10;
-        var areaSize = 75;
         GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
 

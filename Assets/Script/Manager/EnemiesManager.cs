@@ -26,7 +26,24 @@ public class EnemiesManager : MonoBehaviour
 
     }
 
-    public GameObject Spawn(Vector3 location)
+
+    private IEnumerator AttemptSpawn()
+    {
+        // プレイヤーのいちは中心が0の座標系だが、LocalAreaは左下が0なので補正する
+        // TODO: 知識が漏れ出しているような感じがするのでLocalAreaやRoomの方でいい感じに処理してほしい
+        var offsetValue = (GameManager.instance.areaSize + GameManager.instance.centerSize / 2f) / 2f;
+        var offset = new Vector2(offsetValue, offsetValue);
+        for (; ; )
+        {
+            var rect = GameManager.instance.currentRoom.rect;
+            if (rect == null) continue;
+            var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
+            Spawn(position - offset);
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private GameObject Spawn(Vector3 location)
     {
         if (enemies.Count > enemiesLimit)
         {
@@ -87,15 +104,8 @@ public class EnemiesManager : MonoBehaviour
         return enemies[0];
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        Init();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        StartCoroutine(AttemptSpawn());
     }
 }

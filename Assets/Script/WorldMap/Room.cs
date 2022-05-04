@@ -24,6 +24,14 @@ namespace WorldMap
             }
         }
 
+        public Rect rect
+        {
+            get
+            {
+                return new Rect(offset.x, offset.y, tiles.Count, tiles[0].Count);
+            }
+        }
+
         public float Distance(Room room)
         {
             return (room.center - center).magnitude;
@@ -118,11 +126,6 @@ namespace WorldMap
                 return tiles[(int)position.x];
             }
             return null;
-        }
-
-        public void MakeGate()
-        {
-
         }
     }
 }
