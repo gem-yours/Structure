@@ -198,7 +198,7 @@ public class Player : MonoBehaviour, Living
         isInvincible = false;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnHit(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
@@ -208,7 +208,16 @@ public class Player : MonoBehaviour, Living
         }
     }
 
-    // Start is called before the first frame update
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        OnHit(other);
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        OnHit(other);
+    }
+
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
