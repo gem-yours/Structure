@@ -11,7 +11,7 @@ public class Player : MonoBehaviour, Living
     public float speed { private set; get; } = 0.15f;
 
     public Deck deck = new Deck(
-        new List<Spell> { new Ignis(), new Ignis(), new Ignis(), new Ignis(), new Explosion() }
+        new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() }
         );
 
 #pragma warning disable CS8618
