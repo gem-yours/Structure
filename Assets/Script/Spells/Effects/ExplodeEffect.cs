@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Stage;
 
 #nullable enable
 public class ExplodeEffect : MonoBehaviour
@@ -12,7 +13,7 @@ public class ExplodeEffect : MonoBehaviour
     private Spell? spell;
     private ParticleSystem? particle;
     private CircleCollider2D? circleCollider2D;
-    private float maxRadius = 1.5f;
+    private float maxRadius = 1f;
 
     public void Explode(Spell spell)
     {
@@ -36,7 +37,8 @@ public class ExplodeEffect : MonoBehaviour
         yield return new WaitForSeconds(duration - expandingDuration);
         if (onDurationEnded != null) onDurationEnded();
     }
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private void OnHit(Collider2D other)
     {
         if (spell == null) return;
         if (other.gameObject.tag == "Enemy")
@@ -44,10 +46,21 @@ public class ExplodeEffect : MonoBehaviour
             var enemy = other.gameObject.GetComponent<Enemy>();
             enemy.OnHit(spell.damage);
         }
+        if (other.gameObject.tag == "Wall")
+        {
+            var wall = other.gameObject.GetComponent<Wall>();
+            wall.OnHit(spell.damage);
+        }
     }
 
-    void OnTriggerStay(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        OnHit(other);
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        OnHit(other);
     }
 
     private void Start()
