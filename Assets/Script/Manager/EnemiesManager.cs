@@ -29,10 +29,6 @@ public class EnemiesManager : MonoBehaviour
 
     private IEnumerator AttemptSpawn()
     {
-        // プレイヤーのいちは中心が0の座標系だが、LocalAreaは左下が0なので補正する
-        // TODO: 知識が漏れ出しているような感じがするのでLocalAreaやRoomの方でいい感じに処理してほしい
-        var offsetValue = (MapManager.instance.areaSize + MapManager.instance.centerSize / 2f) / 2f;
-        var offset = new Vector2(offsetValue, offsetValue);
         for (; ; )
         {
             var room = MapManager.instance.currentRoom;
@@ -47,8 +43,15 @@ public class EnemiesManager : MonoBehaviour
                 yield return new WaitForSeconds(1);
                 continue;
             }
+            if (MapManager.instance.currentArea == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
+            var offset = MapManager.instance.currentArea.offset;
+
             var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
-            Spawn(position - offset);
+            Spawn(position + offset);
             yield return new WaitForSeconds(1);
         }
     }

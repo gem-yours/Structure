@@ -8,6 +8,7 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager instance;
     public Room currentRoom { get; private set; }
+    public LocalArea currentArea { get; private set; }
     public int centerSize { get; } = 10;
     public int areaSize { get; } = 75;
     private List<LocalArea> localAreas = new List<LocalArea>();
@@ -24,64 +25,62 @@ public class MapManager : MonoBehaviour
         var center = new Vector2(centerSize, centerSize);
         var map = new Vector2(areaSize, areaSize - centerSize);
 
-        var centerRoom = new WorldMap.LocalArea(center, 1);
-        WorldMap.Generator.Generate(
-            centerRoom,
-            Vector2.Scale(-center, new Vector2(0.5f, 0.5f))
+        var centerRoom = new WorldMap.LocalArea(
+            center,
+            Vector2.Scale(-center, new Vector2(0.5f, 0.5f)),
+            1
         );
+        WorldMap.Generator.Generate(centerRoom);
         localAreas.Add(centerRoom);
 
-        var bottomLeading = new WorldMap.LocalArea(map, (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom));
-        WorldMap.Generator.Generate(
-            bottomLeading,
-            new Vector2(-map.x + center.x / 2, -map.y - center.y / 2)
+        var bottomLeading = new WorldMap.LocalArea(
+            map,
+            new Vector2(-map.x + center.x / 2, -map.y - center.y / 2),
+            (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)
         );
+        WorldMap.Generator.Generate(bottomLeading);
         localAreas.Add(bottomLeading);
 
-        var topLeading = new WorldMap.LocalArea(map.Swap(), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom));
-        WorldMap.Generator.Generate(
-            topLeading,
-            new Vector2(-map.x + center.x / 2, -center.y / 2)
+        var topLeading = new WorldMap.LocalArea(
+            map.Swap(),
+            new Vector2(-map.x + center.x / 2, -center.y / 2),
+            (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)
         );
+        WorldMap.Generator.Generate(topLeading);
         localAreas.Add(topLeading);
 
-        var topTrailing = new WorldMap.LocalArea(map, (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom));
-        WorldMap.Generator.Generate(
-            topTrailing,
-            new Vector2(-center.x / 2, center.y / 2)
+        var topTrailing = new WorldMap.LocalArea(
+            map,
+            new Vector2(-center.x / 2, center.y / 2), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)
         );
+        WorldMap.Generator.Generate(topTrailing);
         localAreas.Add(topTrailing);
 
-        var bottomTrailing = new WorldMap.LocalArea(map.Swap(), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom));
-        WorldMap.Generator.Generate(
-           bottomTrailing,
-            new Vector2(center.x / 2, -map.y - center.y / 2)
+        var bottomTrailing = new WorldMap.LocalArea(
+            map.Swap(),
+            new Vector2(center.x / 2, -map.y - center.y / 2), (int)Random.Range(maxNumberOfRoom / 2, maxNumberOfRoom)
         );
+        WorldMap.Generator.Generate(bottomTrailing);
         localAreas.Add(bottomTrailing);
     }
 
     private IEnumerator DetectWhereThePlayerIs(int centerSize, int areaSize, int timeInterval = 1)
     {
-        // プレイヤーの位置は中心が0の座標系だが、LocalAreaは左下が0なので補正する
-        var offsetValue = (areaSize + centerSize / 2f) / 2f;
-        var offset = new Vector2(offsetValue, offsetValue);
         for (; ; )
         {
             var player = GameManager.instance.player;
             if (player != null)
             {
-                // TODO: エリアに応じたオフセットの計算
                 foreach (LocalArea localArea in localAreas)
                 {
-                    currentRoom = localArea.GetRoom((Vector2)player.gameObject.transform.position + offset);
+                    currentRoom = localArea.GetRoom((Vector2)player.gameObject.transform.position - localArea.offset);
                     if (currentRoom != null)
                     {
+                        currentArea = localArea;
                         break;
                     }
                 }
             }
-            if (currentRoom != null)
-                Debug.Log(currentRoom.center);
             yield return new WaitForSeconds(timeInterval);
         }
     }

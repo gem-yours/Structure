@@ -11,15 +11,16 @@ namespace WorldMap
     {
         public List<Room> rooms = new List<Room>();
         public int numberOfRoom = 1;
+        public Vector2 offset { get; private set; } = Vector2.zero;
 
 
         public Ground ground { get; private set; }
         private int maximumNumberOfRoom;
         private List<Ground> queue = new List<Ground>();
 
-        public LocalArea(Vector2 size, int maximumNumberOfRoom = 100, int minimumRoomSize = 0) : this((int)size.x, (int)size.y, maximumNumberOfRoom, minimumRoomSize) { }
+        public LocalArea(Vector2 size, Vector2 offset, int maximumNumberOfRoom = 100, int minimumRoomSize = 0) : this((int)size.x, (int)size.y, offset, maximumNumberOfRoom, minimumRoomSize) { }
 
-        public LocalArea(int columns, int rows, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
+        public LocalArea(int columns, int rows, Vector2 offset, int maximumNumberOfRoom = 100, int minimumRoomSize = 0)
         {
             this.maximumNumberOfRoom = maximumNumberOfRoom;
             ground = new Ground(
@@ -28,6 +29,7 @@ namespace WorldMap
                     return Enumerable.Range(0, rows).Select(x => new TileContainer(new Empty())).ToList();
                 }).ToList()
             );
+            this.offset = offset;
 
             queue.Add(ground);
             TryToCreateRooms(minimumRoomSize, Direction.Column);
