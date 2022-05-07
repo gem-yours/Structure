@@ -38,7 +38,7 @@ namespace WorldMap
     public class Empty : Tile
     {
         public string rawValue { get; } = "*";
-        public string resourcePath { get; } = "";
+        public string resourcePath { get; } = "Empty";
     }
 
     public class NorthWall : Tile

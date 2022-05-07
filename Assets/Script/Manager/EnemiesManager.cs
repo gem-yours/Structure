@@ -35,8 +35,18 @@ public class EnemiesManager : MonoBehaviour
         var offset = new Vector2(offsetValue, offsetValue);
         for (; ; )
         {
-            var rect = GameManager.instance.currentRoom.rect;
-            if (rect == null) continue;
+            var room = GameManager.instance.currentRoom;
+            if (room == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
+            var rect = room.rect;
+            if (rect == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
             var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
             Spawn(position - offset);
             yield return new WaitForSeconds(1);

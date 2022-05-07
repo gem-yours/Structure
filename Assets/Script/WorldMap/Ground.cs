@@ -59,8 +59,8 @@ namespace WorldMap
 
         public TileContainer? Get(int x, int y)
         {
-            if (x < 0 || x > tiles.Count ||
-                y < 0 || y > tiles[x].Count)
+            if (x < 0 || x >= tiles.Count ||
+                y < 0 || y >= tiles[x].Count)
             {
                 return null;
             }
