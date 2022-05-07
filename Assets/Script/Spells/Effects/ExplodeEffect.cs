@@ -28,6 +28,7 @@ public class ExplodeEffect : MonoBehaviour
         // 当たり判定をだんだん大きくする
         var expandingDuration = Mathf.Max(0.5f, duration);
         var easeInOut = AnimationCurve.EaseInOut(0, 0, expandingDuration, maxRadius);
+        easeInOut.AddKey(expandingDuration * 0.25f, maxRadius * 0.9f);
         for (float current = 0; current < expandingDuration; current += Time.deltaTime)
         {
             if (circleCollider2D != null) circleCollider2D.radius = easeInOut.Evaluate(current);
