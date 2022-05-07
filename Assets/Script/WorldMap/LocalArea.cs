@@ -12,6 +12,13 @@ namespace WorldMap
         public List<Room> rooms = new List<Room>();
         public int numberOfRoom = 1;
         public Vector2 offset { get; private set; } = Vector2.zero;
+        public Rect rect
+        {
+            get
+            {
+                return new Rect(offset.x, offset.y, ground.columns, ground.rows);
+            }
+        }
 
 
         public Ground ground { get; private set; }
@@ -42,7 +49,7 @@ namespace WorldMap
             {
                 var room = rooms[i];
                 var rect = room.rect;
-                if (rect.Contains(position))
+                if (rect.Contains(position - offset))
                 {
                     return room;
                 }

@@ -9,7 +9,7 @@ namespace WorldMap
 
     public class Ground
     {
-        public int column
+        public int columns
         {
             get
             {
@@ -18,7 +18,7 @@ namespace WorldMap
         }
 
 
-        public int row
+        public int rows
         {
             get
             {
@@ -30,7 +30,7 @@ namespace WorldMap
         {
             get
             {
-                return column * row;
+                return columns * rows;
             }
         }
 
@@ -69,9 +69,9 @@ namespace WorldMap
 
         public Vector2 GetOffset<TileContainer>(TileContainer target)
         {
-            foreach (int x in Enumerable.Range(0, column))
+            foreach (int x in Enumerable.Range(0, columns))
             {
-                foreach (int y in Enumerable.Range(0, row))
+                foreach (int y in Enumerable.Range(0, rows))
                 {
                     var tmp = Get(x, y);
                     if (tmp == null) continue;
@@ -91,30 +91,30 @@ namespace WorldMap
             {
                 case Direction.Column:
                     {
-                        if (column < minimumEdge * 2)
+                        if (columns < minimumEdge * 2)
                         {
                             break;
                         }
-                        var border = Random.Range(minimumEdge, column - 1 - minimumEdge);
+                        var border = Random.Range(minimumEdge, columns - 1 - minimumEdge);
                         var first = tiles.GetRange(0, border);
-                        var second = tiles.GetRange(border, column - border);
+                        var second = tiles.GetRange(border, columns - border);
                         return (new Ground(first), new Ground(second));
                     }
                 case Direction.Row:
                     {
-                        if (row < minimumEdge * 2)
+                        if (rows < minimumEdge * 2)
                         {
                             break;
                         }
-                        var border = Random.Range(minimumEdge, row - 1 - minimumEdge);
+                        var border = Random.Range(minimumEdge, rows - 1 - minimumEdge);
                         var first = new List<List<TileContainer>>();
                         var second = new List<List<TileContainer>>();
-                        for (int i = 0; i < column; i++)
+                        for (int i = 0; i < columns; i++)
                         {
                             var tileRow = GetRow(i);
                             if (tileRow == null) continue;
                             first.Add(tileRow.GetRange(0, border));
-                            second.Add(tileRow.GetRange(border, row - border));
+                            second.Add(tileRow.GetRange(border, rows - border));
                         }
                         return (new Ground(first), new Ground(second));
                     }

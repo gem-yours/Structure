@@ -10,9 +10,9 @@ namespace WorldMap
     {
         public static void Generate(LocalArea area)
         {
-            foreach (int x in Enumerable.Range(0, area.ground.column))
+            foreach (int x in Enumerable.Range(0, area.ground.columns))
             {
-                foreach (int y in Enumerable.Range(0, area.ground.row))
+                foreach (int y in Enumerable.Range(0, area.ground.rows))
                 {
                     var obj = area.ground.Get(x, y)?.Resource();
                     if (obj == null) continue;

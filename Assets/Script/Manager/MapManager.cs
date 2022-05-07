@@ -73,7 +73,11 @@ public class MapManager : MonoBehaviour
             {
                 foreach (LocalArea localArea in localAreas)
                 {
-                    currentRoom = localArea.GetRoom((Vector2)player.gameObject.transform.position - localArea.offset);
+                    if (!localArea.rect.Contains(player.gameObject.transform.position))
+                    {
+                        continue;
+                    }
+                    currentRoom = localArea.GetRoom((Vector2)player.gameObject.transform.position);
                     if (currentRoom != null)
                     {
                         currentArea = localArea;
