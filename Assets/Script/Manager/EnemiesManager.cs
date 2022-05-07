@@ -31,11 +31,11 @@ public class EnemiesManager : MonoBehaviour
     {
         // プレイヤーのいちは中心が0の座標系だが、LocalAreaは左下が0なので補正する
         // TODO: 知識が漏れ出しているような感じがするのでLocalAreaやRoomの方でいい感じに処理してほしい
-        var offsetValue = (GameManager.instance.areaSize + GameManager.instance.centerSize / 2f) / 2f;
+        var offsetValue = (MapManager.instance.areaSize + MapManager.instance.centerSize / 2f) / 2f;
         var offset = new Vector2(offsetValue, offsetValue);
         for (; ; )
         {
-            var room = GameManager.instance.currentRoom;
+            var room = MapManager.instance.currentRoom;
             if (room == null)
             {
                 yield return new WaitForSeconds(1);

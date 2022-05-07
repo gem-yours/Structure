@@ -86,4 +86,11 @@ public class RooomTest
         }
         Assert.AreEqual(terrain, result);
     }
+
+    [Test]
+    public void CheckRect()
+    {
+        var except = new Rect(offset.x, offset.y, columns, rows);
+        Assert.AreEqual(except, room.rect);
+    }
 }
