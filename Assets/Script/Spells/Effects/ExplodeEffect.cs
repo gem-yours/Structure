@@ -48,7 +48,6 @@ public class ExplodeEffect : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        Debug.Log(other);
     }
 
     private void Start()

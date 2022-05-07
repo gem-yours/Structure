@@ -52,7 +52,14 @@ public class Player : MonoBehaviour, Living
         var current = rb2D.position;
         rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed));
 
-        var isLeft = (movingDirection.x < 0) ? 1 : -1;
+        // 攻撃中は向きを変えない
+        if (isAttacking) return;
+        ChangeFacingDirection(movingDirection);
+    }
+
+    private void ChangeFacingDirection(Vector2 direction)
+    {
+        var isLeft = (direction.x < 0) ? 1 : -1;
         if (isLeft != 0)
         {
             transform.localScale = new Vector3(
@@ -92,7 +99,13 @@ public class Player : MonoBehaviour, Living
     {
         isAttacking = true;
         animator?.SetTrigger("attack");
+        var enemy = nearestEnemy(transform.position);
+        if (enemy != null) ChangeFacingDirection(enemy.transform.position - transform.position);
+        var rawSpeed = speed;
+        speed *= 0.75f;
+
         yield return new WaitForSeconds(0.75f);
+
         var spell = new Ignis();
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
         if (boltObject == null)
@@ -104,29 +117,42 @@ public class Player : MonoBehaviour, Living
         if (bolt == null)
         {
             isAttacking = false;
+            speed = rawSpeed;
             yield break;
         }
         bolt.spell = new Ignis();
-        var enemy = nearestEnemy(transform.position);
+
+        // モーション中に敵が死んでいる可能性があるので念のため、再取得する
+        if (enemy == null) enemy = nearestEnemy(transform.position);
         if (enemy != null)
         {
             bolt.Target(enemy.transform.position);
+            speed = rawSpeed;
         }
         else
         {
             // 敵がいないときは向いてる方向に発射する
-            bolt.Target(transform.position + Vector3.right * transform.localScale.x);
+            bolt.Target(transform.position + Vector3.left * transform.localScale.x);
         }
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
         isAttacking = false;
+        speed = rawSpeed;
     }
 
     public void Cast(SpellSlot slot)
     {
-        if (indicatorDirection.magnitude < draggingThreshold) return;
+        if (indicatorDirection.magnitude < draggingThreshold)
+        {
+            IndicateDirection(Vector2.zero);
+            return;
+        }
         var spell = deck.GetSpell(slot);
-        if (spell == null) return;
+        if (spell == null)
+        {
+            IndicateDirection(Vector2.zero);
+            return;
+        }
 
         StartCoroutine(Casting(spell, indicatorDirection));
         IndicateDirection(Vector2.zero);
@@ -162,7 +188,10 @@ public class Player : MonoBehaviour, Living
     public IEnumerator OnHit(float damage)
     {
         isInvincible = true;
-        animator?.SetTrigger("damaged");
+        if (!isAttacking)
+        {
+            animator?.SetTrigger("damaged");
+        }
         // TODO: Coroutine内で別のCoroutineを起動するのは良いやり方なのか？
         if (damageAnimation != null) StartCoroutine(damageAnimation());
         yield return new WaitForSeconds(invincibleDuration);

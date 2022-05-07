@@ -26,7 +26,37 @@ public class EnemiesManager : MonoBehaviour
 
     }
 
-    public GameObject Spawn(Vector3 location)
+
+    private IEnumerator AttemptSpawn()
+    {
+        for (; ; )
+        {
+            var room = MapManager.instance.currentRoom;
+            if (room == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
+            var rect = room.rect;
+            if (rect == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
+            if (MapManager.instance.currentArea == null)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
+            var offset = MapManager.instance.currentArea.offset;
+
+            var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
+            Spawn(position + offset);
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    private GameObject Spawn(Vector3 location)
     {
         if (enemies.Count > enemiesLimit)
         {
@@ -87,15 +117,8 @@ public class EnemiesManager : MonoBehaviour
         return enemies[0];
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        Init();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        StartCoroutine(AttemptSpawn());
     }
 }

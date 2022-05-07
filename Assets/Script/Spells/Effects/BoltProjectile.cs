@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Stage;
 
 public class BoltProjectile : MonoBehaviour, SpellEffect
 {
@@ -19,6 +20,8 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
             return;
         }
         transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
+        // ターゲットに向けて少しずらさないと意図せず壁にぶつかることがある
+        transform.position += (Vector3)direction;
     }
 
     public void Move()
@@ -51,6 +54,8 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
         }
         if (other.gameObject.tag == "Wall")
         {
+            var wall = other.gameObject.GetComponent<Wall>();
+            wall.OnHit(spell.damage);
             OnHit();
         }
     }
