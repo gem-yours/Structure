@@ -37,7 +37,7 @@ public class GameCamera : MonoBehaviour
     private Vector3 _offset = Vector3.zero;
     private Vector3 initialDistance;
     private float offsetSize = 3;
-    private float speed = 0.2f;
+    private float speed = Player.speed * 1.1f;
 
     // Start is called before the first frame update
     void Start()
