@@ -22,5 +22,22 @@ namespace WorldMap
             }
 
         }
+
+
+        public static void CreateOuterWall(Rect rect)
+        {
+            var offset = new Vector2(0.5f, 0.5f);
+            var tile = new TileContainer(new Empty());
+            foreach (int x in Enumerable.Range((int)rect.xMin, (int)rect.width))
+            {
+                Instantiate(tile.Resource(), new Vector2(x, rect.yMin) + offset, Quaternion.identity);
+                Instantiate(tile.Resource(), new Vector2(x, rect.yMax) + offset, Quaternion.identity);
+            }
+            foreach (int y in Enumerable.Range((int)rect.yMin, (int)rect.height))
+            {
+                Instantiate(tile.Resource(), new Vector2(rect.xMin, y) + offset, Quaternion.identity);
+                Instantiate(tile.Resource(), new Vector2(rect.xMax, y) + offset, Quaternion.identity);
+            }
+        }
     }
 }

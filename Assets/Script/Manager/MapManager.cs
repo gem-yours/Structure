@@ -62,6 +62,13 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(bottomTrailing);
         localAreas.Add(bottomTrailing);
+
+        WorldMap.Generator.CreateOuterWall(new Rect(
+            -areaSize + centerSize / 2 - 1,
+            -areaSize + centerSize / 2 - 1,
+            areaSize * 2 - centerSize + 1,
+            areaSize * 2 - centerSize + 1
+        ));
     }
 
     private IEnumerator DetectWhereThePlayerIs(int centerSize, int areaSize, int timeInterval = 1)
