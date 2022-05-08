@@ -17,6 +17,8 @@ public abstract class Spell : IEquatable<Spell>
     public abstract float duration { get; }
     public abstract float speed { get; }
     public abstract float range { get; }
+    protected abstract string audioPath { get; }
+
     public float lifetime
     {
         get
@@ -38,6 +40,14 @@ public abstract class Spell : IEquatable<Spell>
         get
         {
             return Resources.Load<UnityEngine.Object>("Effects/" + identifier);
+        }
+    }
+
+    public AudioClip? audioClip
+    {
+        get
+        {
+            return Resources.Load<AudioClip>("Sound/" + audioPath);
         }
     }
 
