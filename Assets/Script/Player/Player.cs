@@ -16,6 +16,9 @@ public class Player : MonoBehaviour, Living
 
 #pragma warning disable CS8618
     private DrawManager drawManager;
+    private AudioSource audioSource;
+    private Rigidbody2D rb2D;
+    private Animator animator;
 #pragma warning restore CS8618
 
     public delegate GameObject? NearestEnemy(Vector2 location);
@@ -33,8 +36,6 @@ public class Player : MonoBehaviour, Living
     private float invincibleDuration = 1f;
 
     private Vector2 movingDirection = Vector2.zero;
-    private Rigidbody2D? rb2D;
-    private Animator? animator;
 
     private float draggingThreshold = 50;
     private Vector2 indicatorDirection = Vector2.zero;
@@ -154,6 +155,9 @@ public class Player : MonoBehaviour, Living
             return;
         }
 
+        audioSource.clip = spell.audioClip;
+        audioSource.Play();
+
         StartCoroutine(Casting(spell, indicatorDirection));
         IndicateDirection(Vector2.zero);
     }
@@ -222,6 +226,7 @@ public class Player : MonoBehaviour, Living
     {
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         drawManager = new DrawManager(deck, drawTime, shuffleTime);
 
