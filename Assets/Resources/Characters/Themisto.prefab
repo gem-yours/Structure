@@ -3644,7 +3644,7 @@ GameObject:
   - component: {fileID: 9007235565728186764}
   - component: {fileID: 3788520383656731546}
   - component: {fileID: 7800013651634327369}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Themisto
   m_TagString: Player
   m_Icon: {fileID: 0}

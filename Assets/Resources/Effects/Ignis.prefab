@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2951180041077587389}
   - component: {fileID: 8834816625111084147}
   - component: {fileID: 4575440624160043361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ignis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
