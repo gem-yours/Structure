@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 #nullable enable
@@ -131,6 +132,36 @@ namespace WorldMap
             return null;
         }
 
+
+        public void Add(Ground ground, Vector2 offset)
+        {
+            foreach (var x in Enumerable.Range(0, ground.columns))
+            {
+                foreach (var y in Enumerable.Range(0, ground.rows))
+                {
+                    var target = Get(x + (int)offset.x, y + (int)offset.y);
+                    var container = ground.Get(x, y);
+                    if (target == null || container == null) continue;
+                    target.tile = container.tile;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder("area\n", size);
+
+            foreach (List<TileContainer> tileColumn in tiles)
+            {
+                foreach (TileContainer container in tileColumn)
+                {
+                    sb.Append(container.tile.rawValue);
+                }
+                sb.Append("\n");
+            }
+
+            return sb.ToString();
+        }
     }
 
     public enum Direction

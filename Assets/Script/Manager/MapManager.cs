@@ -4,19 +4,29 @@ using UnityEngine;
 using WorldMap;
 
 
+#nullable enable
 public class MapManager : MonoBehaviour
 {
+#pragma warning disable CS8618
     public static MapManager instance;
-    public Room currentRoom { get; private set; }
-    public LocalArea currentArea { get; private set; }
+#pragma warning restore CS8618
+    public Room? currentRoom { get; private set; }
+    public LocalArea? currentArea { get; private set; }
     public int centerSize { get; } = 10;
     public int areaSize { get; } = 75;
+#pragma warning disable CS8618
+    public Ground overall;
+#pragma warning restore CS8618
+
     private List<LocalArea> localAreas = new List<LocalArea>();
 
     void Start()
     {
+        overall = new Ground(centerSize + areaSize * 2, centerSize + areaSize * 2);
+
         GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
+        UIManager.instance.miniMap.ground = overall;
     }
 
 
@@ -32,6 +42,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(centerRoom);
         localAreas.Add(centerRoom);
+        overall.Add(centerRoom);
 
         var bottomLeading = new WorldMap.LocalArea(
             map,
@@ -48,6 +59,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(topLeading);
         localAreas.Add(topLeading);
+        overall.Add(topLeading);
 
         var topTrailing = new WorldMap.LocalArea(
             map,
@@ -55,6 +67,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(topTrailing);
         localAreas.Add(topTrailing);
+        overall.Add(topTrailing);
 
         var bottomTrailing = new WorldMap.LocalArea(
             map.Swap(),
@@ -62,6 +75,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(bottomTrailing);
         localAreas.Add(bottomTrailing);
+        overall.Add(bottomTrailing);
 
         WorldMap.Generator.CreateOuterWall(new Rect(
             -areaSize + centerSize / 2 - 1,
@@ -115,5 +129,13 @@ static class VectorExtension
     public static Vector2 Swap(this Vector2 vector)
     {
         return new Vector2(vector.y, vector.x);
+    }
+}
+
+static class GroundExtension
+{
+    public static void Add(this Ground ground, LocalArea localArea)
+    {
+        ground.Add(localArea.ground, localArea.offset);
     }
 }

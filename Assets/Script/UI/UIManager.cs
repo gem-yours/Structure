@@ -30,6 +30,10 @@ public class UIManager : MonoBehaviour
     public SpellCard? spellCard3;
     public Button? skipButton;
 
+#pragma warning disable CS8618
+    public MiniMap miniMap;
+#pragma warning restore CS8618
+
     public DeckPreview? deckPreview;
 
     public DragController? dragController;

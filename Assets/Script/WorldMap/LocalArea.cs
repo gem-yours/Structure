@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 #nullable enable
@@ -143,18 +142,7 @@ namespace WorldMap
 
         public override string ToString()
         {
-            var sb = new StringBuilder("area\n", ground.size);
-
-            foreach (List<TileContainer> tileColumn in ground.tiles)
-            {
-                foreach (TileContainer container in tileColumn)
-                {
-                    sb.Append(container.tile.rawValue);
-                }
-                sb.Append("\n");
-            }
-
-            return sb.ToString();
+            return ground.ToString();
         }
     }
 
