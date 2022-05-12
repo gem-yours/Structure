@@ -48,6 +48,14 @@ namespace WorldMap
             this.tiles = tmp;
         }
 
+        public Ground(int column, int row) : this(
+            Enumerable.Range(0, column).Select(x =>
+                {
+                    return Enumerable.Range(0, row).Select(x => new TileContainer(new Empty())).ToList();
+                }).ToList()
+        )
+        { }
+
         public List<TileContainer>? GetRow(int x)
         {
             if (x < 0 || x > tiles.Count)
