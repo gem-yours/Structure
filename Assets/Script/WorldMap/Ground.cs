@@ -76,6 +76,11 @@ namespace WorldMap
             return tiles[x][y];
         }
 
+        public TileContainer? Get(Vector2 position)
+        {
+            return Get((int)position.x, (int)position.y);
+        }
+
         public Vector2 GetOffset<TileContainer>(TileContainer target)
         {
             foreach (int x in Enumerable.Range(0, columns))
@@ -151,10 +156,12 @@ namespace WorldMap
         {
             var sb = new StringBuilder("area\n", size);
 
-            foreach (List<TileContainer> tileColumn in tiles)
+            foreach (var y in Enumerable.Range(0, rows))
             {
-                foreach (TileContainer container in tileColumn)
+                foreach (var x in Enumerable.Range(0, columns))
                 {
+                    var container = Get(x, rows - y);
+                    if (container == null) continue;
                     sb.Append(container.tile.rawValue);
                 }
                 sb.Append("\n");

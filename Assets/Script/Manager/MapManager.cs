@@ -22,10 +22,11 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
-        overall = new Ground(centerSize + areaSize * 2, centerSize + areaSize * 2);
+        overall = new Ground(-centerSize + areaSize * 2, -centerSize + areaSize * 2);
 
         GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
+        Debug.Log(overall);
         UIManager.instance.miniMap.ground = overall;
     }
 
@@ -35,6 +36,9 @@ public class MapManager : MonoBehaviour
         var center = new Vector2(centerSize, centerSize);
         var map = new Vector2(areaSize, areaSize - centerSize);
 
+        // 中心を左下にずらす
+        var overallOffset = new Vector2(overall.columns, overall.rows) / 2;
+
         var centerRoom = new WorldMap.LocalArea(
             center,
             Vector2.Scale(-center, new Vector2(0.5f, 0.5f)),
@@ -42,7 +46,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(centerRoom);
         localAreas.Add(centerRoom);
-        overall.Add(centerRoom);
+        overall.Add(centerRoom, overallOffset);
 
         var bottomLeading = new WorldMap.LocalArea(
             map,
@@ -51,6 +55,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(bottomLeading);
         localAreas.Add(bottomLeading);
+        // overall.Add(bottomLeading, overallOffset);
 
         var topLeading = new WorldMap.LocalArea(
             map.Swap(),
@@ -59,7 +64,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(topLeading);
         localAreas.Add(topLeading);
-        overall.Add(topLeading);
+        overall.Add(topLeading, overallOffset);
 
         var topTrailing = new WorldMap.LocalArea(
             map,
@@ -67,7 +72,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(topTrailing);
         localAreas.Add(topTrailing);
-        overall.Add(topTrailing);
+        // overall.Add(topTrailing, overallOffset);
 
         var bottomTrailing = new WorldMap.LocalArea(
             map.Swap(),
@@ -75,7 +80,7 @@ public class MapManager : MonoBehaviour
         );
         WorldMap.Generator.Generate(bottomTrailing);
         localAreas.Add(bottomTrailing);
-        overall.Add(bottomTrailing);
+        // overall.Add(bottomTrailing, overallOffset);
 
         WorldMap.Generator.CreateOuterWall(new Rect(
             -areaSize + centerSize / 2 - 1,
@@ -134,8 +139,9 @@ static class VectorExtension
 
 static class GroundExtension
 {
-    public static void Add(this Ground ground, LocalArea localArea)
+    public static void Add(this Ground ground, LocalArea localArea, Vector2 offset)
     {
-        ground.Add(localArea.ground, localArea.offset);
+        Debug.Log(localArea.offset + " " + offset);
+        ground.Add(localArea.ground, localArea.offset + offset);
     }
 }
