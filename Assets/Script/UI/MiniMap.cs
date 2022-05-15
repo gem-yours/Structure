@@ -8,6 +8,10 @@ using WorldMap;
 #nullable enable
 public class MiniMap : MonoBehaviour
 {
+#pragma warning disable CS8618
+    public Canvas canvas;
+
+#pragma warning restore CS8618
     public Ground? ground
     {
         set
@@ -19,6 +23,7 @@ public class MiniMap : MonoBehaviour
     }
 
 #pragma warning disable CS8618
+
     private Vector2 mapSize;
 #pragma warning restore CS8618
 
@@ -32,13 +37,14 @@ public class MiniMap : MonoBehaviour
                 var tile = ground.Get(x, y);
                 if (tile == null) continue;
                 if (tile.Equals(new NorthWall()) ||
-                    tile.Equals(new NorthWall()) ||
-                    tile.Equals(new NorthWall()))
+                    tile.Equals(new SouthWall()) ||
+                    tile.Equals(new VerticalWall()))
                 {
                     // 中心を左下にする
                     DrawRect(
                         Vector2.Scale(new Vector2(x - ground.columns / 2, y - ground.rows / 2), unit),
-                        unit
+                        Vector2.one * 0.05f
+                    // unit * canvas.scaleFactor
                     );
                 }
             }
@@ -62,6 +68,6 @@ public class MiniMap : MonoBehaviour
     {
         var rectTransform = GetComponent<RectTransform>();
         // 高さはaspect ratio fitterによって制御されている
-        mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x);
+        mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x) * 2;
     }
 }
