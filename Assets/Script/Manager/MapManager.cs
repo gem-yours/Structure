@@ -27,6 +27,7 @@ public class MapManager : MonoBehaviour
         GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
         UIManager.instance.miniMap.ground = overall;
+        StartCoroutine(DrawMap());
     }
 
 
@@ -111,6 +112,16 @@ public class MapManager : MonoBehaviour
                 }
             }
             yield return new WaitForSeconds(timeInterval);
+        }
+    }
+
+
+    private IEnumerator DrawMap()
+    {
+        for (; ; )
+        {
+            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position);
+            yield return new WaitForSeconds(1f);
         }
     }
 

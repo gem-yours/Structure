@@ -12,39 +12,46 @@ public class MiniMap : MonoBehaviour
     public Canvas canvas;
 
 #pragma warning restore CS8618
-    public Ground? ground
-    {
-        set
-        {
-            if (value == null) return; // TODO: マップを消去する
-
-            DrawMap(value);
-        }
-    }
+    public Ground? ground;
 
 #pragma warning disable CS8618
 
     private Vector2 mapSize;
 #pragma warning restore CS8618
 
-    private void DrawMap(Ground ground)
+    public void DrawMap(Vector2 positiion, int resolution = 25)
     {
-        var unit = Vector2.Scale(mapSize, new Vector2(1f / ground.columns, 1f / ground.rows));
-        foreach (var x in Enumerable.Range(0, ground.columns))
+        RemoveChildren();
+        if (ground == null) return;
+        var unit = mapSize / resolution;
+        foreach (var x in Enumerable.Range(0, resolution))
         {
-            foreach (var y in Enumerable.Range(0, ground.rows))
+            foreach (var y in Enumerable.Range(0, resolution))
             {
-                var tile = ground.Get(x, y);
+                var tile = ground.Get(
+                    (int)(x - resolution / 2 + positiion.x + ground.columns / 2),
+                    (int)(y - resolution / 2 + positiion.y + ground.rows / 2)
+                );
                 if (tile == null) continue;
+
+                // 中心を左下にする
+                var position = Vector2.Scale(new Vector2(x - resolution / 2, y - resolution / 2), unit);
                 if (tile.Equals(new NorthWall()) ||
                     tile.Equals(new SouthWall()) ||
                     tile.Equals(new VerticalWall()))
                 {
-                    // 中心を左下にする
                     DrawRect(
-                        Vector2.Scale(new Vector2(x - ground.columns / 2, y - ground.rows / 2), unit),
-                        Vector2.one * 0.05f
-                    // unit * canvas.scaleFactor
+                        position,
+                        unit * 0.05f, // TODO: 単位を合わせる
+                        new Color(1, 1, 1)
+                    );
+                }
+                if (tile.Equals(new Floor()))
+                {
+                    DrawRect(
+                        position,
+                        unit * 0.05f, // TODO: 単位を合わせる
+                        new Color(0, 0, 1)
                     );
                 }
             }
@@ -52,7 +59,16 @@ public class MiniMap : MonoBehaviour
     }
 
 
-    private void DrawRect(Vector2 position, Vector2 size)
+    private void RemoveChildren()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+
+    private void DrawRect(Vector2 position, Vector2 size, Color color)
     {
         var rect = new GameObject("MapContents");
         rect.transform.SetParent(this.transform);
@@ -61,6 +77,7 @@ public class MiniMap : MonoBehaviour
         rectTransform.localPosition = position;
 
         var image = rect.AddComponent<Image>();
+        image.color = color;
         // TODO: 画像を追加
     }
 
