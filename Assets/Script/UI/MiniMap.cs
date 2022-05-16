@@ -32,7 +32,11 @@ public class MiniMap : MonoBehaviour
                     (int)(x - resolution / 2 + positiion.x + ground.columns / 2),
                     (int)(y - resolution / 2 + positiion.y + ground.rows / 2)
                 );
-                if (tile == null) continue;
+                if (tile == null)
+                {
+                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                    continue;
+                }
 
                 if (tile.Equals(new NorthWall()) ||
                     tile.Equals(new SouthWall()) ||
