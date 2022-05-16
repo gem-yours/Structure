@@ -2,7 +2,8 @@
     "name": "Stage",
     "rootNamespace": "",
     "references": [
-        "GUID:9a1fda5549728d9458a0153e3047932e"
+        "GUID:9a1fda5549728d9458a0153e3047932e",
+        "GUID:f917b7570bcf3b24b93c8281cada0502"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

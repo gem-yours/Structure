@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 #nullable enable
@@ -48,6 +49,14 @@ namespace WorldMap
             this.tiles = tmp;
         }
 
+        public Ground(int column, int row) : this(
+            Enumerable.Range(0, column).Select(x =>
+                {
+                    return Enumerable.Range(0, row).Select(x => new TileContainer(new Empty())).ToList();
+                }).ToList()
+        )
+        { }
+
         public List<TileContainer>? GetRow(int x)
         {
             if (x < 0 || x > tiles.Count)
@@ -65,6 +74,11 @@ namespace WorldMap
                 return null;
             }
             return tiles[x][y];
+        }
+
+        public TileContainer? Get(Vector2 position)
+        {
+            return Get((int)position.x, (int)position.y);
         }
 
         public Vector2 GetOffset<TileContainer>(TileContainer target)
@@ -123,6 +137,39 @@ namespace WorldMap
             return null;
         }
 
+
+        public void Add(Ground ground, Vector2 offset)
+        {
+            foreach (var x in Enumerable.Range(0, ground.columns))
+            {
+                foreach (var y in Enumerable.Range(0, ground.rows))
+                {
+                    var container = ground.Get(x, y);
+                    if (container == null) continue;
+                    var positiion = new Vector2(x + (int)offset.x, y + (int)offset.y);
+                    if (Get(positiion) == null) continue;
+                    tiles[(int)positiion.x][(int)positiion.y] = container;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder("area\n", size);
+
+            foreach (var y in Enumerable.Range(0, rows))
+            {
+                foreach (var x in Enumerable.Range(0, columns))
+                {
+                    var container = Get(x, rows - y);
+                    if (container == null) continue;
+                    sb.Append(container.tile.rawValue);
+                }
+                sb.Append("\n");
+            }
+
+            return sb.ToString();
+        }
     }
 
     public enum Direction
