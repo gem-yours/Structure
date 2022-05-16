@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WorldMap;
 
 
+#nullable enable
 namespace Stage
 {
-    public class Wall : MonoBehaviour
+    public class Wall : MonoBehaviour, Structure
     {
         public float hp { private set; get; } = 2;
+        public TileContainer? tileContainer { set; get; }
 
+#pragma warning disable CS8618
         private SpriteRenderer spriteRenderer;
+#pragma warning restore CS8618
 
         public void OnHit(float damage)
         {
@@ -24,6 +29,10 @@ namespace Stage
             // TODO: 壊れかけの状態を導入する
             if (hp > 0) return;
             Instantiate(Resources.Load("Map/Tile"), transform.position, Quaternion.identity);
+            if (tileContainer != null)
+            {
+                tileContainer.tile = new WorldMap.Floor();
+            }
             Destroy(gameObject);
         }
 

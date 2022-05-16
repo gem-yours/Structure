@@ -16,8 +16,13 @@ namespace WorldMap
                 {
                     var obj = area.ground.Get(x, y)?.Resource();
                     if (obj == null) continue;
+
                     // タイルの中心を中央から左下にするため+0.5している
-                    Instantiate(obj, area.offset + new Vector2(x + 0.5f, y + 0.5f), Quaternion.identity);
+                    var instance = Instantiate(obj, area.offset + new Vector2(x + 0.5f, y + 0.5f), Quaternion.identity) as GameObject;
+                    if (instance == null) continue;
+                    var structure = instance.GetComponent<Structure>();
+                    if (structure == null) continue;
+                    structure.tileContainer = area.ground.Get(x, y);
                 }
             }
 

@@ -144,10 +144,11 @@ namespace WorldMap
             {
                 foreach (var y in Enumerable.Range(0, ground.rows))
                 {
-                    var target = Get(x + (int)offset.x, y + (int)offset.y);
                     var container = ground.Get(x, y);
-                    if (target == null || container == null) continue;
-                    target.tile = container.tile;
+                    if (container == null) continue;
+                    var positiion = new Vector2(x + (int)offset.x, y + (int)offset.y);
+                    if (Get(positiion) == null) continue;
+                    tiles[(int)positiion.x][(int)positiion.y] = container;
                 }
             }
         }
