@@ -16,12 +16,8 @@ public class MiniMap : MonoBehaviour
 
     private List<List<GameObject>> gameObjects = new List<List<GameObject>>();
     private int resolution = 50;
-#pragma warning disable CS8618
 
-    private Vector2 mapSize;
-#pragma warning restore CS8618
-
-    public void DrawMap(Vector2 positiion)
+    public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
         if (ground == null) return;
         foreach (var x in Enumerable.Range(0, gameObjects.Count))
@@ -29,8 +25,8 @@ public class MiniMap : MonoBehaviour
             foreach (var y in Enumerable.Range(0, gameObjects[x].Count))
             {
                 var tile = ground.Get(
-                    (int)(x - resolution / 2 + positiion.x + ground.columns / 2),
-                    (int)(y - resolution / 2 + positiion.y + ground.rows / 2)
+                    (int)(x - resolution / 2 + center.x + ground.columns / 2),
+                    (int)(y - resolution / 2 + center.y + ground.rows / 2)
                 );
                 if (tile == null)
                 {
@@ -46,7 +42,7 @@ public class MiniMap : MonoBehaviour
                 }
                 if (tile.Equals(new Floor()))
                 {
-                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 1);
+                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 1, 0.5f);
                 }
                 if (tile.Equals(new Empty()))
                 {
@@ -54,9 +50,32 @@ public class MiniMap : MonoBehaviour
                 }
             }
         }
+
+        var playerPositionInMiniMap = playerPosition - center + new Vector2(resolution / 2, resolution / 2);
+        DrawRect(playerPositionInMiniMap, 1, new Color(1, 0, 0));
     }
 
-    private void PrepareObjects()
+
+    private void DrawRect(Vector2 center, int radius, Color color)
+    {
+        foreach (var x in Enumerable.Range(-radius, radius * 2))
+        {
+            foreach (var y in Enumerable.Range(-radius, radius * 2))
+            {
+                var position = center + new Vector2(x, y);
+                if (
+                    position.x < 0 || position.x > gameObjects.Count ||
+                    position.y < 0 || position.y > gameObjects[0].Count
+                )
+                {
+                    continue;
+                }
+                gameObjects[(int)position.x][(int)position.y].GetComponent<Image>().color = color;
+            }
+        }
+    }
+
+    private void PrepareObjects(Vector2 mapSize)
     {
         gameObjects = Enumerable.Range(0, resolution).Select(x =>
         {
@@ -65,7 +84,6 @@ public class MiniMap : MonoBehaviour
                 var rect = new GameObject("MapContents");
                 rect.transform.SetParent(this.transform);
                 var rectTransform = rect.AddComponent<RectTransform>();
-                // TODO: 正しいサイズを設定する
                 rectTransform.localScale = Vector2.one;
                 rectTransform.sizeDelta = mapSize / resolution;
                 rectTransform.localPosition = Vector2.Scale(
@@ -83,8 +101,8 @@ public class MiniMap : MonoBehaviour
     private void Start()
     {
         var rectTransform = GetComponent<RectTransform>();
-        // 高さはaspect ratio fitterによって制御されている
-        mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x) * 2;
-        PrepareObjects();
+        // 幅はaspect ratio fitterによって制御されている
+        var mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x) * 2;
+        PrepareObjects(mapSize);
     }
 }

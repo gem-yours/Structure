@@ -120,7 +120,7 @@ public class MapManager : MonoBehaviour
     {
         for (; ; )
         {
-            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position);
+            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position, GameManager.instance.player.transform.position);
             yield return new WaitForSeconds(0.1f);
         }
     }
