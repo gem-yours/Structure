@@ -60,6 +60,7 @@ public class Player : MonoBehaviour, Living
 
     private void ChangeFacingDirection(Vector2 direction)
     {
+        if (direction.magnitude == 0) return;
         var isLeft = (direction.x < 0) ? 1 : -1;
         if (isLeft != 0)
         {

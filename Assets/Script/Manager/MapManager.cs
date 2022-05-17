@@ -20,7 +20,21 @@ public class MapManager : MonoBehaviour
 
     private List<LocalArea> localAreas = new List<LocalArea>();
 
-    void Start()
+    public void Draw(MiniMap miniMap, Vector2 playerPosition, Vector2? center)
+    {
+        if (center == null) center = Vector2.zero;
+        miniMap.ground = overall;
+        miniMap.resolution = overall.columns;
+        StartCoroutine(_Draw(miniMap, playerPosition, (Vector2)center));
+    }
+
+    private IEnumerator _Draw(MiniMap miniMap, Vector2 playerPosition, Vector2 center)
+    {
+        yield return null;
+        miniMap.DrawMap(center, playerPosition);
+    }
+
+    private void Start()
     {
         overall = new Ground(-centerSize + areaSize * 2, -centerSize + areaSize * 2);
 
@@ -120,7 +134,7 @@ public class MapManager : MonoBehaviour
     {
         for (; ; )
         {
-            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position);
+            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position, GameManager.instance.player.transform.position);
             yield return new WaitForSeconds(0.1f);
         }
     }

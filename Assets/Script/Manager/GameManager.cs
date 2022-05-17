@@ -63,6 +63,17 @@ public class GameManager : MonoBehaviour
             );
         };
 
+        UIManager.instance.menuButton.onClick.AddListener(() =>
+        {
+            Pause();
+            UIManager.instance.ShowMenu(() =>
+            {
+                UIManager.instance.HideMenu();
+                Resume();
+            });
+            MapManager.instance.Draw(UIManager.instance.worldMap, player.transform.position, null);
+        });
+
         player.expManager.onExpGain = (int level, int exp, int requireExp) =>
         {
             UIManager.instance.level = level;
