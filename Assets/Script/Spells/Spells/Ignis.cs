@@ -8,10 +8,10 @@ public class Ignis : Spell
     override public string name { get; } = "イグニス";
     override public string description { get; } = "一番近い敵に向かって火の玉を発射する";
     override public float damage { get; } = 1;
-    override public int magazine { get; } = 1;
-    override public float delay { get; } = 1f;
+    override public int magazine { get; } = 3;
+    override public float delay { get; } = 0.1f;
     public override float duration { get; } = 0f;
-    override public float speed { get; } = 0.5f;
-    override public float range { get; } = 1f;
+    override public float speed { get; } = 50f;
+    override public float range { get; } = 50f;
     override protected string audioPath { get; } = "ignition";
 }

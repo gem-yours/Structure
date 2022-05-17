@@ -27,7 +27,7 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
     public void Move()
     {
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, spell.speed));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, spell.speed * Time.deltaTime));
 
         rb2D.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
@@ -45,15 +45,16 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
 
     protected void OnTouchedOther(Collider2D other)
     {
-        StopCoroutine(fadingCoroutine);
         if (other.gameObject.tag == "Enemy")
         {
+            StopCoroutine(fadingCoroutine);
             var enemy = other.gameObject.GetComponent<Enemy>();
             enemy.OnHit(spell.damage);
             OnHit();
         }
         if (other.gameObject.tag == "Wall")
         {
+            StopCoroutine(fadingCoroutine);
             var wall = other.gameObject.GetComponent<Wall>();
             wall.OnHit(spell.damage);
             OnHit();
