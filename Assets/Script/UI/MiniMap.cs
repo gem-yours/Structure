@@ -13,9 +13,9 @@ public class MiniMap : MonoBehaviour
 
 #pragma warning restore CS8618
     public Ground? ground;
+    public int resolution = 50;
 
     private List<List<GameObject>> gameObjects = new List<List<GameObject>>();
-    private int resolution = 50;
 
     public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
@@ -82,10 +82,11 @@ public class MiniMap : MonoBehaviour
             return Enumerable.Range(0, resolution).Select(y =>
             {
                 var rect = new GameObject("MapContents");
+                rect.layer = gameObject.layer;
                 rect.transform.SetParent(this.transform);
                 var rectTransform = rect.AddComponent<RectTransform>();
                 rectTransform.localScale = Vector2.one;
-                rectTransform.sizeDelta = mapSize / resolution;
+                rectTransform.sizeDelta = Abs(mapSize / resolution);
                 rectTransform.localPosition = Vector2.Scale(
                     new Vector2(x - resolution / 2, y - resolution / 2),
                     mapSize / resolution
@@ -104,5 +105,10 @@ public class MiniMap : MonoBehaviour
         // 幅はaspect ratio fitterによって制御されている
         var mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x) * 2;
         PrepareObjects(mapSize);
+    }
+
+    private Vector2 Abs(Vector2 vector)
+    {
+        return new Vector2(Mathf.Abs(vector.x), Mathf.Abs(vector.y));
     }
 }

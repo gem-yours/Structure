@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
         UIManager.instance.menuButton.onClick.AddListener(() =>
         {
             Pause();
+            UIManager.instance.ShowMenu();
+            MapManager.instance.Draw(UIManager.instance.worldMap, player.transform.position, null);
         });
 
         player.expManager.onExpGain = (int level, int exp, int requireExp) =>

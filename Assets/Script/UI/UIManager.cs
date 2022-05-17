@@ -32,7 +32,9 @@ public class UIManager : MonoBehaviour
 
 #pragma warning disable CS8618
     public MiniMap miniMap;
+    public MiniMap worldMap;
     public Button menuButton;
+    public GameObject menu;
 #pragma warning restore CS8618
 
     public DeckPreview? deckPreview;
@@ -141,6 +143,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShowMenu()
+    {
+        menu.SetActive(true);
+    }
+
+    public void HideMenu()
+    {
+        menu.SetActive(false);
+    }
 
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
