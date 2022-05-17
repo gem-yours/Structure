@@ -24,6 +24,7 @@ public class MapManager : MonoBehaviour
     {
         if (center == null) center = Vector2.zero;
         miniMap.ground = overall;
+        miniMap.resolution = overall.columns;
         StartCoroutine(_Draw(miniMap, playerPosition, (Vector2)center));
     }
 

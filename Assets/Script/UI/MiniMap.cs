@@ -13,7 +13,21 @@ public class MiniMap : MonoBehaviour
 
 #pragma warning restore CS8618
     public Ground? ground;
-    public int resolution = 50;
+
+    private int _resolution = 50;
+    public int resolution
+    {
+        get
+        {
+            return _resolution;
+        }
+        set
+        {
+            if (value == _resolution) return;
+            _resolution = value;
+            texture = new Texture2D(value, value);
+        }
+    }
 
 #pragma warning disable CS8618
     private Texture2D texture;
