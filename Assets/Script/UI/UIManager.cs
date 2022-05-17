@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
     public MiniMap worldMap;
     public Button menuButton;
     public GameObject menu;
+    public Button returnFromMenu;
 #pragma warning restore CS8618
 
     public DeckPreview? deckPreview;
@@ -143,13 +144,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowMenu()
+    public void ShowMenu(UnityEngine.Events.UnityAction onClick)
     {
+        returnFromMenu.onClick.AddListener(onClick);
         menu.SetActive(true);
     }
 
     public void HideMenu()
     {
+        returnFromMenu.onClick.RemoveAllListeners();
         menu.SetActive(false);
     }
 

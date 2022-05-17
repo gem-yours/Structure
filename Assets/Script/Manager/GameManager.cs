@@ -66,7 +66,11 @@ public class GameManager : MonoBehaviour
         UIManager.instance.menuButton.onClick.AddListener(() =>
         {
             Pause();
-            UIManager.instance.ShowMenu();
+            UIManager.instance.ShowMenu(() =>
+            {
+                UIManager.instance.HideMenu();
+                Resume();
+            });
             MapManager.instance.Draw(UIManager.instance.worldMap, player.transform.position, null);
         });
 
