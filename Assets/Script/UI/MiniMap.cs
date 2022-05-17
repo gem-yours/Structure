@@ -15,96 +15,83 @@ public class MiniMap : MonoBehaviour
     public Ground? ground;
     public int resolution = 50;
 
-    private List<List<GameObject>> gameObjects = new List<List<GameObject>>();
+#pragma warning disable CS8618
+    private Texture2D texture;
+    private Image image;
 
+#pragma warning restore CS8618
     public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
         if (ground == null) return;
-        foreach (var x in Enumerable.Range(0, gameObjects.Count))
+
+        foreach (var x in Enumerable.Range(0, texture.width))
         {
-            foreach (var y in Enumerable.Range(0, gameObjects[x].Count))
+            foreach (var y in Enumerable.Range(0, texture.height))
             {
                 var tile = ground.Get(
                     (int)(x - resolution / 2 + center.x + ground.columns / 2),
                     (int)(y - resolution / 2 + center.y + ground.rows / 2)
                 );
+
+                var position = new Vector2(x, y);
                 if (tile == null)
                 {
-                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                    DrawRect(position, 1, new Color(0, 0, 0, 0));
                     continue;
                 }
 
+                var color = new Color(0, 0, 0, 0);
                 if (tile.Equals(new NorthWall()) ||
                     tile.Equals(new SouthWall()) ||
                     tile.Equals(new VerticalWall()))
                 {
-                    gameObjects[x][y].GetComponent<Image>().color = new Color(1, 1, 1);
+                    color = new Color(1, 1, 1);
                 }
                 if (tile.Equals(new Floor()))
                 {
-                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 1, 0.5f);
+                    color = new Color(0, 0, 1, 0.5f);
                 }
                 if (tile.Equals(new Empty()))
                 {
-                    gameObjects[x][y].GetComponent<Image>().color = new Color(0, 0, 0, 0);
+                    color = new Color(0, 0, 0, 0);
                 }
+                DrawRect(position, 1, color);
             }
         }
 
         var playerPositionInMiniMap = playerPosition - center + new Vector2(resolution / 2, resolution / 2);
-        DrawRect(playerPositionInMiniMap, 1, new Color(1, 0, 0));
+        DrawRect(playerPositionInMiniMap, 4, new Color(1, 0, 0));
+        texture.Apply();
+        image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
 
 
-    private void DrawRect(Vector2 center, int radius, Color color)
+    private void DrawRect(Vector2 center, int diameter, Color color)
     {
-        foreach (var x in Enumerable.Range(-radius, radius * 2))
+        foreach (var x in Enumerable.Range(-diameter / 2, diameter))
         {
-            foreach (var y in Enumerable.Range(-radius, radius * 2))
+            foreach (var y in Enumerable.Range(-diameter / 2, diameter))
             {
                 var position = center + new Vector2(x, y);
                 if (
-                    position.x < 0 || position.x > gameObjects.Count ||
-                    position.y < 0 || position.y > gameObjects[0].Count
+                    position.x < 0 || position.x > texture.width ||
+                    position.y < 0 || position.y > texture.height
                 )
                 {
                     continue;
                 }
-                gameObjects[(int)position.x][(int)position.y].GetComponent<Image>().color = color;
+                texture.SetPixel((int)position.x, (int)position.y, color);
             }
         }
     }
 
-    private void PrepareObjects(Vector2 mapSize)
-    {
-        gameObjects = Enumerable.Range(0, resolution).Select(x =>
-        {
-            return Enumerable.Range(0, resolution).Select(y =>
-            {
-                var rect = new GameObject("MapContents");
-                rect.layer = gameObject.layer;
-                rect.transform.SetParent(this.transform);
-                var rectTransform = rect.AddComponent<RectTransform>();
-                rectTransform.localScale = Vector2.one;
-                rectTransform.sizeDelta = Abs(mapSize / resolution);
-                rectTransform.localPosition = Vector2.Scale(
-                    new Vector2(x - resolution / 2, y - resolution / 2),
-                    mapSize / resolution
-                );
-                var image = rect.AddComponent<Image>();
-                image.color = new Color(0, 0, 0, 1);
-
-                return rect;
-            }).ToList();
-        }).ToList();
-    }
-
     private void Start()
     {
+        image = GetComponent<Image>();
         var rectTransform = GetComponent<RectTransform>();
         // 幅はaspect ratio fitterによって制御されている
         var mapSize = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x) * 2;
-        PrepareObjects(mapSize);
+        texture = new Texture2D((int)resolution, (int)resolution);
     }
 
     private Vector2 Abs(Vector2 vector)
