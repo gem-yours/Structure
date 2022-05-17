@@ -2673,6 +2673,7 @@ MonoBehaviour:
   spellCard3: {fileID: 653158504}
   skipButton: {fileID: 187304719}
   miniMap: {fileID: 991379001}
+  menuButton: {fileID: 573743344}
   deckPreview: {fileID: 1898764538}
   dragController: {fileID: 1357766568}
 --- !u!114 &1953335859

@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
 
 #pragma warning disable CS8618
     public MiniMap miniMap;
+    public Button menuButton;
 #pragma warning restore CS8618
 
     public DeckPreview? deckPreview;

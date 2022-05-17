@@ -63,6 +63,11 @@ public class GameManager : MonoBehaviour
             );
         };
 
+        UIManager.instance.menuButton.onClick.AddListener(() =>
+        {
+            Pause();
+        });
+
         player.expManager.onExpGain = (int level, int exp, int requireExp) =>
         {
             UIManager.instance.level = level;
