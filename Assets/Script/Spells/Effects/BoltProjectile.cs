@@ -27,7 +27,7 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
     public void Move()
     {
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction * spell.speed * Time.deltaTime, spell.speed * Time.deltaTime));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, spell.speed * Time.deltaTime));
 
         rb2D.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
     }

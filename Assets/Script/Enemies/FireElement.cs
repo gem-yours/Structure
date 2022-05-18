@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireElement : MonoBehaviour, Enemy, Living
 {
-    public float speed { get; private set; } = 0.05f;
+    public float speed { get; private set; } = 1f;
     public float hp { get; private set; } = 2;
     public float damage { get; private set; } = 1;
     public int exp { get; private set; } = 1;
@@ -32,7 +32,7 @@ public class FireElement : MonoBehaviour, Enemy, Living
     {
         Vector2 direction = (target.transform.position - rb2D.transform.position).normalized;
         Vector2 current = rb2D.transform.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, speed * Time.deltaTime));
 
         // 回転・反転
         var isLeft = (direction.x > 0) ? 1 : -1;
@@ -60,14 +60,12 @@ public class FireElement : MonoBehaviour, Enemy, Living
         onDead(this);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (isDead) return;
         MoveToPlayer();
