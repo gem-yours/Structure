@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using WorldMap;
 
@@ -32,6 +33,8 @@ public class MapManager : MonoBehaviour
     {
         yield return null;
         miniMap.DrawMap(center, playerPosition);
+        miniMap.AddEnemy(EnemiesManager.instance.enemies.Select(x => (Vector2)x.transform.position).ToList());
+        miniMap.Apply();
     }
 
     private void Start()
@@ -40,7 +43,8 @@ public class MapManager : MonoBehaviour
 
         GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
-        UIManager.instance.miniMap.ground = overall;
+        var miniMap = UIManager.instance.miniMap;
+        miniMap.ground = overall;
         StartCoroutine(DrawMap());
     }
 
@@ -134,8 +138,8 @@ public class MapManager : MonoBehaviour
     {
         for (; ; )
         {
-            UIManager.instance.miniMap.DrawMap(GameManager.instance.player.transform.position, GameManager.instance.player.transform.position);
-            yield return new WaitForSeconds(0.1f);
+            var position = GameManager.instance.player.transform.position;
+            yield return _Draw(UIManager.instance.miniMap, position, position);
         }
     }
 

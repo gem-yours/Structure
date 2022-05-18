@@ -1,12 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemiesManager : MonoBehaviour
 {
     public static EnemiesManager instance;
     public static int enemiesLimit = 5;
-    private List<GameObject> enemies = new List<GameObject>();
+
+    public List<Enemy> enemies
+    {
+        get
+        {
+            return _enemies.Select(enemy =>
+            {
+                return enemy.GetComponent<Enemy>();
+            }).ToList();
+        }
+    }
+    private List<GameObject> _enemies = new List<GameObject>();
 
     private void Awake()
     {
@@ -58,7 +70,7 @@ public class EnemiesManager : MonoBehaviour
 
     private GameObject Spawn(Vector3 location)
     {
-        if (enemies.Count > enemiesLimit)
+        if (_enemies.Count > enemiesLimit)
         {
             return null;
         }
@@ -70,7 +82,7 @@ public class EnemiesManager : MonoBehaviour
         }
 
         var enemyObj = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
-        enemies.Add(enemyObj);
+        _enemies.Add(enemyObj);
         var enemy = enemyObj.GetComponent<Enemy>();
         enemy.onDead = (Enemy enemy) =>
         {
@@ -84,7 +96,7 @@ public class EnemiesManager : MonoBehaviour
 
     public bool Dead(Enemy enemy)
     {
-        var enemyObject = enemies.Find(
+        var enemyObject = _enemies.Find(
             delegate (GameObject go)
             {
                 return go.GetComponent<Enemy>() == enemy;
@@ -97,24 +109,24 @@ public class EnemiesManager : MonoBehaviour
 
         GameManager.instance.player.expManager.GainExp(enemy.exp);
 
-        enemies.Remove(enemyObject);
+        _enemies.Remove(enemyObject);
         Destroy(enemyObject);
         return true;
     }
 
     public GameObject NearestEnemy(Vector3 position)
     {
-        if (enemies.Count == 0)
+        if (_enemies.Count == 0)
         {
             return null;
         }
-        enemies.Sort(delegate (GameObject lhs, GameObject rhs)
+        _enemies.Sort(delegate (GameObject lhs, GameObject rhs)
         {
             var lhsDistance = (position - lhs.transform.position).magnitude;
             var rhsDistance = (position - rhs.transform.position).magnitude;
             return (lhsDistance > rhsDistance) ? 1 : -1;
         });
-        return enemies[0];
+        return _enemies[0];
     }
 
     private void Start()
