@@ -15,7 +15,7 @@ public class Player : MonoBehaviour, Living
         );
 
 #pragma warning disable CS8618
-    private DrawManager drawManager;
+    public DrawManager drawManager;
     private AudioSource audioSource;
     private Rigidbody2D rb2D;
     private Animator animator;
@@ -253,8 +253,9 @@ public class DrawManager
 {
     Deck deck;
 
-    float drawTime;
-    float shuffleTime;
+    public bool isShuffling { get; private set; } = false;
+    private float drawTime;
+    private float shuffleTime;
 
     public DrawManager(Deck deck, float drawTime, float shuffleTime)
     {
@@ -268,8 +269,10 @@ public class DrawManager
 
         if (deck.needShuffle)
         {
+            isShuffling = true;
             yield return new WaitForSeconds(shuffleTime);
             deck.Shuffle();
+            isShuffling = false;
         }
 
         if (!deck.canDraw)
@@ -279,5 +282,11 @@ public class DrawManager
 
         yield return new WaitForSeconds(drawTime);
         deck.Draw();
+    }
+
+    public IEnumerator Add(Spell spell)
+    {
+        while (isShuffling) yield return null;
+        deck.Add(spell);
     }
 }
