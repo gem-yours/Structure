@@ -8,7 +8,7 @@ public class Player : MonoBehaviour, Living
 {
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
-    public static float speed { private set; get; } = 2.5f;
+    public static float speed { private set; get; } = 10f; // 2.5f
     public Deck deck = new Deck(
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f

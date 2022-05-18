@@ -23,7 +23,8 @@ public class EnemiesManager : MonoBehaviour
     }
     private List<GameObject> _enemies = new List<GameObject>();
 
-    private int distanceThreshold = 10;
+    private const float distanceThreshold = 10;
+    private const float deadDistance = 20;
 
     private void Awake()
     {
@@ -43,6 +44,46 @@ public class EnemiesManager : MonoBehaviour
 
     }
 
+    public bool Dead(Enemy enemy)
+    {
+        var enemyObject = _enemies.Find(
+            delegate (GameObject go)
+            {
+                return go.GetComponent<Enemy>() == enemy;
+            }
+        );
+        if (enemyObject == null)
+        {
+            return false;
+        }
+
+        _enemies.Remove(enemyObject);
+        Destroy(enemyObject);
+        return true;
+    }
+
+    public GameObject? NearestEnemy(Vector3 position)
+    {
+        if (_enemies.Count == 0)
+        {
+            return null;
+        }
+        _enemies.Sort((GameObject lhs, GameObject rhs) =>
+        {
+            var lhsDistance = (position - lhs.transform.position).magnitude;
+            var rhsDistance = (position - rhs.transform.position).magnitude;
+            return (lhsDistance > rhsDistance) ? 1 : -1;
+        });
+        var enemy = _enemies.FirstOrDefault();
+        if ((position - enemy.transform.position).magnitude < distanceThreshold)
+        {
+            return enemy;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     private IEnumerator AttemptSpawn()
     {
@@ -93,58 +134,41 @@ public class EnemiesManager : MonoBehaviour
         enemy.onDead = (Enemy enemy) =>
         {
             Dead(enemy);
+            GameManager.instance.player.expManager.GainExp(enemy.exp);
         };
         enemy.target = GameManager.instance.player.gameObject;
-
 
         return enemyObj;
     }
 
-    public bool Dead(Enemy enemy)
+
+    private IEnumerator KillEnemiesFarAwayPlayer()
     {
-        var enemyObject = _enemies.Find(
-            delegate (GameObject go)
+        for (; ; )
+        {
+            var room = MapManager.instance.currentRoom;
+            var area = MapManager.instance.currentArea;
+            var offset = (area is null) ? Vector2.zero : area.offset;
+            Rect? rect = (room is null) ? null : room.rect;
+
+            var player = GameManager.instance.player.transform.position;
+
+            foreach (var enemy in enemies)
             {
-                return go.GetComponent<Enemy>() == enemy;
+                // 同じ部屋にいる敵は消さない
+                if (rect is not null && ((Rect)rect).Contains((Vector2)enemy.transform.position - offset)) continue;
+                if ((player - enemy.transform.position).magnitude > deadDistance)
+                {
+                    Dead(enemy);
+                }
             }
-        );
-        if (enemyObject == null)
-        {
-            return false;
-        }
-
-        GameManager.instance.player.expManager.GainExp(enemy.exp);
-
-        _enemies.Remove(enemyObject);
-        Destroy(enemyObject);
-        return true;
-    }
-
-    public GameObject? NearestEnemy(Vector3 position)
-    {
-        if (_enemies.Count == 0)
-        {
-            return null;
-        }
-        _enemies.Sort((GameObject lhs, GameObject rhs) =>
-        {
-            var lhsDistance = (position - lhs.transform.position).magnitude;
-            var rhsDistance = (position - rhs.transform.position).magnitude;
-            return (lhsDistance > rhsDistance) ? 1 : -1;
-        });
-        var enemy = _enemies.FirstOrDefault();
-        if ((position - enemy.transform.position).magnitude < distanceThreshold)
-        {
-            return enemy;
-        }
-        else
-        {
-            return null;
+            yield return new WaitForSeconds(3);
         }
     }
 
     private void Start()
     {
         StartCoroutine(AttemptSpawn());
+        StartCoroutine(KillEnemiesFarAwayPlayer());
     }
 }
