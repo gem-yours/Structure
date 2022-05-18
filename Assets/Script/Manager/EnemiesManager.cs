@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#nullable enable
 public class EnemiesManager : MonoBehaviour
 {
+#pragma warning disable CS8618
     public static EnemiesManager instance;
+#pragma warning restore CS8618
     public static int enemiesLimit = 5;
 
     public List<Enemy> enemies
@@ -19,6 +22,8 @@ public class EnemiesManager : MonoBehaviour
         }
     }
     private List<GameObject> _enemies = new List<GameObject>();
+
+    private int distanceThreshold = 10;
 
     private void Awake()
     {
@@ -68,7 +73,7 @@ public class EnemiesManager : MonoBehaviour
         }
     }
 
-    private GameObject Spawn(Vector3 location)
+    private GameObject? Spawn(Vector3 location)
     {
         if (_enemies.Count > enemiesLimit)
         {
@@ -76,12 +81,13 @@ public class EnemiesManager : MonoBehaviour
         }
 
         // プレイヤーの近くに敵が出現しないようにする
-        if ((GameManager.instance.player.transform.position - location).magnitude < 10)
+        if ((GameManager.instance.player.transform.position - location).magnitude < distanceThreshold)
         {
             return null;
         }
 
         var enemyObj = Instantiate(Resources.Load("Enemies/FireElement"), location, Quaternion.identity) as GameObject;
+        if (enemyObj == null) return null;
         _enemies.Add(enemyObj);
         var enemy = enemyObj.GetComponent<Enemy>();
         enemy.onDead = (Enemy enemy) =>
@@ -114,19 +120,27 @@ public class EnemiesManager : MonoBehaviour
         return true;
     }
 
-    public GameObject NearestEnemy(Vector3 position)
+    public GameObject? NearestEnemy(Vector3 position)
     {
         if (_enemies.Count == 0)
         {
             return null;
         }
-        _enemies.Sort(delegate (GameObject lhs, GameObject rhs)
+        _enemies.Sort((GameObject lhs, GameObject rhs) =>
         {
             var lhsDistance = (position - lhs.transform.position).magnitude;
             var rhsDistance = (position - rhs.transform.position).magnitude;
             return (lhsDistance > rhsDistance) ? 1 : -1;
         });
-        return _enemies[0];
+        var enemy = _enemies.FirstOrDefault();
+        if ((position - enemy.transform.position).magnitude < distanceThreshold)
+        {
+            return enemy;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private void Start()
