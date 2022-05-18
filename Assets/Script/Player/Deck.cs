@@ -99,7 +99,8 @@ public class Deck
     public void Add(Spell spell)
     {
         _spells.Add(spell);
-        if (isShuffling)
+        // シャッフル中は山札に追加しなくてもシャッフル終了時に勝手に追加される
+        if (!isShuffling)
         {
             _drawPile.Add(spell);
         }
