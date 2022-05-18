@@ -185,7 +185,7 @@ public class Player : MonoBehaviour, Living
     {
         while (true)
         {
-            yield return drawManager.Draw();
+            yield return drawManager.Draw(0);
         }
     }
 
@@ -229,7 +229,7 @@ public class Player : MonoBehaviour, Living
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        drawManager = new DrawManager(deck, drawTime, shuffleTime);
+        drawManager = new DrawManager(deck, shuffleTime);
 
         deck.onAdd = (Deck deck, Spell spell) =>
         {
@@ -254,17 +254,15 @@ public class DrawManager
     Deck deck;
 
     public bool isShuffling { get; private set; } = false;
-    private float drawTime;
     private float shuffleTime;
 
-    public DrawManager(Deck deck, float drawTime, float shuffleTime)
+    public DrawManager(Deck deck, float shuffleTime)
     {
         this.deck = deck;
-        this.drawTime = drawTime;
         this.shuffleTime = shuffleTime;
     }
 
-    public IEnumerator Draw()
+    public IEnumerator Draw(float drawTime)
     {
 
         if (deck.needShuffle)

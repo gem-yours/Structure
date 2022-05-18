@@ -13,5 +13,7 @@ public class Ignis : Spell
     public override float duration { get; } = 0f;
     override public float speed { get; } = 10f;
     override public float range { get; } = 10f;
+    override public float drawTime { get; } = 0.1f;
+
     override protected string audioPath { get; } = "ignition";
 }

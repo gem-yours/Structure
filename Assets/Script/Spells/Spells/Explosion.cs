@@ -13,5 +13,7 @@ public class Explosion : Spell
     override public float duration { get; } = 1f;
     override public float speed { get; } = 5f;
     override public float range { get; } = 5f;
+    override public float drawTime { get; } = 1f;
+
     override protected string audioPath { get; } = "ignition";
 }

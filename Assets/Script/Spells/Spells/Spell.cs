@@ -17,6 +17,7 @@ public abstract class Spell : IEquatable<Spell>
     public abstract float duration { get; }
     public abstract float speed { get; }
     public abstract float range { get; }
+    public abstract float drawTime { get; }
     protected abstract string audioPath { get; }
 
     public float lifetime

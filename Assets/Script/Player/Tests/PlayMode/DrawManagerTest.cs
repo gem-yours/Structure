@@ -13,7 +13,6 @@ public class DrawManagerTest
     private List<Spell> spells;
     private DrawManager drawManager;
 #pragma warning restore CS8618
-    private float drawTime = 0.01f;
     private float shuffleTime = 0.02f;
 
     [SetUp]
@@ -26,7 +25,7 @@ public class DrawManagerTest
             new Ignis()
         };
         deck = new Deck(spells);
-        drawManager = new DrawManager(deck, drawTime, shuffleTime);
+        drawManager = new DrawManager(deck, shuffleTime);
     }
 
     [UnityTest]
@@ -34,7 +33,7 @@ public class DrawManagerTest
     {
         while (deck.canDraw)
         {
-            yield return drawManager.Draw();
+            yield return drawManager.Draw(0);
         }
         Assert.AreEqual(spells.Skip(3), deck.drawPile);
         Assert.AreEqual(spells.Take(3), deck.discardPile);
@@ -45,10 +44,10 @@ public class DrawManagerTest
     {
         var newSpell = new Ignis();
 
-        yield return drawManager.Draw();
+        yield return drawManager.Draw(0);
         deck.Add(newSpell);
-        yield return drawManager.Draw();
-        yield return drawManager.Draw();
+        yield return drawManager.Draw(0);
+        yield return drawManager.Draw(0);
 
         spells.Add(newSpell);
         Assert.AreEqual(spells.Take(3), deck.discardPile);
