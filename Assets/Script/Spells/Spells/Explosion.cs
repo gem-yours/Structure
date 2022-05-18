@@ -11,7 +11,7 @@ public class Explosion : Spell
     override public int magazine { get; } = 1;
     override public float delay { get; } = 1f;
     override public float duration { get; } = 1f;
-    override public float speed { get; } = 25f;
-    override public float range { get; } = 25f;
+    override public float speed { get; } = 5f;
+    override public float range { get; } = 5f;
     override protected string audioPath { get; } = "ignition";
 }

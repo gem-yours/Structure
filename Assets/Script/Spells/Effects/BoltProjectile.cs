@@ -27,7 +27,7 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
     public void Move()
     {
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, spell.speed * Time.deltaTime));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + direction * spell.speed * Time.deltaTime, spell.speed * Time.deltaTime));
 
         rb2D.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
     }
@@ -66,15 +66,13 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
         OnTouchedOther(other);
     }
 
-    // Start is called before the first frame update
     protected virtual void Start()
     {
         rb2D = GetComponent<Rigidbody2D>();
         fadingCoroutine = StartCoroutine(Fade());
     }
 
-    // Update is called once per frame
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         Move();
     }

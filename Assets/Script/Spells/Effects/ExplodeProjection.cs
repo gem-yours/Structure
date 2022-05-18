@@ -30,10 +30,9 @@ public class ExplodeProjection : BoltProjectile
         particle = GetComponent<ParticleSystem>();
     }
 
-    // Update is called once per frame
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (explodeEffect.isExploding) return;
-        base.Update();
+        base.FixedUpdate();
     }
 }
