@@ -44,6 +44,7 @@ public class Deck
             return new List<Spell>(_discardPile);
         }
     }
+    public bool isShuffling { get; private set; } = false;
 
     public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(SpellSlot slot, Spell spell);
@@ -63,11 +64,15 @@ public class Deck
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
-    public Deck(List<Spell> spells)
+
+    private float shuffleTime = 0;
+
+    public Deck(List<Spell> spells, float shuffleTime)
     {
         this._spells = new List<Spell>(spells);
         _drawPile = new List<Spell>(spells);
         _discardPile = new List<Spell>();
+        this.shuffleTime = shuffleTime;
     }
 
     public bool canDraw
@@ -94,7 +99,10 @@ public class Deck
     public void Add(Spell spell)
     {
         _spells.Add(spell);
-        _drawPile.Add(spell);
+        if (isShuffling)
+        {
+            _drawPile.Add(spell);
+        }
 
         foreach (OnAdd listener in onAdds)
         {
@@ -108,31 +116,32 @@ public class Deck
         return new List<Spell?>(_drawPile.Take(numberOfCandidates).ToList());
     }
 
-    public (Spell?, SpellSlot?) Draw()
+    public IEnumerator Draw()
     {
-        if (!canDraw) return (null, null);
+        if (!canDraw) yield break;
 
         var spell = _drawPile.First();
+        yield return new WaitForSeconds(spell.drawTime);
+
         var slot = slots.Equip(spell);
 
-        if (slot != null)
+        if (slot == null)
         {
-            _discardPile.Add(spell);
-            _drawPile.Remove(spell);
-            if (onDraw != null) onDraw((SpellSlot)slot, spell);
-            return (spell, slot);
+            yield break;
         }
-        else
-        {
-            return (null, null);
-        }
+        _discardPile.Add(spell);
+        _drawPile.Remove(spell);
+        if (onDraw != null) onDraw((SpellSlot)slot, spell);
     }
 
-    public void Shuffle()
+    private IEnumerator Shuffle()
     {
+        isShuffling = true;
+        yield return new WaitForSeconds(shuffleTime);
         _discardPile.RemoveAll(x => true);
         _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
+        isShuffling = false;
     }
 
     public void Use(Spell spell)
@@ -140,6 +149,32 @@ public class Deck
         var slot = slots.RemoveSpell(spell);
         if (slot == null) return;
         if (onRemove != null) onRemove((SpellSlot)slot);
+    }
+
+
+    public void ContinuouslyDraw(MonoBehaviour monobehaviour)
+    {
+        monobehaviour.StartCoroutine(_ContinuouslyDraw());
+    }
+
+    private IEnumerator _ContinuouslyDraw()
+    {
+        while (true)
+        {
+            if (needShuffle)
+            {
+                yield return Shuffle();
+            }
+
+            if (!canDraw)
+            {
+                yield return null;
+                continue;
+            }
+
+            yield return Draw();
+            yield return null;
+        }
     }
 }
 

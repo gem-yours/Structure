@@ -9,13 +9,12 @@ public class Player : MonoBehaviour, Living
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public static float speed { private set; get; } = 0.15f;
-
     public Deck deck = new Deck(
-        new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() }
-        );
+                new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
+                2f
+                );
 
 #pragma warning disable CS8618
-    public DrawManager drawManager;
     private AudioSource audioSource;
     private Rigidbody2D rb2D;
     private Animator animator;
@@ -28,9 +27,6 @@ public class Player : MonoBehaviour, Living
     public Living.DeadAnimation? deadAnimation { set; private get; }
 
     private bool isAttacking = false;
-
-    private float drawTime = 0.25f;
-    private float shuffleTime = 2f;
 
     private bool isInvincible = false;
     private float invincibleDuration = 1f;
@@ -181,14 +177,6 @@ public class Player : MonoBehaviour, Living
         deck.Use(spell);
     }
 
-    private IEnumerator DrawSpell()
-    {
-        while (true)
-        {
-            yield return drawManager.Draw(0);
-        }
-    }
-
 
     public IEnumerator OnHit(float damage)
     {
@@ -229,13 +217,10 @@ public class Player : MonoBehaviour, Living
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        drawManager = new DrawManager(deck, shuffleTime);
-
+        deck.ContinuouslyDraw(this);
         deck.onAdd = (Deck deck, Spell spell) =>
         {
-            StartCoroutine(DrawSpell());
         };
-        StartCoroutine(DrawSpell());
     }
 
     // Update is called once per frame
@@ -246,45 +231,5 @@ public class Player : MonoBehaviour, Living
         {
             Move();
         }
-    }
-}
-
-public class DrawManager
-{
-    Deck deck;
-
-    public bool isShuffling { get; private set; } = false;
-    private float shuffleTime;
-
-    public DrawManager(Deck deck, float shuffleTime)
-    {
-        this.deck = deck;
-        this.shuffleTime = shuffleTime;
-    }
-
-    public IEnumerator Draw(float drawTime)
-    {
-
-        if (deck.needShuffle)
-        {
-            isShuffling = true;
-            yield return new WaitForSeconds(shuffleTime);
-            deck.Shuffle();
-            isShuffling = false;
-        }
-
-        if (!deck.canDraw)
-        {
-            yield break;
-        }
-
-        yield return new WaitForSeconds(drawTime);
-        deck.Draw();
-    }
-
-    public IEnumerator Add(Spell spell)
-    {
-        while (isShuffling) yield return null;
-        deck.Add(spell);
     }
 }
