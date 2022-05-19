@@ -6,7 +6,6 @@ using System.Linq;
 #nullable enable
 public class Player : MonoBehaviour, Living, ITargeter
 {
-    public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public static float speed { private set; get; } = 10f; // 2.5f
     public Deck deck = new Deck(
@@ -15,6 +14,7 @@ public class Player : MonoBehaviour, Living, ITargeter
                 );
 
 #pragma warning disable CS8618
+    public Indicator indicator;
     private AudioSource audioSource;
     private Rigidbody2D rb2D;
     private Animator animator;
@@ -33,8 +33,6 @@ public class Player : MonoBehaviour, Living, ITargeter
 
     private Vector2 movingDirection = Vector2.zero;
 
-    private float draggingThreshold = 50;
-    private Vector2 indicatorDirection = Vector2.zero;
 
     public void ChangeMoveDirection(Vector2 direction)
     {
@@ -73,28 +71,8 @@ public class Player : MonoBehaviour, Living, ITargeter
         if (spell is null) return;
         if (spell.targetType == Spell.TargetType.Direction)
         {
-            IndicateDirection(direction);
+            indicator.IndicateDirection(direction);
         }
-    }
-
-    private void IndicateDirection(Vector2 direction)
-    {
-        indicatorDirection = direction;
-
-        if (directionIndicator == null) return;
-
-        if (direction.magnitude < draggingThreshold)
-        {
-            directionIndicator.SetActive(false);
-            return;
-        }
-        directionIndicator.SetActive(true);
-        directionIndicator.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
-        directionIndicator.transform.localScale = new Vector3(
-            0.1f,
-            (0.1f - Mathf.Abs(direction.normalized.y) * 0.1f) / 2 + 0.05f,
-            0.1f
-        );
     }
 
     public void Attack()
@@ -140,26 +118,19 @@ public class Player : MonoBehaviour, Living, ITargeter
 
     public void Cast(SpellSlot slot)
     {
-        if (indicatorDirection.magnitude < draggingThreshold)
-        {
-            IndicateDirection(Vector2.zero);
-            return;
-        }
         var spell = deck.GetSpell(slot);
         if (spell == null)
         {
-            IndicateDirection(Vector2.zero);
             return;
         }
 
         audioSource.clip = spell.audioClip;
         audioSource.Play();
 
-        StartCoroutine(Casting(spell, indicatorDirection));
-        IndicateDirection(Vector2.zero);
+        StartCoroutine(Casting(spell));
     }
 
-    private IEnumerator Casting(Spell spell, Vector2 direction)
+    private IEnumerator Casting(Spell spell)
     {
         for (int time = 0; time < spell.magazine; time++)
         {
@@ -186,7 +157,7 @@ public class Player : MonoBehaviour, Living, ITargeter
                 if (enemy is null) return Vector2.left * transform.localScale.x;
                 return enemy.transform.position;
             case Spell.TargetType.Direction:
-                return indicatorDirection;
+                return indicator.direction;
         }
         return Vector2.zero;
     }
