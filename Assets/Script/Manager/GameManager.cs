@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UIManager.instance.loadingText.text = "プレイヤーを作成中";
+
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         UIManager.instance.deck = player.deck;
@@ -113,5 +115,9 @@ public class GameManager : MonoBehaviour
         {
             player.Attack();
         };
+
+        UIManager.instance.loadingText.text = "マップを生成中";
+        MapManager.instance.GenerateMap();
+        UIManager.instance.loadingScreen.SetActive(false);
     }
 }
