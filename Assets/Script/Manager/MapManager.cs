@@ -13,12 +13,11 @@ public class MapManager : MonoBehaviour
 #pragma warning restore CS8618
     public Room? currentRoom { get; private set; }
     public LocalArea? currentArea { get; private set; }
-    public int centerSize { get; } = 10;
-    public int areaSize { get; } = 75;
-#pragma warning disable CS8618
-    public Ground overall;
-#pragma warning restore CS8618
+    public const int centerSize = 10;
+    public const int areaSize = 75;
+    public const int maxNumberOfRoom = 10;
 
+    public Ground overall = new Ground(-centerSize + areaSize * 2, -centerSize + areaSize * 2);
     private List<LocalArea> localAreas = new List<LocalArea>();
 
     public void Draw(MiniMap miniMap, Vector2 playerPosition, Vector2? center)
@@ -39,9 +38,6 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        overall = new Ground(-centerSize + areaSize * 2, -centerSize + areaSize * 2);
-
-        GenerateMap(centerSize, areaSize, 10);
         StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
         var miniMap = UIManager.instance.miniMap;
         miniMap.ground = overall;
@@ -49,7 +45,7 @@ public class MapManager : MonoBehaviour
     }
 
 
-    private void GenerateMap(int centerSize, int areaSize, int maxNumberOfRoom)
+    public void GenerateMap()
     {
         var center = new Vector2(centerSize, centerSize);
         var map = new Vector2(areaSize, areaSize - centerSize);

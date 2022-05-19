@@ -36,6 +36,8 @@ public class UIManager : MonoBehaviour
     public Button menuButton;
     public GameObject menu;
     public Button returnFromMenu;
+    public GameObject loadingScreen;
+    public TextMeshProUGUI loadingText;
 #pragma warning restore CS8618
 
     public DeckPreview? deckPreview;
