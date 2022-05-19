@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 #nullable enable
-public class Player : MonoBehaviour, Living
+public class Player : MonoBehaviour, Living, ITargeter
 {
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
@@ -120,18 +120,8 @@ public class Player : MonoBehaviour, Living
         }
         bolt.spell = new Ignis();
 
-        // モーション中に敵が死んでいる可能性があるので念のため、再取得する
-        if (enemy == null) enemy = nearestEnemy(transform.position);
-        if (enemy != null)
-        {
-            bolt.Target(enemy.transform.position);
-            speed = rawSpeed;
-        }
-        else
-        {
-            // 敵がいないときは向いてる方向に発射する
-            bolt.Target(transform.position + Vector3.left * transform.localScale.x);
-        }
+        bolt.Target(this);
+        speed = rawSpeed;
 
         yield return new WaitForSeconds(0.5f);
         isAttacking = false;
@@ -167,7 +157,7 @@ public class Player : MonoBehaviour, Living
             var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
             if (spellEffect == null) break;
             spellEffect.spell = spell;
-            spellEffect.Target(transform.position + (Vector3)direction);
+            spellEffect.Target(this);
             // 最後の一発はディレイを入れる必要がない
             if (time != spell.magazine - 1)
             {
@@ -177,6 +167,19 @@ public class Player : MonoBehaviour, Living
         deck.Use(spell);
     }
 
+    public Vector2 SearchTarget(Spell spell)
+    {
+        switch (spell.targetType)
+        {
+            case Spell.TargetType.Auto:
+                var enemy = nearestEnemy(transform.position);
+                if (enemy is null) return Vector2.left * transform.localScale.x;
+                return enemy.transform.position;
+            case Spell.TargetType.Direction:
+                return indicatorDirection;
+        }
+        return Vector2.zero;
+    }
 
     public IEnumerator OnHit(float damage)
     {

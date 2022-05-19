@@ -11,8 +11,9 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
     private Rigidbody2D rb2D;
     private Coroutine fadingCoroutine;
 
-    public void Target(Vector2 target)
+    public void Target(ITargeter targeter)
     {
+        var target = targeter.SearchTarget(spell);
         direction = ((Vector3)target - transform.position).normalized;
         if (direction.magnitude == 0)
         {
