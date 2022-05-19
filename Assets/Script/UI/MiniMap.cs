@@ -29,13 +29,18 @@ public class MiniMap : MonoBehaviour
         }
     }
 
+    private Vector2 center = Vector2.zero;
+
 #pragma warning disable CS8618
     private Texture2D texture;
     private Image image;
 
 #pragma warning restore CS8618
+
+
     public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
+        this.center = center;
         if (ground == null) return;
 
         foreach (var x in Enumerable.Range(0, texture.width))
@@ -73,10 +78,33 @@ public class MiniMap : MonoBehaviour
             }
         }
 
-        var playerPositionInMiniMap = playerPosition - center + new Vector2(resolution / 2, resolution / 2);
+        var playerPositionInMiniMap = RealPositionToMapPosition(playerPosition);
         DrawRect(playerPositionInMiniMap, 4, new Color(1, 0, 0));
+    }
+
+
+    public void AddEnemy(List<Vector2> enemies)
+    {
+        foreach (var enemy in enemies)
+        {
+            DrawRect(
+                RealPositionToMapPosition(enemy),
+                4,
+                new Color(0, 1, 0)
+            );
+        }
+    }
+
+
+    public void Apply()
+    {
         texture.Apply();
         image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+    }
+
+    private Vector2 RealPositionToMapPosition(Vector2 realPosition)
+    {
+        return realPosition - center + new Vector2(resolution / 2, resolution / 2);
     }
 
 

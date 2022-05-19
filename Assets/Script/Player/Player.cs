@@ -8,7 +8,7 @@ public class Player : MonoBehaviour, Living
 {
     public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
-    public static float speed { private set; get; } = 0.15f;
+    public static float speed { private set; get; } = 10f; // 2.5f
     public Deck deck = new Deck(
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour, Living
     {
         if (rb2D == null) return;
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed));
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed * Time.deltaTime));
 
         // 攻撃中は向きを変えない
         if (isAttacking) return;
@@ -223,8 +223,7 @@ public class Player : MonoBehaviour, Living
         };
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.rotation = Quaternion.identity;
         if (movingDirection != Vector2.zero)
