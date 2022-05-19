@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
 
         UIManager.instance.onDragging = (SpellSlot slot, Vector2 displacement) =>
         {
-            player.IndicateDirection(displacement);
+            player.Dragged(slot, displacement);
         };
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {

@@ -67,7 +67,17 @@ public class Player : MonoBehaviour, Living, ITargeter
         }
     }
 
-    public void IndicateDirection(Vector2 direction)
+    public void Dragged(SpellSlot slot, Vector2 direction)
+    {
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (spell.targetType == Spell.TargetType.Direction)
+        {
+            IndicateDirection(direction);
+        }
+    }
+
+    private void IndicateDirection(Vector2 direction)
     {
         indicatorDirection = direction;
 
