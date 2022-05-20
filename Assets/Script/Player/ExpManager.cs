@@ -8,7 +8,7 @@ public class ExpManager
     public int level { private set; get; } = 1;
     public int exp { private set; get; } = 0;
 
-    private static int initialRequireExp = 1;
+    private const int initialRequireExp = 1;
     public int requireExp { private set; get; } = initialRequireExp;
     public delegate void OnLevelUp(int level);
     public OnLevelUp onLevelUp { set; private get; } = (int level) => { };

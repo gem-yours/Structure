@@ -161,7 +161,7 @@ public class UIManager : MonoBehaviour
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
         spellCard1!.spell = spell1;
-        spellCard1!.onClick = (Spell spell) => onSpellPicked(spell);
+        spellCard1!.onClick = (Spell? spell) => onSpellPicked(spell);
         spellCard2!.spell = spell2;
         spellCard2!.onClick = onSpellPicked;
         spellCard3!.spell = spell3;
@@ -169,7 +169,7 @@ public class UIManager : MonoBehaviour
 
 
         skipButton!.onClick.RemoveAllListeners();
-        skipButton!.onClick.AddListener(() => onSpellPicked(null));
+        skipButton?.onClick.AddListener(() => onSpellPicked(null));
 
         pickSpellWindow!.SetActive(true);
     }

@@ -183,8 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 762ed82136e82f14da4532129fb892b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellImage: {fileID: 7443754554050528823}
   spellDescription: {fileID: 7443754555818992606}
+  spellImage: {fileID: 7443754554050528823}
+  button: {fileID: 6633598664207188046}
 --- !u!114 &6633598664207188046
 MonoBehaviour:
   m_ObjectHideFlags: 0
