@@ -220,10 +220,14 @@ public class Player : MonoBehaviour, Living, ITargeter
 
     void FixedUpdate()
     {
-        transform.rotation = Quaternion.identity;
         if (movingDirection != Vector2.zero)
         {
             Move();
         }
+    }
+
+    private void Update()
+    {
+        transform.rotation = Quaternion.identity;
     }
 }
