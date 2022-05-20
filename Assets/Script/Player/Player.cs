@@ -4,9 +4,8 @@ using UnityEngine;
 using System.Linq;
 
 #nullable enable
-public class Player : MonoBehaviour, Living
+public class Player : MonoBehaviour, Living, ITargeter
 {
-    public GameObject? directionIndicator;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public static float speed { private set; get; } = 10f; // 2.5f
     public Deck deck = new Deck(
@@ -15,6 +14,7 @@ public class Player : MonoBehaviour, Living
                 );
 
 #pragma warning disable CS8618
+    public Indicator indicator;
     private AudioSource audioSource;
     private Rigidbody2D rb2D;
     private Animator animator;
@@ -33,8 +33,6 @@ public class Player : MonoBehaviour, Living
 
     private Vector2 movingDirection = Vector2.zero;
 
-    private float draggingThreshold = 50;
-    private Vector2 indicatorDirection = Vector2.zero;
 
     public void ChangeMoveDirection(Vector2 direction)
     {
@@ -67,24 +65,24 @@ public class Player : MonoBehaviour, Living
         }
     }
 
-    public void IndicateDirection(Vector2 direction)
+    public void Dragged(SpellSlot slot, Vector2 direction)
     {
-        indicatorDirection = direction;
-
-        if (directionIndicator == null) return;
-
-        if (direction.magnitude < draggingThreshold)
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (spell.targetType == Spell.TargetType.Direction)
         {
-            directionIndicator.SetActive(false);
-            return;
+            indicator.IndicateDirection(direction);
         }
-        directionIndicator.SetActive(true);
-        directionIndicator.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
-        directionIndicator.transform.localScale = new Vector3(
-            0.1f,
-            (0.1f - Mathf.Abs(direction.normalized.y) * 0.1f) / 2 + 0.05f,
-            0.1f
-        );
+    }
+
+    public void Clicked(SpellSlot slot)
+    {
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (spell.targetType == Spell.TargetType.Auto)
+        {
+            Cast(slot);
+        }
     }
 
     public void Attack()
@@ -120,18 +118,8 @@ public class Player : MonoBehaviour, Living
         }
         bolt.spell = new Ignis();
 
-        // モーション中に敵が死んでいる可能性があるので念のため、再取得する
-        if (enemy == null) enemy = nearestEnemy(transform.position);
-        if (enemy != null)
-        {
-            bolt.Target(enemy.transform.position);
-            speed = rawSpeed;
-        }
-        else
-        {
-            // 敵がいないときは向いてる方向に発射する
-            bolt.Target(transform.position + Vector3.left * transform.localScale.x);
-        }
+        bolt.Target(this);
+        speed = rawSpeed;
 
         yield return new WaitForSeconds(0.5f);
         isAttacking = false;
@@ -140,26 +128,20 @@ public class Player : MonoBehaviour, Living
 
     public void Cast(SpellSlot slot)
     {
-        if (indicatorDirection.magnitude < draggingThreshold)
-        {
-            IndicateDirection(Vector2.zero);
-            return;
-        }
         var spell = deck.GetSpell(slot);
         if (spell == null)
         {
-            IndicateDirection(Vector2.zero);
             return;
         }
+        indicator.HideIndicator();
 
         audioSource.clip = spell.audioClip;
         audioSource.Play();
 
-        StartCoroutine(Casting(spell, indicatorDirection));
-        IndicateDirection(Vector2.zero);
+        StartCoroutine(Casting(spell));
     }
 
-    private IEnumerator Casting(Spell spell, Vector2 direction)
+    private IEnumerator Casting(Spell spell)
     {
         for (int time = 0; time < spell.magazine; time++)
         {
@@ -167,7 +149,7 @@ public class Player : MonoBehaviour, Living
             var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
             if (spellEffect == null) break;
             spellEffect.spell = spell;
-            spellEffect.Target(transform.position + (Vector3)direction);
+            spellEffect.Target(this);
             // 最後の一発はディレイを入れる必要がない
             if (time != spell.magazine - 1)
             {
@@ -177,6 +159,19 @@ public class Player : MonoBehaviour, Living
         deck.Use(spell);
     }
 
+    public Vector2 SearchTarget(Spell spell)
+    {
+        switch (spell.targetType)
+        {
+            case Spell.TargetType.Auto:
+                var enemy = nearestEnemy(transform.position);
+                if (enemy is null) return Vector2.left * transform.localScale.x;
+                return enemy.transform.position - transform.position;
+            case Spell.TargetType.Direction:
+                return indicator.direction;
+        }
+        return Vector2.zero;
+    }
 
     public IEnumerator OnHit(float damage)
     {

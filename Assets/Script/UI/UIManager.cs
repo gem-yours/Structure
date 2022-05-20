@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
 
     public DeckPreview? deckPreview;
 
-    public DragController? dragController;
+    public DragController? movingController;
 
     public Deck deck
     {
@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public OnSpellDragging onDragging
+    public OnSpellDragging onDraggingSpell
     {
         set
         {
@@ -90,7 +90,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public OnSpellAction onClick
+    public OnSpellAction onClickSpell
     {
         set
         {
@@ -139,7 +139,7 @@ public class UIManager : MonoBehaviour
         {
             if (!value)
             {
-                dragController?.ForceEndDrag();
+                movingController?.ForceEndDrag();
             }
             if (ui == null) return;
             ui.GetComponent<Canvas>().enabled = value;

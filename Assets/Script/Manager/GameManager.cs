@@ -92,20 +92,24 @@ public class GameManager : MonoBehaviour
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
 
-        UIManager.instance.dragController.onDragging = (Vector2 displacement) =>
+        UIManager.instance.movingController.onDragging = (Vector2 displacement) =>
         {
             // y方向のセンシを下げる
             var correctedDir = Vector2.Scale(displacement, new Vector2(1, 0.5f));
             player.ChangeMoveDirection(correctedDir);
         };
-        UIManager.instance.dragController.onEndDragging = () =>
+        UIManager.instance.movingController.onEndDragging = () =>
         {
             player.ChangeMoveDirection(Vector2.zero);
         };
 
-        UIManager.instance.onDragging = (SpellSlot slot, Vector2 displacement) =>
+        UIManager.instance.onDraggingSpell = (SpellSlot slot, Vector2 displacement) =>
         {
-            player.IndicateDirection(displacement);
+            player.Dragged(slot, displacement);
+        };
+        UIManager.instance.onClickSpell = (SpellSlot slot) =>
+        {
+            player.Clicked(slot);
         };
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {

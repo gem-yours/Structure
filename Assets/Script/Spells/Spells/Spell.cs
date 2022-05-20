@@ -7,6 +7,12 @@ using UnityEngine;
 // 時間単位は秒
 public abstract class Spell : IEquatable<Spell>
 {
+    public enum TargetType
+    {
+        Auto,
+        Direction,
+    }
+
     // prefabやアイコンの名前
     public abstract string identifier { get; }
     public abstract string name { get; }
@@ -17,6 +23,7 @@ public abstract class Spell : IEquatable<Spell>
     public abstract float duration { get; }
     public abstract float speed { get; }
     public abstract float range { get; }
+    public abstract TargetType targetType { get; }
     public abstract float drawTime { get; }
     protected abstract string audioPath { get; }
 

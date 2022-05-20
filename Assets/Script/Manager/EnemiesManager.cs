@@ -23,8 +23,8 @@ public class EnemiesManager : MonoBehaviour
     }
     private List<GameObject> _enemies = new List<GameObject>();
 
-    private const float distanceThreshold = 10;
-    private const float deadDistance = 20;
+    private const float distanceThreshold = 20;
+    private const float deadDistance = 25;
 
     private void Awake()
     {

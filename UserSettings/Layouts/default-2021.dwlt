@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 820.8
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Console
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 24
+  controlID: 23
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 25
+  controlID: 24
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,11 +165,11 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1243.2
-    height: 422.4
+    height: 341.6
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 26
+  controlID: 25
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -188,7 +188,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 287.2
-    height: 422.4
+    height: 341.6
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 13}
@@ -214,7 +214,7 @@ MonoBehaviour:
     x: 287.2
     y: 0
     width: 955.99994
-    height: 422.4
+    height: 341.6
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 14}
@@ -239,9 +239,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 422.4
+    y: 341.6
     width: 1243.2
-    height: 348.4
+    height: 429.19998
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
@@ -270,8 +270,8 @@ MonoBehaviour:
     y: 0
     width: 292.80005
     height: 770.8
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 12}
@@ -342,7 +342,7 @@ MonoBehaviour:
     x: 0
     y: 73.6
     width: 286.2
-    height: 401.4
+    height: 320.6
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -350,23 +350,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 7e4386ff
-      m_LastClickedID: -7978114
-      m_ExpandedIDs: 28f4b9ff30f4b9fff684c0ffd4feceff4e87d7ff9287d7ffc289d7ff9e8ad7ff1cfbffffea610000b4990000
+      m_SelectedIDs: 56150100
+      m_LastClickedID: 70998
+      m_ExpandedIDs: 029ac1ff56150100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: MapContents
-        m_OriginalName: MapContents
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -6099254
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -399,7 +399,7 @@ MonoBehaviour:
     x: 287.2
     y: 73.6
     width: 953.99994
-    height: 401.4
+    height: 320.6
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -420,9 +420,9 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: -141, y: 149}
+      snapOffset: {x: -141, y: -147}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 1
+      snapCorner: 3
       id: unity-grid-and-snap-toolbar
       index: 1
       layout: 1
@@ -443,7 +443,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 1
       id: unity-search-toolbar
       index: 1
@@ -454,7 +454,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Open Tile Palette
       index: 2
@@ -465,7 +465,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Tilemap Focus
       index: 3
@@ -475,7 +475,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 24.8}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: unity-transform-toolbar
@@ -498,7 +498,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Light Settings
       index: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Camera
       index: 1
@@ -520,7 +520,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Cloth Constraints
       index: 2
@@ -531,7 +531,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Cloth Collisions
       index: 3
@@ -542,7 +542,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Navmesh Display
       index: 4
@@ -553,7 +553,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Agent Display
       index: 5
@@ -564,7 +564,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Obstacle Display
       index: 6
@@ -575,7 +575,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Occlusion Culling
       index: 7
@@ -586,7 +586,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Physics Debugger
       index: 8
@@ -597,7 +597,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Scene Visibility
       index: 9
@@ -608,24 +608,24 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 24.8}
       snapCorner: 0
       id: Scene View/Particles
       index: 10
       layout: 4
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
   m_Gizmos: 1
-  m_OverrideSceneCullingMask: 6917529027641081856
-  m_SceneIsLit: 1
+  m_OverrideSceneCullingMask: 0
+  m_SceneIsLit: 0
   m_SceneLighting: 1
   m_2DMode: 1
   m_isRotationLocked: 0
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -5.642743, y: -0.49999976, z: 90}
+    m_Target: {x: 20.550077, y: 0.489408, z: -0.13084593}
     speed: 2
-    m_Value: {x: -0.37206727, y: -0.032421, z: 40.743973}
+    m_Value: {x: 50.439095, y: -1.2205845, z: 1006.6407}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -637,7 +637,7 @@ MonoBehaviour:
   m_SceneViewState:
     m_AlwaysRefresh: 0
     showFog: 1
-    showSkybox: 1
+    showSkybox: 0
     showFlares: 1
     showImageEffects: 1
     showParticleSystems: 1
@@ -676,9 +676,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 5.6568537
+    m_Target: 23.0786
     speed: 2
-    m_Value: 6.806469
+    m_Value: 23.0786
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -726,7 +726,7 @@ MonoBehaviour:
     x: 287.2
     y: 73.6
     width: 953.99994
-    height: 401.4
+    height: 491.8
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -737,7 +737,7 @@ MonoBehaviour:
   m_ShowGizmos: 0
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 1192.4999, y: 475.5}
+  m_TargetSize: {x: 1192.4999, y: 588.5}
   m_TextureFilterMode: 0
   m_TextureHideFlags: 61
   m_RenderIMGUI: 1
@@ -754,8 +754,8 @@ MonoBehaviour:
     vZoomLockedByDefault: 0
     m_HBaseRangeMin: -476.99997
     m_HBaseRangeMax: 476.99997
-    m_VBaseRangeMin: -190.2
-    m_VBaseRangeMax: 190.2
+    m_VBaseRangeMin: -235.40001
+    m_VBaseRangeMax: 235.40001
     m_HAllowExceedBaseRangeMin: 1
     m_HAllowExceedBaseRangeMax: 1
     m_VAllowExceedBaseRangeMin: 1
@@ -774,22 +774,22 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 953.99994
-      height: 380.4
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 476.99997, y: 190.2}
+      height: 470.8
+    m_Scale: {x: 0.99999994, y: 0.99999994}
+    m_Translation: {x: 476.99997, y: 235.4}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -476.99997
-      y: -190.2
-      width: 953.99994
-      height: 380.4
+      x: -477
+      y: -235.40001
+      width: 954
+      height: 470.80002
     m_MinimalGUI: 1
-  m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 1192.4999, y: 501.75}
+  m_defaultScale: 0.99999994
+  m_LastWindowPixelSize: {x: 1192.4999, y: 614.75}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -816,9 +816,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 460
+    y: 415.2
     width: 1242.2
-    height: 363.4
+    height: 408.19998
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -836,22 +836,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/UI
+    - Assets/Resources/Characters
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/UI
+  - Assets/Resources/Characters
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\i13ya\Documents\unity\Structure
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 268.6}
-    m_SelectedIDs: d86f0000
-    m_LastClickedID: 28632
-    m_ExpandedIDs: 00000000aa620000ac620000ae620000b0620000b2620000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca62000000ca9a3b
+    scrollPos: {x: 0, y: 15.800018}
+    m_SelectedIDs: e4780000
+    m_LastClickedID: 30948
+    m_ExpandedIDs: 00000000e6620000e8620000ea620000ec620000ee620000f0620000f2620000f4620000f6620000f8620000fa620000fc620000fe6200000063000002630000046300000663000018700000aa770000107b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -879,7 +879,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000aa620000ac620000ae620000b0620000b2620000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca620000
+    m_ExpandedIDs: 00000000e6620000e8620000ea620000ec620000ee620000f0620000f2620000f4620000f6620000f8620000fa620000fc620000fe62000000630000026300000463000006630000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -904,8 +904,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: aa9bc1ff
+    m_LastClickedInstanceID: -4088918
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c623000000000000
     m_RenameOverlay:
@@ -956,9 +956,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 496
+    y: 415.2
     width: 1242.2
-    height: 327.4
+    height: 408.19998
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -1029,9 +1029,9 @@ MonoBehaviour:
       e32: 0
       e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 2f5e2c0c9fbd6644c84b51d738e63abc, type: 2}
+  m_AnimatorController: {fileID: 9100000, guid: b9ebbfa35abec014184ec1e657e1bf1c, type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 1631363788868990744, guid: 2f5e2c0c9fbd6644c84b51d738e63abc, type: 2}
+  - m_Target: {fileID: -1233213450386166488, guid: b9ebbfa35abec014184ec1e657e1bf1c, type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
   stateMachineGraphGUI: {fileID: 0}
@@ -1073,7 +1073,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 1670
+    ID: 434
     splitterInitialOffset: 0
     currentActiveSplitter: -1
     realSizes:
@@ -1096,7 +1096,7 @@ MonoBehaviour:
     oldMinSizes: 
     oldMaxSizes: 
     oldSplitSize: 0
-  m_TestTypeToolbarIndex: 1
+  m_TestTypeToolbarIndex: 0
   m_PlayModeTestListGUI:
     m_Window: {fileID: 19}
     m_NewResultList:
@@ -1104,9 +1104,9 @@ MonoBehaviour:
       uniqueId: '[Structure][suite]'
       name: Structure
       fullName: Structure
-      resultStatus: 2
-      duration: 0.3581569
-      messages: One or more child tests had errors
+      resultStatus: 1
+      duration: 1.6433109
+      messages: 
       output: 
       stacktrace: 
       notRunnable: 0
@@ -1121,7 +1121,7 @@ MonoBehaviour:
       name: PlayModePlayerTest.dll
       fullName: C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/PlayModePlayerTest.dll
       resultStatus: 1
-      duration: 0.3346892
+      duration: 1.2510632
       messages: 
       output: 
       stacktrace: 
@@ -1132,12 +1132,12 @@ MonoBehaviour:
       categories: []
       parentId: 1016
       parentUniqueId: '[Structure][suite]'
-    - id: 1017
-      uniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DrawManagerTest][suite]
-      name: DrawManagerTest
-      fullName: DrawManagerTest
+    - id: 1001
+      uniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DeckTest][suite]
+      name: DeckTest
+      fullName: DeckTest
       resultStatus: 1
-      duration: 0.3274038
+      duration: 1.2446183
       messages: 
       output: 
       stacktrace: 
@@ -1146,14 +1146,14 @@ MonoBehaviour:
       description: 
       isSuite: 1
       categories: []
-      parentId: 1019
+      parentId: 1004
       parentUniqueId: '[PlayModePlayerTest][C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/PlayModePlayerTest.dll][suite]'
     - id: 1003
-      uniqueId: PlayModePlayerTest.dll/DrawManagerTest/[PlayModePlayerTest][DrawManagerTest.CheckAddWhileDraw]
+      uniqueId: PlayModePlayerTest.dll/DeckTest/[PlayModePlayerTest][DeckTest.CheckAddWhileDraw]
       name: CheckAddWhileDraw
-      fullName: DrawManagerTest.CheckAddWhileDraw
+      fullName: DeckTest.CheckAddWhileDraw
       resultStatus: 1
-      duration: 0.1937717
+      duration: 1.2310171
       messages: 
       output: 
       stacktrace: 
@@ -1164,13 +1164,13 @@ MonoBehaviour:
       categories:
       - Uncategorized
       parentId: 1001
-      parentUniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DrawManagerTest][suite]
-    - id: 1018
-      uniqueId: PlayModePlayerTest.dll/DrawManagerTest/[PlayModePlayerTest][DrawManagerTest.DrawTest]
-      name: DrawTest
-      fullName: DrawManagerTest.DrawTest
+      parentUniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DeckTest][suite]
+    - id: 1002
+      uniqueId: PlayModePlayerTest.dll/DeckTest/[PlayModePlayerTest][DeckTest.ContinuouslyDrawTest]
+      name: ContinuouslyDrawTest
+      fullName: DeckTest.ContinuouslyDrawTest
       resultStatus: 1
-      duration: 0.0440506
+      duration: 0.3197985
       messages: 
       output: 
       stacktrace: 
@@ -1180,20 +1180,15 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1017
-      parentUniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DrawManagerTest][suite]
-    m_ResultText: 'MonoBehaviourTest_Works (0.001s)
-
-      ---
-
-      Method has
-      non-void return value, but no result is expected'
+      parentId: 1001
+      parentUniqueId: PlayModePlayerTest.dll/[PlayModePlayerTest][DeckTest][suite]
+    m_ResultText: CheckAddWhileDraw (1.231s)
     m_ResultStacktrace: 
     m_TestListState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: b501af32
-      m_LastClickedID: 850330037
-      m_ExpandedIDs: 10b561a34b525dbc189d8102f25d2f54ffffff7f
+      m_SelectedIDs: 02f64afa
+      m_LastClickedID: -95750654
+      m_ExpandedIDs: 8000d79010b561a34b525dbc189d8102f25d2f54d0a55c75ffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1239,259 +1234,6 @@ MonoBehaviour:
       categories: []
       parentId: 
       parentUniqueId: 
-    - id: 1012
-      uniqueId: '[EditModePlayerTest][C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/EditModePlayerTest.dll][suite]'
-      name: EditModePlayerTest.dll
-      fullName: C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/EditModePlayerTest.dll
-      resultStatus: 1
-      duration: 0.0351616
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1000
-      parentUniqueId: '[Structure][suite]'
-    - id: 1001
-      uniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-      name: DeckTest
-      fullName: DeckTest
-      resultStatus: 1
-      duration: 0.0336809
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 1
-      categories: []
-      parentId: 1012
-      parentUniqueId: '[EditModePlayerTest][C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/EditModePlayerTest.dll][suite]'
-    - id: 1007
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CanDrawCorrectSpell]
-      name: CanDrawCorrectSpell
-      fullName: DeckTest.CanDrawCorrectSpell
-      resultStatus: 1
-      duration: 0.0694848
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1008
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CanShuffle]
-      name: CanShuffle
-      fullName: DeckTest.CanShuffle
-      resultStatus: 1
-      duration: 0.0803236
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1018
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckAddAfterDraw]
-      name: CheckAddAfterDraw
-      fullName: DeckTest.CheckAddAfterDraw
-      resultStatus: 1
-      duration: 0.0019566
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1007
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1006
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckAddCorrectly]
-      name: CheckAddCorrectly
-      fullName: DeckTest.CheckAddCorrectly
-      resultStatus: 1
-      duration: 0.0002092
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1013
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckAddWhileDraw]
-      name: CheckAddWhileDraw
-      fullName: DeckTest.CheckAddWhileDraw
-      resultStatus: 1
-      duration: 0.0005863
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1005
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckCanDraw]
-      name: CheckCanDraw
-      fullName: DeckTest.CheckCanDraw
-      resultStatus: 1
-      duration: 0.0202834
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1019
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckCorrectlyUseSpell]
-      name: CheckCorrectlyUseSpell
-      fullName: DeckTest.CheckCorrectlyUseSpell
-      resultStatus: 1
-      duration: 0.0019479
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1007
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1003
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckDiscardPile]
-      name: CheckDiscardPile
-      fullName: DeckTest.CheckDiscardPile
-      resultStatus: 1
-      duration: 0.0002497
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1002
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckDrawPile]
-      name: CheckDrawPile
-      fullName: DeckTest.CheckDrawPile
-      resultStatus: 1
-      duration: 0.0001768
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1004
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckIsShuffle]
-      name: CheckIsShuffle
-      fullName: DeckTest.CheckIsShuffle
-      resultStatus: 1
-      duration: 0.0003684
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1010
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckOnAdd]
-      name: CheckOnAdd
-      fullName: DeckTest.CheckOnAdd
-      resultStatus: 1
-      duration: 0.00035
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1009
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckOnDraw]
-      name: CheckOnDraw
-      fullName: DeckTest.CheckOnDraw
-      resultStatus: 1
-      duration: 0.0003941
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
-    - id: 1011
-      uniqueId: EditModePlayerTest.dll/DeckTest/[EditModePlayerTest][DeckTest.CheckOnShuffle]
-      name: CheckOnShuffle
-      fullName: DeckTest.CheckOnShuffle
-      resultStatus: 1
-      duration: 0.0002616
-      messages: 
-      output: 
-      stacktrace: 
-      notRunnable: 0
-      ignoredOrSkipped: 0
-      description: 
-      isSuite: 0
-      categories:
-      - Uncategorized
-      parentId: 1001
-      parentUniqueId: EditModePlayerTest.dll/[EditModePlayerTest][DeckTest][suite]
     - id: 1021
       uniqueId: '[WorldMapTest][C:/Users/i13ya/Documents/unity/Structure/Library/ScriptAssemblies/WorldMapTest.dll][suite]'
       name: WorldMapTest.dll
@@ -1794,13 +1536,13 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1024
       parentUniqueId: WorldMapTest.dll/[WorldMapTest][RooomTest][suite]
-    m_ResultText: AddGround (0.019s)
+    m_ResultText: GroundTest (0.032s)
     m_ResultStacktrace: 
     m_TestListState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 447ea1d4
-      m_LastClickedID: -727613884
-      m_ExpandedIDs: 5da0c39a40ff4fad4b525dbc5022eeea069d6f49ea82b96e8e923173ffffff7f
+      m_SelectedIDs: 8e923173
+      m_LastClickedID: 1932628622
+      m_ExpandedIDs: 5da0c39a40ff4fad4b525dbc5022eeea069d6f49ea82b96effffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
