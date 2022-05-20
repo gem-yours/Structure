@@ -75,6 +75,16 @@ public class Player : MonoBehaviour, Living, ITargeter
         }
     }
 
+    public void Clicked(SpellSlot slot)
+    {
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (spell.targetType == Spell.TargetType.Auto)
+        {
+            Cast(slot);
+        }
+    }
+
     public void Attack()
     {
         if (isAttacking) return;
