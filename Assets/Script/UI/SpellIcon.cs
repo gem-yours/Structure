@@ -61,7 +61,6 @@ public class SpellIcon : MonoBehaviour
                     1 + (widthScale - 1) * current,
                     1 + (widthScale - 1) * current
                 );
-                Debug.Log(spellImage.transform.localScale);
             }
         );
         transform.position = target.transform.position;

@@ -99,10 +99,13 @@ public class Deck
     public void Add(Spell spell)
     {
         _spells.Add(spell);
-        // シャッフル中は山札に追加しなくてもシャッフル終了時に勝手に追加される
         if (!isShuffling)
         {
             _drawPile.Add(spell);
+        }
+        else
+        {
+            _discardPile.Add(spell);
         }
 
         foreach (OnAdd listener in onAdds)
@@ -122,8 +125,6 @@ public class Deck
         if (!canDraw) yield break;
 
         var spell = _drawPile.First();
-        yield return new WaitForSeconds(spell.drawTime);
-
         var slot = slots.Equip(spell);
 
         if (slot == null)
@@ -133,6 +134,8 @@ public class Deck
         _discardPile.Add(spell);
         _drawPile.Remove(spell);
         if (onDraw != null) onDraw((SpellSlot)slot, spell);
+
+        yield return new WaitForSeconds(spell.drawTime);
     }
 
     private IEnumerator Shuffle()
@@ -160,6 +163,8 @@ public class Deck
 
     private IEnumerator _ContinuouslyDraw()
     {
+        // すぐにドローしてしまうとUIが崩れる
+        yield return new WaitForSeconds(0.1f);
         while (true)
         {
             if (needShuffle)

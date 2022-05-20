@@ -19,6 +19,10 @@ public class DeckPreview : MonoBehaviour
         {
             value.onAdd = (Deck deck, Spell spell) =>
             {
+                if (deck.isShuffling)
+                {
+                    return;
+                }
                 StartCoroutine(OnAdd(spell));
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
