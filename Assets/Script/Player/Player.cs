@@ -123,6 +123,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         {
             return;
         }
+        indicator.HideIndicator();
 
         audioSource.clip = spell.audioClip;
         audioSource.Play();
@@ -155,7 +156,7 @@ public class Player : MonoBehaviour, Living, ITargeter
             case Spell.TargetType.Auto:
                 var enemy = nearestEnemy(transform.position);
                 if (enemy is null) return Vector2.left * transform.localScale.x;
-                return enemy.transform.position;
+                return enemy.transform.position - transform.position;
             case Spell.TargetType.Direction:
                 return indicator.direction;
         }

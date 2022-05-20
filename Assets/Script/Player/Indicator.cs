@@ -9,7 +9,7 @@ public class Indicator : MonoBehaviour
 #pragma warning disable CS8618
     public GameObject directionIndicator;
 #pragma warning restore CS8618
-    public Vector2 direction { get; private set; } = Vector2.up;
+    public Vector2 direction { get; private set; } = Vector2.right;
 
     private float draggingThreshold = 75;
 
@@ -32,4 +32,8 @@ public class Indicator : MonoBehaviour
         );
     }
 
+    public void HideIndicator()
+    {
+        directionIndicator.SetActive(false);
+    }
 }

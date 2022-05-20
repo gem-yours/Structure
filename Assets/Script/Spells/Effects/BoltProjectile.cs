@@ -13,21 +13,21 @@ public class BoltProjectile : MonoBehaviour, SpellEffect
 
     public void Target(ITargeter targeter)
     {
-        var target = targeter.SearchTarget(spell);
-        direction = ((Vector3)target - transform.position).normalized;
-        if (direction.magnitude == 0)
+        var target = targeter.SearchTarget(spell).normalized;
+        if (target.magnitude == 0)
         {
-            direction = Vector2.right;
+            target = Vector2.right;
             return;
         }
-        transform.rotation = Quaternion.FromToRotation(Vector2.right, direction);
+        transform.rotation = Quaternion.FromToRotation(Vector2.right, target);
         // ターゲットに向けて少しずらさないと意図せず壁にぶつかることがある
-        transform.position += (Vector3)direction;
+        transform.position += (Vector3)target;
+        direction = target;
     }
 
     public void Move()
     {
-        var current = rb2D.position;
+        Vector2 current = transform.position;
         rb2D.MovePosition(Vector2.MoveTowards(current, current + direction, spell.speed * Time.deltaTime));
 
         rb2D.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
