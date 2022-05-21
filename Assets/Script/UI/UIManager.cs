@@ -153,21 +153,21 @@ public class UIManager : MonoBehaviour
 
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
+        spellCard1!.spell = spell1;
+        spellCard2!.spell = spell2;
+        spellCard3!.spell = spell3;
         pickSpellWindow!.SetActive(true);
-        StartCoroutine(SetPickAction(spell1, spell2, spell3, onSpellPicked));
+        StartCoroutine(SetPickingSpellAction(onSpellPicked));
     }
 
     // メニューが表示されてすぐに操作できると操作が事故るので、短い間操作不能にする
-    private IEnumerator SetPickAction(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
+    private IEnumerator SetPickingSpellAction(SpellCard.OnClick onSpellPicked)
     {
-        yield return new WaitForSeconds(0.5f);
-        spellCard1!.spell = spell1;
+        yield return new WaitForSecondsRealtime(1f);
+        // TODO: アニメーションを追加する
         spellCard1!.onClick = (Spell? spell) => onSpellPicked(spell);
-        spellCard2!.spell = spell2;
         spellCard2!.onClick = onSpellPicked;
-        spellCard3!.spell = spell3;
         spellCard3!.onClick = onSpellPicked;
-
 
         skipButton!.onClick.RemoveAllListeners();
         skipButton?.onClick.AddListener(() => onSpellPicked(null));
@@ -231,11 +231,5 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         pickSpellWindow!.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

@@ -27,3 +27,19 @@ public class AnimationUtil
         animationDelegate(animationCurve.Evaluate(animationDuration));
     }
 }
+
+
+public sealed class WaitForSecondsRealtime : CustomYieldInstruction
+{
+    private float waitUntilThis;
+
+    public override bool keepWaiting
+    {
+        get { return Time.realtimeSinceStartup < waitUntilThis; }
+    }
+
+    public WaitForSecondsRealtime(float waithingTime)
+    {
+        waitUntilThis = Time.realtimeSinceStartup + waithingTime;
+    }
+}
