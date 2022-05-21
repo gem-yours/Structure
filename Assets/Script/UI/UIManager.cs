@@ -17,9 +17,11 @@ public class UIManager : MonoBehaviour
 
     public GameObject? ui;
     public DragController? attackController;
-    public DragController? spell1Controller;
-    public DragController? spell2Controller;
-    public DragController? spell3Controller;
+#pragma warning disable CS8618
+    public SpellSlotController spell1Controller;
+    public SpellSlotController spell2Controller;
+    public SpellSlotController spell3Controller;
+#pragma warning restore CS8618
 
     public TextMeshProUGUI? levelText;
     public Slider? expBar;
@@ -68,12 +70,9 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
-            if (spell2Controller != null)
-                spell2Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
-            if (spell3Controller != null)
-                spell3Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
+            spell1Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
+            spell2Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
+            spell3Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
         }
     }
 
@@ -81,12 +80,9 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onEndDragging = () => value(SpellSlot.Spell1);
-            if (spell2Controller != null)
-                spell2Controller.onEndDragging = () => value(SpellSlot.Spell2);
-            if (spell3Controller != null)
-                spell3Controller.onEndDragging = () => value(SpellSlot.Spell3);
+            spell1Controller.dragController.onEndDragging = () => value(SpellSlot.Spell1);
+            spell2Controller.dragController.onEndDragging = () => value(SpellSlot.Spell2);
+            spell3Controller.dragController.onEndDragging = () => value(SpellSlot.Spell3);
         }
     }
 
@@ -94,12 +90,9 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onClick = () => value(SpellSlot.Spell1);
-            if (spell2Controller != null)
-                spell2Controller.onClick = () => value(SpellSlot.Spell2);
-            if (spell3Controller != null)
-                spell3Controller.onClick = () => value(SpellSlot.Spell3);
+            spell1Controller.dragController.onClick = () => value(SpellSlot.Spell1);
+            spell2Controller.dragController.onClick = () => value(SpellSlot.Spell2);
+            spell3Controller.dragController.onClick = () => value(SpellSlot.Spell3);
         }
     }
 
@@ -187,7 +180,7 @@ public class UIManager : MonoBehaviour
 
     public void SetSpell(SpellSlot slot, SpellIcon icon)
     {
-        var button = GetButtonBySlot((SpellSlot)slot);
+        var button = GetDragControllerBySlot((SpellSlot)slot);
         if (button == null) return;
 
         icon.transform.SetParent(button.transform);
@@ -196,7 +189,7 @@ public class UIManager : MonoBehaviour
 
     public void UnsetSpell(SpellSlot slot)
     {
-        var button = GetButtonBySlot(slot);
+        var button = GetDragControllerBySlot(slot);
         if (button == null) return;
 
         for (var i = 0; i < button.transform.childCount; i++)
@@ -210,13 +203,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private DragController? GetButtonBySlot(SpellSlot slot)
+    private DragController? GetDragControllerBySlot(SpellSlot slot)
     {
         return slot switch
         {
-            SpellSlot.Spell1 => spell1Controller,
-            SpellSlot.Spell2 => spell2Controller,
-            SpellSlot.Spell3 => spell3Controller,
+            SpellSlot.Spell1 => spell1Controller.dragController,
+            SpellSlot.Spell2 => spell2Controller.dragController,
+            SpellSlot.Spell3 => spell3Controller.dragController,
             _ => throw new System.Exception("SpellSlot should not be null.")
         };
     }
