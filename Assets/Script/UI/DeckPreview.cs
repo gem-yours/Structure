@@ -13,7 +13,6 @@ public class DeckPreview : MonoBehaviour
 
     private int numberOfCandidates = 3;
 
-    private bool isDrawing = false;
     public Deck deck
     {
         set
@@ -24,7 +23,7 @@ public class DeckPreview : MonoBehaviour
                 {
                     return;
                 }
-                StartCoroutine(OnAdd(spell));
+                ShowSpell(spell);
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
             {
@@ -134,17 +133,6 @@ public class DeckPreview : MonoBehaviour
         Destroy(fader.gameObject);
     }
 
-
-    private IEnumerator OnAdd(Spell spell)
-    {
-        // ドロー中であれば、ドロー終了時に描画されるため何もしない
-        if (isDrawing)
-        {
-            yield break;
-        }
-        ShowSpell(spell);
-    }
-
     private IEnumerator OnDraw(Deck deck, Spell spell, SpellSlot slot)
     {
         var icon = spellIcons.Find(x => x.spell == spell);
@@ -155,11 +143,6 @@ public class DeckPreview : MonoBehaviour
         icon.isActive = false;
         inactiveSpellIcons.Add(icon);
 
-        while (isDrawing)
-        {
-            yield return null;
-        }
-        isDrawing = true;
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
         HideSpell(icon);
 
@@ -171,6 +154,5 @@ public class DeckPreview : MonoBehaviour
         }
         // 新たなスペルを表示する
         yield return null; // 最低1fは表示させないとサイズがおかしくなる
-        isDrawing = false;
     }
 }
