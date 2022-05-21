@@ -160,6 +160,14 @@ public class UIManager : MonoBehaviour
 
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
+        pickSpellWindow!.SetActive(true);
+        StartCoroutine(SetPickAction(spell1, spell2, spell3, onSpellPicked));
+    }
+
+    // メニューが表示されてすぐに操作できると操作が事故るので、短い間操作不能にする
+    private IEnumerator SetPickAction(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
+    {
+        yield return new WaitForSeconds(0.5f);
         spellCard1!.spell = spell1;
         spellCard1!.onClick = (Spell? spell) => onSpellPicked(spell);
         spellCard2!.spell = spell2;
@@ -170,8 +178,6 @@ public class UIManager : MonoBehaviour
 
         skipButton!.onClick.RemoveAllListeners();
         skipButton?.onClick.AddListener(() => onSpellPicked(null));
-
-        pickSpellWindow!.SetActive(true);
     }
 
     public void HidePickSpellWindow()
