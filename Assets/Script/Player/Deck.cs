@@ -48,6 +48,7 @@ public class Deck
 
     public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(SpellSlot slot, Spell spell);
+    public delegate void OnActivated(Spell spell);
     public delegate void OnShuffle(Deck deck);
     public delegate void OnRemove(SpellSlot slot);
 
@@ -61,6 +62,7 @@ public class Deck
         }
     }
     public OnDraw? onDraw { set; private get; } = null;
+    public OnActivated? onActivated { set; private get; } = null;
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
@@ -125,17 +127,19 @@ public class Deck
         if (!canDraw) yield break;
 
         var spell = _drawPile.First();
-        var slot = slots.Equip(spell);
+        var slot = slots.Equip(spell, false);
 
-        if (slot == null)
+        if (slot is null)
         {
             yield break;
         }
         _discardPile.Add(spell);
         _drawPile.Remove(spell);
-        if (onDraw != null) onDraw((SpellSlot)slot, spell);
+        if (onDraw is not null) onDraw((SpellSlot)slot, spell);
 
         yield return new WaitForSeconds(spell.drawTime);
+        slots.Activete((SpellSlot)slot, true);
+        if (onActivated is not null) onActivated(spell);
     }
 
     private IEnumerator Shuffle()
@@ -146,6 +150,7 @@ public class Deck
         _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
         if (onShuffle != null) onShuffle(this);
         isShuffling = false;
+        yield return null;
     }
 
     public void Use(Spell spell)
@@ -194,7 +199,8 @@ public enum SpellSlot
 
 public class EquipmentSlot
 {
-    public Dictionary<SpellSlot, Spell?> currentSpells = new Dictionary<SpellSlot, Spell?>();
+    public Dictionary<SpellSlot, Spell?> currentSpells { get; private set; } = new Dictionary<SpellSlot, Spell?>();
+    public Dictionary<SpellSlot, bool> areActive { get; private set; } = new Dictionary<SpellSlot, bool>();
 
     public bool isEmpty
     {
@@ -223,6 +229,11 @@ public class EquipmentSlot
         currentSpells.Add(SpellSlot.Spell1, null);
         currentSpells.Add(SpellSlot.Spell2, null);
         currentSpells.Add(SpellSlot.Spell3, null);
+
+        areActive.Add(SpellSlot.Spell1, false);
+        areActive.Add(SpellSlot.Spell2, false);
+        areActive.Add(SpellSlot.Spell3, false);
+
     }
 
     public SpellSlot? GetEmptySlot()
@@ -234,12 +245,18 @@ public class EquipmentSlot
         return null;
     }
 
-    public SpellSlot? Equip(Spell spell)
+    public SpellSlot? Equip(Spell spell, bool isActive = true)
     {
         var slot = GetEmptySlot();
         if (slot == null) return null;
         currentSpells[(SpellSlot)slot] = spell;
+        areActive[(SpellSlot)slot] = isActive;
         return slot;
+    }
+
+    public void Activete(SpellSlot slot, bool active)
+    {
+        areActive[slot] = active;
     }
 
     public Spell? GetSpell(SpellSlot slot)

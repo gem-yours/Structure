@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class DeckPreview : MonoBehaviour
 {
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
+    private List<SpellIcon> inactiveSpellIcons = new List<SpellIcon>();
 
     private int numberOfCandidates = 3;
 
@@ -29,7 +30,13 @@ public class DeckPreview : MonoBehaviour
             {
                 StartCoroutine(OnDraw(value, spell, slot));
             };
-
+            value.onActivated = (Spell spell) =>
+            {
+                var icon = inactiveSpellIcons.Find(x => x.spell == spell);
+                if (icon == null) return;
+                icon.isActive = true;
+                inactiveSpellIcons.Remove(icon);
+            };
             value.onShuffle = (Deck deck) =>
             {
                 var tmp = new List<SpellIcon>(spellIcons);
@@ -140,18 +147,19 @@ public class DeckPreview : MonoBehaviour
 
     private IEnumerator OnDraw(Deck deck, Spell spell, SpellSlot slot)
     {
+        var icon = spellIcons.Find(x => x.spell == spell);
+        if (icon == null)
+        {
+            yield break;
+        }
+        icon.isActive = false;
+        inactiveSpellIcons.Add(icon);
+
         while (isDrawing)
         {
             yield return null;
         }
         isDrawing = true;
-        // ドローされたカードを候補から削除する
-        var icon = spellIcons.Find(x => x.spell == spell);
-        if (icon == null)
-        {
-            isDrawing = false;
-            yield break;
-        }
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
         HideSpell(icon);
 

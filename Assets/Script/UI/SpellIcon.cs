@@ -23,6 +23,27 @@ public class SpellIcon : MonoBehaviour
             return _spell;
         }
     }
+
+    private bool _isActive = true;
+    public bool isActive
+    {
+        set
+        {
+            _isActive = value;
+            if (value)
+            {
+                spellImage.color = new Color(1, 1, 1);
+            }
+            else
+            {
+                spellImage.color = new Color(0.5f, 0.5f, 0.5f);
+            }
+        }
+        get
+        {
+            return _isActive;
+        }
+    }
 #pragma warning disable CS8618
     private Rigidbody2D rb2D;
 #pragma warning restore CS8618
