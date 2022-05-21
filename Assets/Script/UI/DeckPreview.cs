@@ -29,12 +29,16 @@ public class DeckPreview : MonoBehaviour
             {
                 StartCoroutine(OnDraw(value, spell, slot));
             };
-            value.onActivated = (Spell spell) =>
+            value.onProgress = (Spell spell, float progress, bool isActive) =>
             {
                 var icon = inactiveSpellIcons.Find(x => x.spell == spell);
                 if (icon == null) return;
-                icon.isActive = true;
-                inactiveSpellIcons.Remove(icon);
+                icon.fillAmount = 1 - progress;
+                if (isActive)
+                {
+                    inactiveSpellIcons.Remove(icon);
+                    icon.fillAmount = 0;
+                }
             };
             value.onShuffle = (Deck deck) =>
             {
@@ -140,7 +144,7 @@ public class DeckPreview : MonoBehaviour
         {
             yield break;
         }
-        icon.isActive = false;
+        icon.fillAmount = 1;
         inactiveSpellIcons.Add(icon);
 
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する

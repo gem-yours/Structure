@@ -8,7 +8,21 @@ public class SpellIcon : MonoBehaviour
 {
 #pragma warning disable CS8618
     public Image spellImage;
+    public Image indicator;
 #pragma warning restore CS8618
+
+    private float _progress = 0;
+    public float fillAmount
+    {
+        set
+        {
+            indicator.fillAmount = value;
+        }
+        get
+        {
+            return _progress;
+        }
+    }
     private Spell? _spell;
     public Spell? spell
     {
@@ -24,26 +38,6 @@ public class SpellIcon : MonoBehaviour
         }
     }
 
-    private bool _isActive = true;
-    public bool isActive
-    {
-        set
-        {
-            _isActive = value;
-            if (value)
-            {
-                spellImage.color = new Color(1, 1, 1);
-            }
-            else
-            {
-                spellImage.color = new Color(0.5f, 0.5f, 0.5f);
-            }
-        }
-        get
-        {
-            return _isActive;
-        }
-    }
 #pragma warning disable CS8618
     private Rigidbody2D rb2D;
 #pragma warning restore CS8618
