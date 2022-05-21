@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public delegate void OnAttack();
     public delegate void OnSpellAction(SpellSlot spellSlot);
     public delegate void OnSpellDragging(SpellSlot spellSlot, Vector2 displacement);
+    public delegate void OnSpellPushed(SpellSlot spellSlot);
 
     public GameObject? ui;
     public DragController? attackController;
@@ -73,6 +74,25 @@ public class UIManager : MonoBehaviour
             spell1Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
             spell2Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
             spell3Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
+        }
+    }
+
+    public OnSpellPushed onSpellPushed
+    {
+        set
+        {
+            spell1Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell1);
+            };
+            spell2Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell2);
+            };
+            spell3Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell3);
+            };
         }
     }
 

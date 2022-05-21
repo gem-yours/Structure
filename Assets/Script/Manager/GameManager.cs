@@ -113,7 +113,11 @@ public class GameManager : MonoBehaviour
         };
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {
-            player.Cast(slot);
+            player.EndDragging(slot);
+        };
+        UIManager.instance.onSpellPushed = (SpellSlot slot) =>
+        {
+            player.Pushed(slot);
         };
         UIManager.instance.onAttack = () =>
         {

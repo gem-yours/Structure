@@ -25,6 +25,14 @@ public class Player : MonoBehaviour, Living, ITargeter
     public delegate GameObject? NearestEnemy(Vector2 location);
     public NearestEnemy nearestEnemy = (Vector2 location) => { return null; };
 
+    public Vector2 facingDirection
+    {
+        get
+        {
+            return Vector2.left * transform.localScale.x;
+        }
+    }
+
     public Living.DamageAnimation? damageAnimation { set; private get; }
     public Living.DeadAnimation? deadAnimation { set; private get; }
 
@@ -77,6 +85,27 @@ public class Player : MonoBehaviour, Living, ITargeter
         }
     }
 
+    public void Pushed(SpellSlot slot)
+    {
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (spell.targetType == Spell.TargetType.Direction)
+        {
+            indicator.IndicateDirection(facingDirection);
+        }
+    }
+
+    public void EndDragging(SpellSlot slot)
+    {
+        var spell = deck.GetSpell(slot);
+        if (spell is null) return;
+        if (indicator.IsActive(spell.targetType))
+        {
+            Cast(slot);
+        }
+        indicator.HideIndicator();
+    }
+
     public void Clicked(SpellSlot slot)
     {
         var spell = deck.GetSpell(slot);
@@ -85,6 +114,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         {
             Cast(slot);
         }
+        indicator.HideIndicator();
     }
 
     public void Attack()
@@ -135,7 +165,6 @@ public class Player : MonoBehaviour, Living, ITargeter
         {
             return;
         }
-        indicator.HideIndicator();
 
         audioSource.clip = spell.audioClip;
         audioSource.Play();
@@ -172,7 +201,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         {
             case Spell.TargetType.Auto:
                 var enemy = nearestEnemy(transform.position);
-                if (enemy is null) return Vector2.left * transform.localScale.x;
+                if (enemy is null) return facingDirection;
                 return enemy.transform.position - transform.position;
             case Spell.TargetType.Direction:
                 return indicator.direction;
