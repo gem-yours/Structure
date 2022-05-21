@@ -12,6 +12,8 @@ public class Player : MonoBehaviour, Living, ITargeter
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
                 );
+    public delegate void OnCasting(Spell spell, float current); // currentは0 ~ 1;
+    public OnCasting? onCasting = null;
 
 #pragma warning disable CS8618
     public Indicator indicator;
@@ -151,11 +153,16 @@ public class Player : MonoBehaviour, Living, ITargeter
             spellEffect.spell = spell;
             spellEffect.Target(this);
             // 最後の一発はディレイを入れる必要がない
-            if (time != spell.magazine - 1)
+            yield return AnimationUtil.Linear(spell.delay, (current) =>
             {
-                yield return new WaitForSeconds(spell.delay);
-            }
+                if (onCasting is not null)
+                {
+                    var progressPerCast = 1f / spell.magazine;
+                    onCasting(spell, (current + time) * progressPerCast);
+                }
+            });
         }
+        if (onCasting is not null) onCasting(spell, 0);
         deck.Use(spell);
     }
 

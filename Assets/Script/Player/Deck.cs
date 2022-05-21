@@ -144,6 +144,11 @@ public class Deck
         slots.Activete((SpellSlot)slot, true);
     }
 
+    public SpellSlot? GetSpellSlot(Spell spell)
+    {
+        return slots.GetSpellSlot(spell);
+    }
+
     private IEnumerator Shuffle()
     {
         isShuffling = true;
@@ -266,12 +271,17 @@ public class EquipmentSlot
         return currentSpells[slot];
     }
 
-    public SpellSlot? RemoveSpell(Spell spell)
+    public SpellSlot? GetSpellSlot(Spell spell)
     {
-        var key = currentSpells.Keys.ToArray()
+        return currentSpells.Keys.ToArray()
         .Select(x => (SpellSlot?)x)
         .DefaultIfEmpty(null)
-        .FirstOrDefault(key => (key != null) ? currentSpells[(SpellSlot)key] == spell : false);
+        .FirstOrDefault(key => key is not null && currentSpells[(SpellSlot)key] == spell);
+    }
+
+    public SpellSlot? RemoveSpell(Spell spell)
+    {
+        var key = GetSpellSlot(spell);
         if (key != null)
         {
             currentSpells[(SpellSlot)key] = null;

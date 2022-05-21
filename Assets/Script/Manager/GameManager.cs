@@ -120,6 +120,13 @@ public class GameManager : MonoBehaviour
             player.Attack();
         };
 
+        player.onCasting = (Spell spell, float current) =>
+        {
+            var slot = player.deck.GetSpellSlot(spell);
+            if (slot is null) return;
+            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
+        };
+
         UIManager.instance.loadingText.text = "マップを生成中";
         MapManager.instance.GenerateMap();
         UIManager.instance.loadingScreen.SetActive(false);

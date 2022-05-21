@@ -180,16 +180,16 @@ public class UIManager : MonoBehaviour
 
     public void SetSpell(SpellSlot slot, SpellIcon icon)
     {
-        var button = GetDragControllerBySlot((SpellSlot)slot);
-        if (button == null) return;
+        var dragController = GetControllerBySlot((SpellSlot)slot).dragController;
+        if (dragController == null) return;
 
-        icon.transform.SetParent(button.transform);
-        icon.AttachTo(button.gameObject);
+        icon.transform.SetParent(dragController.transform);
+        icon.AttachTo(dragController.gameObject);
     }
 
     public void UnsetSpell(SpellSlot slot)
     {
-        var button = GetDragControllerBySlot(slot);
+        var button = GetControllerBySlot(slot).dragController;
         if (button == null) return;
 
         for (var i = 0; i < button.transform.childCount; i++)
@@ -203,14 +203,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private DragController? GetDragControllerBySlot(SpellSlot slot)
+    public SpellSlotController GetControllerBySlot(SpellSlot slot)
     {
         return slot switch
         {
-            SpellSlot.Spell1 => spell1Controller.dragController,
-            SpellSlot.Spell2 => spell2Controller.dragController,
-            SpellSlot.Spell3 => spell3Controller.dragController,
-            _ => throw new System.Exception("SpellSlot should not be null.")
+            SpellSlot.Spell1 => spell1Controller,
+            SpellSlot.Spell2 => spell2Controller,
+            SpellSlot.Spell3 => spell3Controller,
+            _ => throw new System.Exception("SpellSlot should not be null")
         };
     }
 
