@@ -113,11 +113,22 @@ public class GameManager : MonoBehaviour
         };
         UIManager.instance.onEndDragging = (SpellSlot slot) =>
         {
-            player.Cast(slot);
+            player.EndDragging(slot);
+        };
+        UIManager.instance.onSpellPushed = (SpellSlot slot) =>
+        {
+            player.Pushed(slot);
         };
         UIManager.instance.onAttack = () =>
         {
             player.Attack();
+        };
+
+        player.onCasting = (Spell spell, float current) =>
+        {
+            var slot = player.deck.GetSpellSlot(spell);
+            if (slot is null) return;
+            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
         };
 
         UIManager.instance.loadingText.text = "マップを生成中";

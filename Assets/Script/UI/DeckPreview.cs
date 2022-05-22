@@ -8,24 +8,47 @@ using UnityEngine.UI;
 #nullable enable
 public class DeckPreview : MonoBehaviour
 {
+#pragma warning disable CS8618
+    public RectTransform backgroundIndicator;
+    public Image shuffleIcon;
+#pragma warning restore CS8618
+
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
+    private List<SpellIcon> inactiveSpellIcons = new List<SpellIcon>();
 
     private int numberOfCandidates = 3;
 
-    private bool isDrawing = false;
     public Deck deck
     {
         set
         {
             value.onAdd = (Deck deck, Spell spell) =>
             {
-                StartCoroutine(OnAdd(spell));
+                if (deck.isShuffling)
+                {
+                    return;
+                }
+                ShowSpell(spell);
             };
             value.onDraw = (SpellSlot slot, Spell spell) =>
             {
                 StartCoroutine(OnDraw(value, spell, slot));
             };
-
+            value.onProgress = (Spell spell, float progress, bool isActive) =>
+            {
+                var icon = inactiveSpellIcons.Find(x => x.spell == spell);
+                if (icon == null) return;
+                icon.fillAmount = 1 - progress;
+                if (isActive)
+                {
+                    inactiveSpellIcons.Remove(icon);
+                    icon.fillAmount = 0;
+                }
+            };
+            value.onStartShuffling = (Deck deck, float shuffleTime) =>
+            {
+                StartCoroutine(ShuffleAnimation(shuffleTime));
+            };
             value.onShuffle = (Deck deck) =>
             {
                 var tmp = new List<SpellIcon>(spellIcons);
@@ -123,31 +146,16 @@ public class DeckPreview : MonoBehaviour
         Destroy(fader.gameObject);
     }
 
-
-    private IEnumerator OnAdd(Spell spell)
-    {
-        // ドロー中であれば、ドロー終了時に描画されるため何もしない
-        if (isDrawing)
-        {
-            yield break;
-        }
-        ShowSpell(spell);
-    }
-
     private IEnumerator OnDraw(Deck deck, Spell spell, SpellSlot slot)
     {
-        while (isDrawing)
-        {
-            yield return null;
-        }
-        isDrawing = true;
-        // ドローされたカードを候補から削除する
         var icon = spellIcons.Find(x => x.spell == spell);
         if (icon == null)
         {
-            isDrawing = false;
             yield break;
         }
+        icon.fillAmount = 1;
+        inactiveSpellIcons.Add(icon);
+
         UIManager.instance.SetSpell(slot, icon); // TODO: UIManagerを直接呼び出すのはなんか汚い気がするので他の方法を検討する
         HideSpell(icon);
 
@@ -159,6 +167,25 @@ public class DeckPreview : MonoBehaviour
         }
         // 新たなスペルを表示する
         yield return null; // 最低1fは表示させないとサイズがおかしくなる
-        isDrawing = false;
+    }
+
+    private IEnumerator ShuffleAnimation(float shuffleTime)
+    {
+        shuffleIcon.gameObject.SetActive(true);
+        StartCoroutine(shuffleIcon.AppearFromAlpha(0.25f));
+
+        var angleSpeed = 180;
+        yield return AnimationUtil.EaseInOut(shuffleTime, (float current) =>
+        {
+            backgroundIndicator.anchorMax = new Vector2(1, 1 - current);
+            shuffleIcon.transform.rotation = Quaternion.Euler(0, 0, angleSpeed * current * shuffleTime);
+        });
+        yield return null;
+        var rect = spellIcons.FirstOrDefault().GetComponent<RectTransform>();
+        if (rect is null) yield break;
+        backgroundIndicator.anchorMax = new Vector2(rect.sizeDelta.y, 0);
+
+        yield return shuffleIcon.DisppearToAlpha(0.1f);
+        shuffleIcon.gameObject.SetActive(false);
     }
 }

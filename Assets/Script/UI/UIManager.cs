@@ -14,12 +14,15 @@ public class UIManager : MonoBehaviour
     public delegate void OnAttack();
     public delegate void OnSpellAction(SpellSlot spellSlot);
     public delegate void OnSpellDragging(SpellSlot spellSlot, Vector2 displacement);
+    public delegate void OnSpellPushed(SpellSlot spellSlot);
 
     public GameObject? ui;
     public DragController? attackController;
-    public DragController? spell1Controller;
-    public DragController? spell2Controller;
-    public DragController? spell3Controller;
+#pragma warning disable CS8618
+    public SpellSlotController spell1Controller;
+    public SpellSlotController spell2Controller;
+    public SpellSlotController spell3Controller;
+#pragma warning restore CS8618
 
     public TextMeshProUGUI? levelText;
     public Slider? expBar;
@@ -68,12 +71,28 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
-            if (spell2Controller != null)
-                spell2Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
-            if (spell3Controller != null)
-                spell3Controller.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
+            spell1Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell1, displacement);
+            spell2Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell2, displacement);
+            spell3Controller.dragController.onDragging = (Vector2 displacement) => value(SpellSlot.Spell3, displacement);
+        }
+    }
+
+    public OnSpellPushed onSpellPushed
+    {
+        set
+        {
+            spell1Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell1);
+            };
+            spell2Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell2);
+            };
+            spell3Controller.dragController.onPushed = () =>
+            {
+                value(SpellSlot.Spell3);
+            };
         }
     }
 
@@ -81,12 +100,9 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onEndDragging = () => value(SpellSlot.Spell1);
-            if (spell2Controller != null)
-                spell2Controller.onEndDragging = () => value(SpellSlot.Spell2);
-            if (spell3Controller != null)
-                spell3Controller.onEndDragging = () => value(SpellSlot.Spell3);
+            spell1Controller.dragController.onEndDragging = () => value(SpellSlot.Spell1);
+            spell2Controller.dragController.onEndDragging = () => value(SpellSlot.Spell2);
+            spell3Controller.dragController.onEndDragging = () => value(SpellSlot.Spell3);
         }
     }
 
@@ -94,12 +110,9 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (spell1Controller != null)
-                spell1Controller.onClick = () => value(SpellSlot.Spell1);
-            if (spell2Controller != null)
-                spell2Controller.onClick = () => value(SpellSlot.Spell2);
-            if (spell3Controller != null)
-                spell3Controller.onClick = () => value(SpellSlot.Spell3);
+            spell1Controller.dragController.onClick = () => value(SpellSlot.Spell1);
+            spell2Controller.dragController.onClick = () => value(SpellSlot.Spell2);
+            spell3Controller.dragController.onClick = () => value(SpellSlot.Spell3);
         }
     }
 
@@ -161,17 +174,23 @@ public class UIManager : MonoBehaviour
     public void ShowPickSpellWindow(Spell spell1, Spell spell2, Spell spell3, SpellCard.OnClick onSpellPicked)
     {
         spellCard1!.spell = spell1;
-        spellCard1!.onClick = (Spell spell) => onSpellPicked(spell);
         spellCard2!.spell = spell2;
-        spellCard2!.onClick = onSpellPicked;
         spellCard3!.spell = spell3;
+        pickSpellWindow!.SetActive(true);
+        StartCoroutine(SetPickingSpellAction(onSpellPicked));
+    }
+
+    // メニューが表示されてすぐに操作できると操作が事故るので、短い間操作不能にする
+    private IEnumerator SetPickingSpellAction(SpellCard.OnClick onSpellPicked)
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        // TODO: アニメーションを追加する
+        spellCard1!.onClick = (Spell? spell) => onSpellPicked(spell);
+        spellCard2!.onClick = onSpellPicked;
         spellCard3!.onClick = onSpellPicked;
 
-
         skipButton!.onClick.RemoveAllListeners();
-        skipButton!.onClick.AddListener(() => onSpellPicked(null));
-
-        pickSpellWindow!.SetActive(true);
+        skipButton?.onClick.AddListener(() => onSpellPicked(null));
     }
 
     public void HidePickSpellWindow()
@@ -181,16 +200,16 @@ public class UIManager : MonoBehaviour
 
     public void SetSpell(SpellSlot slot, SpellIcon icon)
     {
-        var button = GetButtonBySlot((SpellSlot)slot);
-        if (button == null) return;
+        var dragController = GetControllerBySlot((SpellSlot)slot).dragController;
+        if (dragController == null) return;
 
-        icon.transform.SetParent(button.transform);
-        icon.AttachTo(button.gameObject);
+        icon.transform.SetParent(dragController.transform);
+        icon.AttachTo(dragController.gameObject);
     }
 
     public void UnsetSpell(SpellSlot slot)
     {
-        var button = GetButtonBySlot(slot);
+        var button = GetControllerBySlot(slot).dragController;
         if (button == null) return;
 
         for (var i = 0; i < button.transform.childCount; i++)
@@ -204,14 +223,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private DragController? GetButtonBySlot(SpellSlot slot)
+    public SpellSlotController GetControllerBySlot(SpellSlot slot)
     {
         return slot switch
         {
             SpellSlot.Spell1 => spell1Controller,
             SpellSlot.Spell2 => spell2Controller,
             SpellSlot.Spell3 => spell3Controller,
-            _ => throw new System.Exception("SpellSlot should not be null.")
+            _ => throw new System.Exception("SpellSlot should not be null")
         };
     }
 
@@ -232,11 +251,5 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         pickSpellWindow!.SetActive(false);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

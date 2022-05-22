@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 #nullable enable
 [RequireComponent(typeof(Image))]
-public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler
 {
     public bool dragOnSurfaces = true;
 
@@ -16,6 +16,8 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public OnDragging? onDragging { get; set; }
     public delegate void OnEndDraggging();
     public OnEndDraggging? onEndDragging { get; set; }
+    public delegate void OnPushed();
+    public OnPushed? onPushed = null;
     public delegate void OnClick();
     public OnClick? onClick { get; set; }
 
@@ -80,6 +82,16 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         if (onClick != null)
             onClick();
+    }
+
+    public void OnPointerDown(PointerEventData pointerEventData)
+    {
+        if (onPushed is not null) onPushed();
+    }
+
+    public void OnPointerUp(PointerEventData pointerEventData)
+    {
+        if (onEndDragging is not null) onEndDragging();
     }
 
     private void CreateDraggingImage(Vector3 position)

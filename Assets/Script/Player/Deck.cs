@@ -48,6 +48,8 @@ public class Deck
 
     public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(SpellSlot slot, Spell spell);
+    public delegate void OnProgress(Spell spell, float progress, bool isActive);
+    public delegate void OnStartShuffling(Deck deck, float shuffleTime);
     public delegate void OnShuffle(Deck deck);
     public delegate void OnRemove(SpellSlot slot);
 
@@ -61,6 +63,8 @@ public class Deck
         }
     }
     public OnDraw? onDraw { set; private get; } = null;
+    public OnProgress? onProgress { set; private get; } = null;
+    public OnStartShuffling? onStartShuffling { set; private get; } = null;
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
@@ -99,10 +103,13 @@ public class Deck
     public void Add(Spell spell)
     {
         _spells.Add(spell);
-        // シャッフル中は山札に追加しなくてもシャッフル終了時に勝手に追加される
         if (!isShuffling)
         {
             _drawPile.Add(spell);
+        }
+        else
+        {
+            _discardPile.Add(spell);
         }
 
         foreach (OnAdd listener in onAdds)
@@ -122,27 +129,38 @@ public class Deck
         if (!canDraw) yield break;
 
         var spell = _drawPile.First();
-        yield return new WaitForSeconds(spell.drawTime);
+        var slot = slots.Equip(spell, false);
 
-        var slot = slots.Equip(spell);
-
-        if (slot == null)
+        if (slot is null)
         {
             yield break;
         }
         _discardPile.Add(spell);
         _drawPile.Remove(spell);
-        if (onDraw != null) onDraw((SpellSlot)slot, spell);
+        if (onDraw is not null) onDraw((SpellSlot)slot, spell);
+
+        yield return AnimationUtil.Linear(spell.drawTime, (current) =>
+        {
+            if (onProgress is not null) onProgress(spell, current, current == spell.drawTime);
+        });
+        slots.Activete((SpellSlot)slot, true);
+    }
+
+    public SpellSlot? GetSpellSlot(Spell spell)
+    {
+        return slots.GetSpellSlot(spell);
     }
 
     private IEnumerator Shuffle()
     {
         isShuffling = true;
+        if (onStartShuffling is not null) onStartShuffling(this, shuffleTime);
         yield return new WaitForSeconds(shuffleTime);
         _discardPile.RemoveAll(x => true);
         _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
-        if (onShuffle != null) onShuffle(this);
+        if (onShuffle is not null) onShuffle(this);
         isShuffling = false;
+        yield return null;
     }
 
     public void Use(Spell spell)
@@ -160,6 +178,8 @@ public class Deck
 
     private IEnumerator _ContinuouslyDraw()
     {
+        // すぐにドローしてしまうとUIが崩れる
+        yield return new WaitForSeconds(0.1f);
         while (true)
         {
             if (needShuffle)
@@ -189,7 +209,8 @@ public enum SpellSlot
 
 public class EquipmentSlot
 {
-    public Dictionary<SpellSlot, Spell?> currentSpells = new Dictionary<SpellSlot, Spell?>();
+    public Dictionary<SpellSlot, Spell?> currentSpells { get; private set; } = new Dictionary<SpellSlot, Spell?>();
+    public Dictionary<SpellSlot, bool> areActive { get; private set; } = new Dictionary<SpellSlot, bool>();
 
     public bool isEmpty
     {
@@ -218,6 +239,11 @@ public class EquipmentSlot
         currentSpells.Add(SpellSlot.Spell1, null);
         currentSpells.Add(SpellSlot.Spell2, null);
         currentSpells.Add(SpellSlot.Spell3, null);
+
+        areActive.Add(SpellSlot.Spell1, false);
+        areActive.Add(SpellSlot.Spell2, false);
+        areActive.Add(SpellSlot.Spell3, false);
+
     }
 
     public SpellSlot? GetEmptySlot()
@@ -229,12 +255,18 @@ public class EquipmentSlot
         return null;
     }
 
-    public SpellSlot? Equip(Spell spell)
+    public SpellSlot? Equip(Spell spell, bool isActive = true)
     {
         var slot = GetEmptySlot();
         if (slot == null) return null;
         currentSpells[(SpellSlot)slot] = spell;
+        areActive[(SpellSlot)slot] = isActive;
         return slot;
+    }
+
+    public void Activete(SpellSlot slot, bool active)
+    {
+        areActive[slot] = active;
     }
 
     public Spell? GetSpell(SpellSlot slot)
@@ -242,12 +274,17 @@ public class EquipmentSlot
         return currentSpells[slot];
     }
 
-    public SpellSlot? RemoveSpell(Spell spell)
+    public SpellSlot? GetSpellSlot(Spell spell)
     {
-        var key = currentSpells.Keys.ToArray()
+        return currentSpells.Keys.ToArray()
         .Select(x => (SpellSlot?)x)
         .DefaultIfEmpty(null)
-        .FirstOrDefault(key => (key != null) ? currentSpells[(SpellSlot)key] == spell : false);
+        .FirstOrDefault(key => key is not null && currentSpells[(SpellSlot)key] == spell);
+    }
+
+    public SpellSlot? RemoveSpell(Spell spell)
+    {
+        var key = GetSpellSlot(spell);
         if (key != null)
         {
             currentSpells[(SpellSlot)key] = null;
