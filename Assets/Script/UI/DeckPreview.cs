@@ -8,6 +8,11 @@ using UnityEngine.UI;
 #nullable enable
 public class DeckPreview : MonoBehaviour
 {
+#pragma warning disable CS8618
+    public RectTransform backgroundIndicator;
+    public Image shuffleIcon;
+#pragma warning restore CS8618
+
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
     private List<SpellIcon> inactiveSpellIcons = new List<SpellIcon>();
 
@@ -39,6 +44,10 @@ public class DeckPreview : MonoBehaviour
                     inactiveSpellIcons.Remove(icon);
                     icon.fillAmount = 0;
                 }
+            };
+            value.onStartShuffling = (Deck deck, float shuffleTime) =>
+            {
+                StartCoroutine(ShuffleAnimation(shuffleTime));
             };
             value.onShuffle = (Deck deck) =>
             {
@@ -158,5 +167,25 @@ public class DeckPreview : MonoBehaviour
         }
         // 新たなスペルを表示する
         yield return null; // 最低1fは表示させないとサイズがおかしくなる
+    }
+
+    private IEnumerator ShuffleAnimation(float shuffleTime)
+    {
+        shuffleIcon.gameObject.SetActive(true);
+        StartCoroutine(shuffleIcon.AppearFromAlpha(0.25f));
+
+        var angleSpeed = 180;
+        yield return AnimationUtil.EaseInOut(shuffleTime, (float current) =>
+        {
+            backgroundIndicator.anchorMax = new Vector2(1, 1 - current);
+            shuffleIcon.transform.rotation = Quaternion.Euler(0, 0, angleSpeed * current * shuffleTime);
+        });
+        yield return null;
+        var rect = spellIcons.FirstOrDefault().GetComponent<RectTransform>();
+        if (rect is null) yield break;
+        backgroundIndicator.anchorMax = new Vector2(rect.sizeDelta.y, 0);
+
+        yield return shuffleIcon.DisppearToAlpha(0.1f);
+        shuffleIcon.gameObject.SetActive(false);
     }
 }

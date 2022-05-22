@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 #nullable enable
 public class AnimationUtil
@@ -41,5 +42,29 @@ public sealed class WaitForSecondsRealtime : CustomYieldInstruction
     public WaitForSecondsRealtime(float waithingTime)
     {
         waitUntilThis = Time.realtimeSinceStartup + waithingTime;
+    }
+}
+
+
+public static class AlphaExtension
+{
+    public static IEnumerator AppearFromAlpha(this Image image, float animationDuration)
+    {
+        yield return AnimationUtil.EaseInOut(animationDuration, (float current) =>
+        {
+            var color = image.color;
+            color.a = 1 - current;
+            image.color = color;
+        });
+    }
+
+    public static IEnumerator DisppearToAlpha(this Image image, float animationDuration)
+    {
+        yield return AnimationUtil.EaseInOut(animationDuration, (float current) =>
+        {
+            var color = image.color;
+            color.a = current;
+            image.color = color;
+        });
     }
 }

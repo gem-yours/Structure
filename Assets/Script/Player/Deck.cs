@@ -49,6 +49,7 @@ public class Deck
     public delegate void OnAdd(Deck deck, Spell spell);
     public delegate void OnDraw(SpellSlot slot, Spell spell);
     public delegate void OnProgress(Spell spell, float progress, bool isActive);
+    public delegate void OnStartShuffling(Deck deck, float shuffleTime);
     public delegate void OnShuffle(Deck deck);
     public delegate void OnRemove(SpellSlot slot);
 
@@ -63,6 +64,7 @@ public class Deck
     }
     public OnDraw? onDraw { set; private get; } = null;
     public OnProgress? onProgress { set; private get; } = null;
+    public OnStartShuffling? onStartShuffling { set; private get; } = null;
     public OnShuffle? onShuffle { set; private get; } = null;
     public OnRemove? onRemove { set; private get; } = null;
 
@@ -152,10 +154,11 @@ public class Deck
     private IEnumerator Shuffle()
     {
         isShuffling = true;
+        if (onStartShuffling is not null) onStartShuffling(this, shuffleTime);
         yield return new WaitForSeconds(shuffleTime);
         _discardPile.RemoveAll(x => true);
         _drawPile = _spells.OrderBy(x => Guid.NewGuid()).ToList();
-        if (onShuffle != null) onShuffle(this);
+        if (onShuffle is not null) onShuffle(this);
         isShuffling = false;
         yield return null;
     }
