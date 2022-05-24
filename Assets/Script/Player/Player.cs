@@ -12,6 +12,11 @@ public class Player : MonoBehaviour, Living, ITargeter
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
                 );
+    private Dictionary<SpellSlot, bool> isCasting = new Dictionary<SpellSlot, bool> {
+        { SpellSlot.Spell1, false },
+        { SpellSlot.Spell2, false },
+        { SpellSlot.Spell3, false },
+    };
     public delegate void OnCasting(Spell spell, float current); // currentは0 ~ 1;
     public OnCasting? onCasting = null;
 
@@ -160,6 +165,10 @@ public class Player : MonoBehaviour, Living, ITargeter
 
     public void Cast(SpellSlot slot)
     {
+        if (isCasting[slot])
+        {
+            return;
+        }
         var spell = deck.GetSpell(slot);
         if (spell == null)
         {
@@ -169,11 +178,12 @@ public class Player : MonoBehaviour, Living, ITargeter
         audioSource.clip = spell.audioClip;
         audioSource.Play();
 
-        StartCoroutine(Casting(spell));
+        StartCoroutine(Casting(slot, spell));
     }
 
-    private IEnumerator Casting(Spell spell)
+    private IEnumerator Casting(SpellSlot slot, Spell spell)
     {
+        isCasting[slot] = true;
         for (int time = 0; time < spell.magazine; time++)
         {
             // インジケータに合わせて発射位置をずらす
@@ -191,8 +201,10 @@ public class Player : MonoBehaviour, Living, ITargeter
                 }
             });
         }
-        if (onCasting is not null) onCasting(spell, 0);
+
+        isCasting[slot] = false;
         deck.Use(spell);
+        if (onCasting is not null) onCasting(spell, 0);
     }
 
     public Vector2 SearchTarget(Spell spell)
