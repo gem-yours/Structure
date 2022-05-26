@@ -23,7 +23,7 @@ public class EnemiesManager : MonoBehaviour
     }
     private List<GameObject> _enemies = new List<GameObject>();
 
-    private const float distanceThreshold = 20;
+    private const float distanceThreshold = 10;
     private const float deadDistance = 25;
 
     private void Awake()
@@ -110,7 +110,7 @@ public class EnemiesManager : MonoBehaviour
 
             var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
             Spawn(position + offset);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

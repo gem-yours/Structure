@@ -88,6 +88,18 @@ public class GameManager : MonoBehaviour
             return EnemiesManager.instance.NearestEnemy(location);
         };
 
+        player.onCasting = (Spell spell, float current) =>
+        {
+            var slot = player.deck.GetSpellSlot(spell);
+            if (slot is null) return;
+            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
+        };
+        UIManager.instance.maxHp = player.maxHp;
+        player.onDamaged = (float hp) =>
+        {
+            UIManager.instance.currentHp = hp;
+        };
+
         gameObject.AddComponent<GameCamera>();
         gameCamera = gameObject.GetComponent<GameCamera>();
         gameCamera.target = playerObject;
@@ -122,13 +134,6 @@ public class GameManager : MonoBehaviour
         UIManager.instance.onAttack = () =>
         {
             player.Attack();
-        };
-
-        player.onCasting = (Spell spell, float current) =>
-        {
-            var slot = player.deck.GetSpellSlot(spell);
-            if (slot is null) return;
-            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
         };
 
         UIManager.instance.loadingText.text = "マップを生成中";
