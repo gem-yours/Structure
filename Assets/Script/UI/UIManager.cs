@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour
     public SpellSlotController spell1Controller;
     public SpellSlotController spell2Controller;
     public SpellSlotController spell3Controller;
+
+    public GameObject gameOverWindow;
+    public Button exitToTileButton;
 #pragma warning restore CS8618
 
     public TextMeshProUGUI? levelText;

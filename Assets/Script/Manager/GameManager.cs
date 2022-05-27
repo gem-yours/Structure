@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -98,6 +99,15 @@ public class GameManager : MonoBehaviour
         player.onDamaged = (float hp) =>
         {
             UIManager.instance.currentHp = hp;
+        };
+        player.onDead = () =>
+        {
+            Time.timeScale = 0;
+            UIManager.instance.exitToTileButton.onClick.AddListener(() =>
+            {
+                SceneManager.LoadScene("Main");
+            });
+            UIManager.instance.gameOverWindow.SetActive(true);
         };
 
         gameObject.AddComponent<GameCamera>();
