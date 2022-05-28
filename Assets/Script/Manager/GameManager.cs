@@ -105,6 +105,8 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             UIManager.instance.exitToTileButton.onClick.AddListener(() =>
             {
+                Destroy(MapManager.instance.gameObject);
+                EnemiesManager.instance.KillAllEnemies();
                 SceneManager.LoadScene("Main");
             });
             UIManager.instance.gameOverWindow.SetActive(true);

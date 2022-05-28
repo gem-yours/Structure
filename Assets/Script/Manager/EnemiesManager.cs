@@ -31,7 +31,6 @@ public class EnemiesManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
@@ -163,6 +162,15 @@ public class EnemiesManager : MonoBehaviour
                 }
             }
             yield return new WaitForSeconds(3);
+        }
+    }
+
+    public void KillAllEnemies()
+    {
+        while (enemies.Count > 0)
+        {
+            var enemy = enemies.FirstOrDefault();
+            Dead(enemy);
         }
     }
 

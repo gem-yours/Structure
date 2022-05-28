@@ -31,17 +31,14 @@ public class MiniMap : MonoBehaviour
 
     private Vector2 center = Vector2.zero;
 
-#pragma warning disable CS8618
-    private Texture2D texture;
-    private Image image;
-
-#pragma warning restore CS8618
+    private Texture2D? texture;
+    private Image? image;
 
 
     public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
         this.center = center;
-        if (ground == null) return;
+        if (ground is null || texture is null) return;
 
         foreach (var x in Enumerable.Range(0, texture.width))
         {
@@ -98,6 +95,7 @@ public class MiniMap : MonoBehaviour
 
     public void Apply()
     {
+        if (texture is null || image is null) return;
         texture.Apply();
         image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
     }
@@ -110,6 +108,7 @@ public class MiniMap : MonoBehaviour
 
     private void DrawRect(Vector2 center, int diameter, Color color)
     {
+        if (texture is null) return;
         foreach (var x in Enumerable.Range(-diameter / 2, diameter))
         {
             foreach (var y in Enumerable.Range(-diameter / 2, diameter))
