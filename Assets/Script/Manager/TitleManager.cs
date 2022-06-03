@@ -21,6 +21,8 @@ public class TitleManager : MonoBehaviour
 
     private void Init()
     {
+        Time.timeScale = 1;
+
         battleButton = GameObject.Find("BattleButton").GetComponent<Button>();
         equipButton = GameObject.Find("EquipButton").GetComponent<Button>();
         battleScreen = GameObject.Find("BattleScreen");

@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
@@ -42,7 +41,22 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UIManager.instance.loadingText.text = "プレイヤーを作成中";
+        CreatePlayer();
 
+        UIManager.instance.loadingText.text = "UIを設定中";
+        ConfigureUI();
+
+        gameObject.AddComponent<GameCamera>();
+        gameCamera = gameObject.GetComponent<GameCamera>();
+        gameCamera.target = playerObject;
+
+        UIManager.instance.loadingText.text = "マップを生成中";
+        MapManager.instance.GenerateMap();
+        UIManager.instance.loadingScreen.SetActive(false);
+    }
+
+    private void CreatePlayer()
+    {
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         UIManager.instance.deck = player.deck;
@@ -105,17 +119,16 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             UIManager.instance.exitToTileButton.onClick.AddListener(() =>
             {
-                Destroy(MapManager.instance.gameObject);
+                MapManager.instance.StopDrawingMap();
                 EnemiesManager.instance.KillAllEnemies();
                 SceneManager.LoadScene("Main");
             });
             UIManager.instance.gameOverWindow.SetActive(true);
         };
+    }
 
-        gameObject.AddComponent<GameCamera>();
-        gameCamera = gameObject.GetComponent<GameCamera>();
-        gameCamera.target = playerObject;
-
+    private void ConfigureUI()
+    {
         UIManager.instance.movingController.onDragging = (Vector2 displacement) =>
         {
             // y方向のセンシを下げる
@@ -147,9 +160,5 @@ public class GameManager : MonoBehaviour
         {
             player.Attack();
         };
-
-        UIManager.instance.loadingText.text = "マップを生成中";
-        MapManager.instance.GenerateMap();
-        UIManager.instance.loadingScreen.SetActive(false);
     }
 }

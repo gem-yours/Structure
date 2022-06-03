@@ -7,7 +7,7 @@ using System.Linq;
 public class Player : MonoBehaviour, Living, ITargeter
 {
     public float maxHp { private set; get; } = 100;
-    public float currentHp { private set; get; } = 1;
+    public float currentHp { private set; get; } = 100;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public static float speed { private set; get; } = 10f; // 2.5f
     public Deck deck =
@@ -229,7 +229,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         return Vector2.zero;
     }
 
-    private void takeDamage(float damage)
+    public void takeDamage(float damage)
     {
         if (damage <= 0) return;
         currentHp -= damage;
