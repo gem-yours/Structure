@@ -17,6 +17,9 @@ public class MapManager : MonoBehaviour
     public const int areaSize = 75;
     public const int maxNumberOfRoom = 10;
 
+    private Coroutine? drawingMap = null;
+    private Coroutine? detectingPlayer = null;
+
     public Ground overall = new Ground(-centerSize + areaSize * 2, -centerSize + areaSize * 2);
     private List<LocalArea> localAreas = new List<LocalArea>();
 
@@ -25,7 +28,13 @@ public class MapManager : MonoBehaviour
         if (center == null) center = Vector2.zero;
         miniMap.ground = overall;
         miniMap.resolution = overall.columns;
-        StartCoroutine(_Draw(miniMap, playerPosition, (Vector2)center));
+        drawingMap = StartCoroutine(_Draw(miniMap, playerPosition, (Vector2)center));
+    }
+
+    public void StopDrawingMap()
+    {
+        StopCoroutine(drawingMap);
+        StopCoroutine(detectingPlayer);
     }
 
     private IEnumerator _Draw(MiniMap miniMap, Vector2 playerPosition, Vector2 center)
@@ -38,10 +47,10 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
+        detectingPlayer = StartCoroutine(DetectWhereThePlayerIs(centerSize, areaSize));
         var miniMap = UIManager.instance.miniMap;
         miniMap.ground = overall;
-        StartCoroutine(DrawMap());
+        drawingMap = StartCoroutine(DrawMap());
     }
 
 
@@ -144,7 +153,6 @@ public class MapManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {

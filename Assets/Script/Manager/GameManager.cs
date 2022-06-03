@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -17,7 +18,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {
@@ -41,7 +41,22 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UIManager.instance.loadingText.text = "プレイヤーを作成中";
+        CreatePlayer();
 
+        UIManager.instance.loadingText.text = "UIを設定中";
+        ConfigureUI();
+
+        gameObject.AddComponent<GameCamera>();
+        gameCamera = gameObject.GetComponent<GameCamera>();
+        gameCamera.target = playerObject;
+
+        UIManager.instance.loadingText.text = "マップを生成中";
+        MapManager.instance.GenerateMap();
+        UIManager.instance.loadingScreen.SetActive(false);
+    }
+
+    private void CreatePlayer()
+    {
         playerObject = Instantiate(Resources.Load("Characters/Themisto"), Vector3.zero, Quaternion.identity) as GameObject;
         player = playerObject.GetComponent<Player>();
         UIManager.instance.deck = player.deck;
@@ -88,10 +103,32 @@ public class GameManager : MonoBehaviour
             return EnemiesManager.instance.NearestEnemy(location);
         };
 
-        gameObject.AddComponent<GameCamera>();
-        gameCamera = gameObject.GetComponent<GameCamera>();
-        gameCamera.target = playerObject;
+        player.onCasting = (Spell spell, float current) =>
+        {
+            var slot = player.deck.GetSpellSlot(spell);
+            if (slot is null) return;
+            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
+        };
+        UIManager.instance.maxHp = player.maxHp;
+        player.onDamaged = (float hp) =>
+        {
+            UIManager.instance.currentHp = hp;
+        };
+        player.onDead = () =>
+        {
+            Time.timeScale = 0;
+            UIManager.instance.exitToTileButton.onClick.AddListener(() =>
+            {
+                MapManager.instance.StopDrawingMap();
+                EnemiesManager.instance.KillAllEnemies();
+                SceneManager.LoadScene("Main");
+            });
+            UIManager.instance.gameOverWindow.SetActive(true);
+        };
+    }
 
+    private void ConfigureUI()
+    {
         UIManager.instance.movingController.onDragging = (Vector2 displacement) =>
         {
             // y方向のセンシを下げる
@@ -123,16 +160,5 @@ public class GameManager : MonoBehaviour
         {
             player.Attack();
         };
-
-        player.onCasting = (Spell spell, float current) =>
-        {
-            var slot = player.deck.GetSpellSlot(spell);
-            if (slot is null) return;
-            UIManager.instance.GetControllerBySlot((SpellSlot)slot).image.fillAmount = current;
-        };
-
-        UIManager.instance.loadingText.text = "マップを生成中";
-        MapManager.instance.GenerateMap();
-        UIManager.instance.loadingScreen.SetActive(false);
     }
 }

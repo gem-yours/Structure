@@ -6,12 +6,15 @@ using System.Linq;
 #nullable enable
 public class Player : MonoBehaviour, Living, ITargeter
 {
+    public float maxHp { private set; get; } = 100;
+    public float currentHp { private set; get; } = 100;
     public ExpManager expManager { private set; get; } = new ExpManager();
     public static float speed { private set; get; } = 10f; // 2.5f
-    public Deck deck = new Deck(
+    public Deck deck =
+        new Deck(
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
-                );
+        );
     private Dictionary<SpellSlot, bool> isCasting = new Dictionary<SpellSlot, bool> {
         { SpellSlot.Spell1, false },
         { SpellSlot.Spell2, false },
@@ -19,6 +22,11 @@ public class Player : MonoBehaviour, Living, ITargeter
     };
     public delegate void OnCasting(Spell spell, float current); // currentは0 ~ 1;
     public OnCasting? onCasting = null;
+    public delegate void OnDamaged(float hp);
+
+    public OnDamaged? onDamaged = null;
+    public delegate void OnDead();
+    public OnDead? onDead = null;
 
 #pragma warning disable CS8618
     public Indicator indicator;
@@ -202,9 +210,9 @@ public class Player : MonoBehaviour, Living, ITargeter
             });
         }
 
+        if (onCasting is not null) onCasting(spell, 0);
         isCasting[slot] = false;
         deck.Use(spell);
-        if (onCasting is not null) onCasting(spell, 0);
     }
 
     public Vector2 SearchTarget(Spell spell)
@@ -221,6 +229,17 @@ public class Player : MonoBehaviour, Living, ITargeter
         return Vector2.zero;
     }
 
+    public void takeDamage(float damage)
+    {
+        if (damage <= 0) return;
+        currentHp -= damage;
+        if (currentHp < 0)
+        {
+            currentHp = 0;
+            if (onDead is not null) onDead();
+        }
+    }
+
     public IEnumerator OnHit(float damage)
     {
         isInvincible = true;
@@ -228,6 +247,8 @@ public class Player : MonoBehaviour, Living, ITargeter
         {
             animator?.SetTrigger("damaged");
         }
+        takeDamage(damage);
+        if (onDamaged is not null) onDamaged(currentHp);
         // TODO: Coroutine内で別のCoroutineを起動するのは良いやり方なのか？
         if (damageAnimation != null) StartCoroutine(damageAnimation());
         yield return new WaitForSeconds(invincibleDuration);

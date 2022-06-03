@@ -22,10 +22,12 @@ public class UIManager : MonoBehaviour
     public SpellSlotController spell1Controller;
     public SpellSlotController spell2Controller;
     public SpellSlotController spell3Controller;
+
+    public GameObject gameOverWindow;
+    public Button exitToTileButton;
 #pragma warning restore CS8618
 
     public TextMeshProUGUI? levelText;
-    public Slider? expBar;
 
     public GameObject? pickSpellWindow;
     public SpellCard? spellCard1;
@@ -34,6 +36,8 @@ public class UIManager : MonoBehaviour
     public Button? skipButton;
 
 #pragma warning disable CS8618
+    public Slider expBar;
+    public Slider hpBar;
     public MiniMap miniMap;
     public MiniMap worldMap;
     public Button menuButton;
@@ -136,8 +140,23 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (expBar == null) return;
             expBar.value = value;
+        }
+    }
+
+    public float maxHp
+    {
+        set
+        {
+            hpBar.maxValue = value;
+        }
+    }
+
+    public float currentHp
+    {
+        set
+        {
+            hpBar.value = value;
         }
     }
 
@@ -239,7 +258,6 @@ public class UIManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if (instance != this)
         {

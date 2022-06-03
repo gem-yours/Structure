@@ -6,7 +6,7 @@ public class FireElement : MonoBehaviour, Enemy, Living
 {
     public float speed { get; private set; } = 1f;
     public float hp { get; private set; } = 2;
-    public float damage { get; private set; } = 1;
+    public float damage { get; private set; } = 10;
     public int exp { get; private set; } = 1;
 
     public GameObject target { set; private get; }
