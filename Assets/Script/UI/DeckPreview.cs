@@ -16,7 +16,7 @@ public class DeckPreview : MonoBehaviour
     private List<SpellIcon> spellIcons = new List<SpellIcon>();
     private List<SpellIcon> inactiveSpellIcons = new List<SpellIcon>();
 
-    private int numberOfCandidates = 3;
+    private int numberOfCandidates = 4;
 
     public Deck deck
     {
