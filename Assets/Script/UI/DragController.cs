@@ -52,6 +52,12 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, data.position, data.pressEventCamera, out globalMousePos))
         {
             rt.position = globalMousePos;
+            var localPosition = draggingIcon.transform.localPosition;
+            var threshold = 30;
+            if (localPosition.magnitude > threshold)
+            {
+                draggingIcon.transform.localPosition = localPosition.normalized * threshold;
+            }
         }
     }
 
@@ -59,7 +65,7 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         if (draggingIcon != null)
         {
-            draggingIcon.transform.localPosition = Vector3.zero;
+            StartCoroutine(ReturnDraggingIconToOrigin());
         }
         if (onEndDragging != null)
         {
@@ -91,5 +97,17 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private void Start()
     {
         draggingPlane = transform as RectTransform;
+    }
+
+    private IEnumerator ReturnDraggingIconToOrigin()
+    {
+        if (draggingIcon == null) yield break;
+        var positionOfStart = draggingIcon.transform.localPosition;
+        var animationDuration = 0.1f;
+        yield return AnimationUtil.EaseInOut(animationDuration, (float current) =>
+        {
+            draggingIcon.transform.localPosition = positionOfStart * current;
+        });
+        draggingIcon.transform.localPosition = Vector3.zero;
     }
 }
