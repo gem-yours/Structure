@@ -68,7 +68,8 @@ public class Player : MonoBehaviour, Living, ITargeter
     {
         if (rb2D == null) return;
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed * Time.deltaTime));
+        var movementSpeed = Mathf.Min(speed, movingDirection.magnitude / 4);
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, movementSpeed * Time.deltaTime));
 
         // 攻撃中は向きを変えない
         if (isAttacking) return;
