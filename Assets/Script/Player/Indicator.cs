@@ -46,10 +46,11 @@ public class Indicator : MonoBehaviour
         }
         directionIndicator.SetActive(true);
         directionIndicator.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
+        var size = 0.2f;
         directionIndicator.transform.localScale = new Vector3(
-            0.1f,
-            (0.1f - Mathf.Abs(direction.normalized.y) * 0.1f) / 2 + 0.05f,
-            0.1f
+            size,
+            (1 - Mathf.Abs(direction.normalized.y)) * size * 0.4f + size * 0.6f,
+            1
         );
     }
 
