@@ -17,8 +17,8 @@ public class UIManager : MonoBehaviour
     public delegate void OnSpellPushed(SpellSlot spellSlot);
 
     public GameObject? ui;
-    public DragController? attackController;
 #pragma warning disable CS8618
+    public SpellSlotController attackController;
     public SpellSlotController spell1Controller;
     public SpellSlotController spell2Controller;
     public SpellSlotController spell3Controller;
@@ -64,10 +64,8 @@ public class UIManager : MonoBehaviour
     {
         set
         {
-            if (attackController != null)
-            {
-                attackController.onClick = () => value();
-            }
+
+            attackController.dragController.onClick = () => value();
         }
     }
 
