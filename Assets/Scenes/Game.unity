@@ -348,7 +348,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31dcea0e93fd0c47b44fdafa5277471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragOnSurfaces: 1
   draggingIcon: {fileID: 0}
 --- !u!1 &173798129
 GameObject:
@@ -2298,7 +2297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31dcea0e93fd0c47b44fdafa5277471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragOnSurfaces: 1
   draggingIcon: {fileID: 722143838}
 --- !u!114 &1357766569
 MonoBehaviour:

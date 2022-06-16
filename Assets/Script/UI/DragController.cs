@@ -53,7 +53,7 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         {
             rt.position = globalMousePos;
             var localPosition = draggingIcon.transform.localPosition;
-            var threshold = 50;
+            var threshold = 100;
             if (localPosition.magnitude > threshold)
             {
                 draggingIcon.transform.localPosition = localPosition.normalized * threshold;
