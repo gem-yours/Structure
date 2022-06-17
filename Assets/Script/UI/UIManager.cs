@@ -220,8 +220,18 @@ public class UIManager : MonoBehaviour
         var dragController = GetControllerBySlot((SpellSlot)slot).dragController;
         if (dragController == null) return;
 
-        icon.transform.SetParent(dragController.transform);
         icon.AttachTo(dragController.gameObject);
+    }
+
+
+    public void SetAutoAttack(Spell spell)
+    {
+        var iconObject = Instantiate(Resources.Load("SpellIcon/SpellIcon"), Vector3.zero, Quaternion.identity, transform) as GameObject;
+        if (iconObject is null) return;
+        var spellIcon = iconObject.GetComponent<SpellIcon>();
+        if (spellIcon is null) return;
+        spellIcon.spell = spell;
+        spellIcon.AttachTo(attackController.dragController.gameObject, 0);
     }
 
     public void UnsetSpell(SpellSlot slot)
