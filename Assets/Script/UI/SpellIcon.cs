@@ -58,13 +58,17 @@ public class SpellIcon : MonoBehaviour
         DeleteBackground();
         var rectTransform = GetComponent<RectTransform>();
         var targetRectTransform = target.GetComponent<RectTransform>();
-        // targetはsizefitterで幅を調節している
-        // 知識が漏れてる感じはするが、現状いい解決策が思いつかないのでこれで対応する
-        var widthScale = (rectTransform is not null && targetRectTransform is not null) ?
-#pragma warning disable CS8602
-        targetRectTransform.sizeDelta.x / rectTransform.sizeDelta.x : 1f;
-        var initialWidth = rectTransform.sizeDelta.x;
-#pragma warning restore CS8602
+
+        var sizeScale = Vector2.one;
+        if (rectTransform is not null && targetRectTransform is not null)
+        {
+            sizeScale = new Vector2(
+                targetRectTransform.rect.width / rectTransform.rect.width,
+                targetRectTransform.rect.height / rectTransform.rect.height
+            );
+            // マージンを追加
+            sizeScale *= 0.75f;
+        }
 
         if (animationDuration > 0)
         {
@@ -75,14 +79,14 @@ public class SpellIcon : MonoBehaviour
                     var displacment = transform.position - target.transform.position;
                     transform.position = target.transform.position + displacment * current;
                     transform.localScale = new Vector2(
-                        1 + (widthScale - 1) * current,
-                        1 + (widthScale - 1) * current
+                        1 + (sizeScale.x - 1) * current,
+                        1 + (sizeScale.y - 1) * current
                     );
                 }
             );
         }
         transform.localPosition = Vector3.zero;
-        transform.localScale = Vector3.one;
+        transform.localScale = sizeScale;
     }
 
 
