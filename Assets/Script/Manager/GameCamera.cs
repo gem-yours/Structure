@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameCamera : MonoBehaviour
 {
-    public GameObject target
+    public Player target
     {
         get
         {
@@ -16,7 +16,7 @@ public class GameCamera : MonoBehaviour
             initialDistance = transform.position - target.transform.position;
         }
     }
-    private GameObject _target;
+    private Player _target;
 
     public Vector3 offset
     {
@@ -34,17 +34,23 @@ public class GameCamera : MonoBehaviour
             }
         }
     }
+
+    public float targetSpeed
+    {
+        set
+        {
+            speed = targetSpeed * 1.1f;
+        }
+        get
+        {
+            return speed / 1.1f;
+        }
+    }
     private Vector3 _offset = Vector3.zero;
     private Vector3 initialDistance;
     private float offsetSize = 3;
-    private float speed = Player.speed * 1.1f;
+    private float speed = 1f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (target == null)

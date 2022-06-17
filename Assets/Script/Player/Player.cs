@@ -9,7 +9,9 @@ public class Player : MonoBehaviour, Living, ITargeter
     public float maxHp { private set; get; } = 100;
     public float currentHp { private set; get; } = 100;
     public ExpManager expManager { private set; get; } = new ExpManager();
-    public static float speed { private set; get; } = 10f; // 2.5f
+    public float speed { private set; get; } = 10f; // 2.5f
+    public float rawAttackTime { private set; get; } = 1.25f;
+    public float attackSpeed { private set; get; } = 1f;
     public Deck deck =
         new Deck(
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour, Living, ITargeter
     };
     public delegate void OnCasting(Spell spell, float current); // currentは0 ~ 1;
     public OnCasting? onCasting = null;
+    public delegate void OnAutoAttacking(float current);
+    public OnAutoAttacking? onAutoAttacking = null;
     public delegate void OnDamaged(float hp);
 
     public OnDamaged? onDamaged = null;
@@ -136,10 +140,16 @@ public class Player : MonoBehaviour, Living, ITargeter
     {
         if (isAttacking) return;
         StartCoroutine(Attack(autoAttack));
+        StartCoroutine(AnimationUtil.EaseInOut(rawAttackTime / attackSpeed, (float current) =>
+        {
+            if (onAutoAttacking is not null)
+                onAutoAttacking(current);
+        }));
     }
 
     private IEnumerator Attack(Spell spell)
     {
+        var attackTime = rawAttackTime / attackSpeed;
         isAttacking = true;
         animator?.SetTrigger("attack");
         var enemy = nearestEnemy(transform.position);
@@ -147,7 +157,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         var rawSpeed = speed;
         speed *= 0.75f;
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(attackTime * 0.6f);
 
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
         if (boltObject == null)
@@ -167,7 +177,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         bolt.Target(this);
         speed = rawSpeed;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(attackTime * 0.4f);
         isAttacking = false;
         speed = rawSpeed;
     }
