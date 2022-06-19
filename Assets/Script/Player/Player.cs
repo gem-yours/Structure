@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, Living, ITargeter
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
         );
-    public Spell autoAttack { private set; get; } = new Ignis();
+    public Spell autoAttack { private set; get; } = new AutoAttack_Themisto();
     private Dictionary<SpellSlot, bool> isCasting = new Dictionary<SpellSlot, bool> {
         { SpellSlot.Spell1, false },
         { SpellSlot.Spell2, false },
