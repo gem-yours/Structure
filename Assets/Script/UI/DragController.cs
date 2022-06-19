@@ -9,9 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler
 {
-    public bool dragOnSurfaces = true;
-
-    public Sprite? draggingImage;
+    public GameObject? draggingIcon;
     public delegate void OnDragging(Vector2 displacement);
     public OnDragging? onDragging { get; set; }
     public delegate void OnEndDraggging();
@@ -21,14 +19,11 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public delegate void OnClick();
     public OnClick? onClick { get; set; }
 
-    private GameObject? draggingIcon;
     private RectTransform? draggingPlane;
     private Vector2 startPoint;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        CreateDraggingImage(eventData.position);
-
         SetDraggedPosition(eventData);
 
         startPoint = eventData.position;
@@ -40,10 +35,8 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (draggingIcon != null)
+        if (draggingIcon is not null)
             SetDraggedPosition(eventData);
-        else
-            CreateDraggingImage(eventData.position);
 
         if (onDragging != null)
         {
@@ -59,14 +52,21 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(draggingPlane, data.position, data.pressEventCamera, out globalMousePos))
         {
             rt.position = globalMousePos;
-            rt.rotation = draggingPlane.rotation;
+            var localPosition = draggingIcon.transform.localPosition;
+            var threshold = 100;
+            if (localPosition.magnitude > threshold)
+            {
+                draggingIcon.transform.localPosition = localPosition.normalized * threshold;
+            }
         }
     }
 
     public void OnEndDrag(PointerEventData? eventData)
     {
         if (draggingIcon != null)
-            Destroy(draggingIcon);
+        {
+            StartCoroutine(ReturnDraggingIconToOrigin());
+        }
         if (onEndDragging != null)
         {
             onEndDragging();
@@ -94,30 +94,20 @@ public class DragController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (onEndDragging is not null) onEndDragging();
     }
 
-    private void CreateDraggingImage(Vector3 position)
+    private void Start()
     {
-        var canvas = GameObject.Find("UI").GetComponent<Canvas>();
-        if (canvas == null)
-            return;
-        // We have clicked something that can be dragged.
-        // What we want to do is create an icon for this.
-        draggingIcon = new GameObject("icon");
+        draggingPlane = transform as RectTransform;
+    }
 
-        draggingIcon.transform.SetParent(canvas.transform, false);
-        draggingIcon.transform.SetAsLastSibling();
-        draggingIcon.transform.position = position;
-
-        var image = draggingIcon.AddComponent<Image>();
-        if (image != null)
+    private IEnumerator ReturnDraggingIconToOrigin()
+    {
+        if (draggingIcon == null) yield break;
+        var positionOfStart = draggingIcon.transform.localPosition;
+        var animationDuration = 0.1f;
+        yield return AnimationUtil.EaseInOut(animationDuration, (float current) =>
         {
-            image.sprite = draggingImage;
-            image.enabled = draggingImage != null;
-            image.SetNativeSize();
-        }
-
-        if (dragOnSurfaces)
-            draggingPlane = transform as RectTransform;
-        else
-            draggingPlane = canvas.transform as RectTransform;
+            draggingIcon.transform.localPosition = positionOfStart * current;
+        });
+        draggingIcon.transform.localPosition = Vector3.zero;
     }
 }

@@ -9,12 +9,15 @@ public class Player : MonoBehaviour, Living, ITargeter
     public float maxHp { private set; get; } = 100;
     public float currentHp { private set; get; } = 100;
     public ExpManager expManager { private set; get; } = new ExpManager();
-    public static float speed { private set; get; } = 10f; // 2.5f
+    public float speed { private set; get; } = 10f; // 2.5f
+    public float rawAttackTime { private set; get; } = 1.25f;
+    public float attackSpeed { private set; get; } = 1f;
     public Deck deck =
         new Deck(
                 new List<Spell> { new Explosion(), new Ignis(), new Ignis(), new Ignis(), new Ignis() },
                 2f
         );
+    public Spell autoAttack { private set; get; } = new AutoAttack_Themisto();
     private Dictionary<SpellSlot, bool> isCasting = new Dictionary<SpellSlot, bool> {
         { SpellSlot.Spell1, false },
         { SpellSlot.Spell2, false },
@@ -22,6 +25,8 @@ public class Player : MonoBehaviour, Living, ITargeter
     };
     public delegate void OnCasting(Spell spell, float current); // currentは0 ~ 1;
     public OnCasting? onCasting = null;
+    public delegate void OnAutoAttacking(float current);
+    public OnAutoAttacking? onAutoAttacking = null;
     public delegate void OnDamaged(float hp);
 
     public OnDamaged? onDamaged = null;
@@ -68,7 +73,8 @@ public class Player : MonoBehaviour, Living, ITargeter
     {
         if (rb2D == null) return;
         var current = rb2D.position;
-        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, speed * Time.deltaTime));
+        var movementSpeed = Mathf.Min(speed, movingDirection.magnitude / 4);
+        rb2D.MovePosition(Vector2.MoveTowards(current, current + movingDirection, movementSpeed * Time.deltaTime));
 
         // 攻撃中は向きを変えない
         if (isAttacking) return;
@@ -114,7 +120,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         if (spell is null) return;
         if (indicator.IsActive(spell.targetType))
         {
-            Cast(slot);
+            AttemptCast(slot);
         }
         indicator.HideIndicator();
     }
@@ -125,19 +131,25 @@ public class Player : MonoBehaviour, Living, ITargeter
         if (spell is null) return;
         if (spell.targetType == Spell.TargetType.Auto)
         {
-            Cast(slot);
+            AttemptCast(slot);
         }
         indicator.HideIndicator();
     }
 
-    public void Attack()
+    public void AutoAttack()
     {
         if (isAttacking) return;
-        StartCoroutine(_Attack());
+        StartCoroutine(Attack(autoAttack));
+        StartCoroutine(AnimationUtil.EaseInOut(rawAttackTime / attackSpeed, (float current) =>
+        {
+            if (onAutoAttacking is not null)
+                onAutoAttacking(current);
+        }));
     }
 
-    private IEnumerator _Attack()
+    private IEnumerator Attack(Spell spell)
     {
+        var attackTime = rawAttackTime / attackSpeed;
         isAttacking = true;
         animator?.SetTrigger("attack");
         var enemy = nearestEnemy(transform.position);
@@ -145,9 +157,8 @@ public class Player : MonoBehaviour, Living, ITargeter
         var rawSpeed = speed;
         speed *= 0.75f;
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(attackTime * 0.6f);
 
-        var spell = new Ignis();
         var boltObject = Instantiate(spell.prefab, transform.position, transform.rotation) as GameObject;
         if (boltObject == null)
         {
@@ -166,12 +177,12 @@ public class Player : MonoBehaviour, Living, ITargeter
         bolt.Target(this);
         speed = rawSpeed;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(attackTime * 0.4f);
         isAttacking = false;
         speed = rawSpeed;
     }
 
-    public void Cast(SpellSlot slot)
+    public void AttemptCast(SpellSlot slot)
     {
         if (isCasting[slot])
         {
@@ -194,12 +205,7 @@ public class Player : MonoBehaviour, Living, ITargeter
         isCasting[slot] = true;
         for (int time = 0; time < spell.magazine; time++)
         {
-            // インジケータに合わせて発射位置をずらす
-            var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
-            if (spellEffect == null) break;
-            spellEffect.spell = spell;
-            spellEffect.Target(this);
-            // 最後の一発はディレイを入れる必要がない
+            yield return Cast(spell);
             yield return AnimationUtil.Linear(spell.delay, (current) =>
             {
                 if (onCasting is not null)
@@ -213,6 +219,15 @@ public class Player : MonoBehaviour, Living, ITargeter
         if (onCasting is not null) onCasting(spell, 0);
         isCasting[slot] = false;
         deck.Use(spell);
+    }
+
+    private IEnumerator Cast(Spell spell)
+    {
+        // インジケータに合わせて発射位置をずらす
+        var spellEffect = (Instantiate(spell.prefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity) as GameObject)?.GetComponent<SpellEffect?>();
+        if (spellEffect == null) yield break;
+        spellEffect.spell = spell;
+        spellEffect.Target(this);
     }
 
     public Vector2 SearchTarget(Spell spell)

@@ -43,46 +43,54 @@ public class SpellIcon : MonoBehaviour
 #pragma warning restore CS8618
 
 
-    public void AttachTo(GameObject target)
+    public void AttachTo(GameObject target, float animationDuration = 0.5f)
     {
         if (target.transform.position == null)
         {
             return;
         }
-        StartCoroutine(_Attach(target));
+        transform.SetParent(target.transform);
+        StartCoroutine(_Attach(target, animationDuration));
     }
 
-    private IEnumerator _Attach(GameObject target)
+    private IEnumerator _Attach(GameObject target, float animationDuration)
     {
         DeleteBackground();
-        var animationDuration = 0.5f;
         var rectTransform = GetComponent<RectTransform>();
         var targetRectTransform = target.GetComponent<RectTransform>();
-        // targetはsizefitterで幅を調節している
-        // 知識が漏れてる感じはするが、現状いい解決策が思いつかないのでこれで対応する
-        var widthScale = (rectTransform is not null && targetRectTransform is not null) ?
-#pragma warning disable CS8602
-        targetRectTransform.sizeDelta.x / rectTransform.sizeDelta.x : 1f;
-        var initialWidth = rectTransform.sizeDelta.x;
-#pragma warning restore CS8602
 
-        yield return AnimationUtil.EaseInOut(
-            animationDuration,
-            (current) =>
-            {
-                var displacment = transform.position - target.transform.position;
-                transform.position = target.transform.position + displacment * current;
-                transform.localScale = new Vector2(
-                    1 + (widthScale - 1) * current,
-                    1 + (widthScale - 1) * current
-                );
-            }
-        );
-        transform.position = target.transform.position;
+        var sizeScale = Vector2.one;
+        if (rectTransform is not null && targetRectTransform is not null)
+        {
+            sizeScale = new Vector2(
+                targetRectTransform.rect.width / rectTransform.rect.width,
+                targetRectTransform.rect.height / rectTransform.rect.height
+            );
+            // マージンを追加
+            sizeScale *= 0.75f;
+        }
+
+        if (animationDuration > 0)
+        {
+            yield return AnimationUtil.EaseInOut(
+                animationDuration,
+                (current) =>
+                {
+                    var displacment = transform.position - target.transform.position;
+                    transform.position = target.transform.position + displacment * current;
+                    transform.localScale = new Vector2(
+                        1 + (sizeScale.x - 1) * current,
+                        1 + (sizeScale.y - 1) * current
+                    );
+                }
+            );
+        }
+        transform.localPosition = Vector3.zero;
+        transform.localScale = sizeScale;
     }
 
 
-    private void DeleteBackground()
+    public void DeleteBackground()
     {
         var image = GetComponent<Image>();
         if (image is not null)

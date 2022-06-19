@@ -34,6 +34,11 @@ public class MiniMap : MonoBehaviour
     private Texture2D? texture;
     private Image? image;
 
+    private readonly Color floorColor = ColorCreator.Hex(0x6079B5).withAlpha(0.5f);
+    private readonly Color wallColor = ColorCreator.Hex(0xAEAECF);
+    private readonly Color playerColor = ColorCreator.Hex(0xE05562);
+    private readonly Color enemyColor = ColorCreator.Hex(0x6EE055);
+
 
     public void DrawMap(Vector2 center, Vector2 playerPosition)
     {
@@ -61,11 +66,11 @@ public class MiniMap : MonoBehaviour
                     tile.Equals(new SouthWall()) ||
                     tile.Equals(new VerticalWall()))
                 {
-                    color = new Color(1, 1, 1);
+                    color = wallColor;
                 }
                 if (tile.Equals(new Floor()))
                 {
-                    color = new Color(0, 0, 1, 0.5f);
+                    color = floorColor;
                 }
                 if (tile.Equals(new Empty()))
                 {
@@ -76,7 +81,7 @@ public class MiniMap : MonoBehaviour
         }
 
         var playerPositionInMiniMap = RealPositionToMapPosition(playerPosition);
-        DrawRect(playerPositionInMiniMap, 4, new Color(1, 0, 0));
+        DrawRect(playerPositionInMiniMap, 4, playerColor);
     }
 
 
@@ -87,7 +92,7 @@ public class MiniMap : MonoBehaviour
             DrawRect(
                 RealPositionToMapPosition(enemy),
                 4,
-                new Color(0, 1, 0)
+                enemyColor
             );
         }
     }
@@ -138,5 +143,41 @@ public class MiniMap : MonoBehaviour
     private Vector2 Abs(Vector2 vector)
     {
         return new Vector2(Mathf.Abs(vector.x), Mathf.Abs(vector.y));
+    }
+}
+
+
+// https://www.create-forever.games/unity-color-hexadecimal/
+public class ColorCreator
+{
+    /// <summary>
+    /// RGB を 0 ～ 255 で指定したカラー値を取得
+    /// </summary>
+    /// <param name="r">赤</param>
+    /// <param name="g">緑</param>
+    /// <param name="b">青</param>
+    public static Color Rgb(int r, int g, int b)
+    {
+        return new Color((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f);
+    }
+    /// <summary>
+    /// カラーを #RRGGBB の形で取得
+    /// </summary>
+    /// <param name="hexrgb">16進数のカラー値 RRGGBB</param>
+    public static Color Hex(int hexrgb)
+    {
+        int r = (hexrgb >> 16) & 0xff;
+        int g = (hexrgb >> 8) & 0xff;
+        int b = hexrgb & 0xff;
+        return Rgb(r, g, b);
+    }
+}
+
+public static class ColorWithAlpha
+{
+    public static Color withAlpha(this Color color, float alpha)
+    {
+        color.a = alpha;
+        return color;
     }
 }
