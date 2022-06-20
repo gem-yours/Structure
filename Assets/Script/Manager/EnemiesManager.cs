@@ -84,44 +84,47 @@ public class EnemiesManager : MonoBehaviour
         }
     }
 
-    private IEnumerator AttemptSpawn()
+    private IEnumerator ContinuouslySpawn()
     {
         for (; ; )
         {
-            var room = MapManager.instance.currentRoom;
-            if (room == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            var rect = room.rect;
-            if (rect == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            if (MapManager.instance.currentArea == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            var offset = MapManager.instance.currentArea.offset;
-
-            var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
-            Spawn(position + offset);
+            AttemptSpawn();
             yield return new WaitForSeconds(0.5f);
         }
     }
 
-    private GameObject? Spawn(Vector3 location)
+    private void AttemptSpawn()
     {
-        if (_enemies.Count > enemiesLimit)
+        var room = MapManager.instance.currentRoom;
+        if (room == null)
         {
-            return null;
+            return;
+        }
+        var rect = room.rect;
+        if (rect == null)
+        {
+            return;
+        }
+        if (MapManager.instance.currentArea == null)
+        {
+            return;
         }
 
+        var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
+
+        var location = position + MapManager.instance.currentArea.offset;
         // プレイヤーの近くに敵が出現しないようにする
-        if ((GameManager.instance.player.transform.position - location).magnitude < distanceThreshold)
+        if ((GameManager.instance.player.transform.position - (Vector3)location).magnitude < distanceThreshold)
+        {
+            return;
+        }
+
+        Spawn(location);
+    }
+
+    private Enemy? Spawn(Vector3 location)
+    {
+        if (_enemies.Count > enemiesLimit)
         {
             return null;
         }
@@ -137,7 +140,7 @@ public class EnemiesManager : MonoBehaviour
         };
         enemy.target = GameManager.instance.player.gameObject;
 
-        return enemyObj;
+        return enemyObj.GetComponent<Enemy>();
     }
 
 
@@ -176,7 +179,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(AttemptSpawn());
+        StartCoroutine(ContinuouslySpawn());
         StartCoroutine(KillEnemiesFarAwayPlayer());
     }
 }
