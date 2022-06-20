@@ -11,7 +11,7 @@ public class Ignis : Spell
     override public int magazine { get; } = 3;
     override public float delay { get; } = 0.5f;
     public override float duration { get; } = 0f;
-    override public float speed { get; } = 10f;
+    override public float speed { get; } = 15f;
     override public float range { get; } = 10f;
     override public TargetType targetType { get; } = TargetType.Auto;
     override public float drawTime { get; } = 0.5f;
