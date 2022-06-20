@@ -57,15 +57,6 @@ namespace WorldMap
         )
         { }
 
-        public List<TileContainer>? GetRow(int x)
-        {
-            if (x < 0 || x > tiles.Count)
-            {
-                return null;
-            }
-            return tiles[x];
-        }
-
         public TileContainer? Get(int x, int y)
         {
             if (x < 0 || x >= tiles.Count ||
@@ -80,6 +71,31 @@ namespace WorldMap
         {
             return Get((int)position.x, (int)position.y);
         }
+
+        public List<TileContainer>? GetColumn(int y)
+        {
+            if (y < 0 || y > rows) return null;
+            var column = new List<TileContainer>();
+            foreach (int x in Enumerable.Range(0, columns))
+            {
+                column.Add(tiles[x][y]);
+            }
+            return column;
+        }
+
+        public List<TileContainer>? GetRow(int x)
+        {
+            if (x < 0 || x > columns) return null;
+            return tiles[x];
+        }
+
+        public void Set(int x, int y, Tile tile)
+        {
+            var container = Get(x, y);
+            if (container is null) return;
+            container.tile = tile;
+        }
+
 
         public Vector2 GetOffset<TileContainer>(TileContainer target)
         {
