@@ -12,7 +12,7 @@ namespace WorldMap
         {
             get
             {
-                return new Vector2(tiles.Count / 2, tiles[0].Count / 2) + offset;
+                return new Vector2(ground.columns / 2, ground.rows / 2) + offset;
             }
         }
 
@@ -20,7 +20,7 @@ namespace WorldMap
         {
             get
             {
-                return tiles.GetSize();
+                return ground.size;
             }
         }
 
@@ -28,7 +28,7 @@ namespace WorldMap
         {
             get
             {
-                return new Rect(offset.x, offset.y, tiles.Count, tiles[0].Count);
+                return new Rect(offset.x, offset.y, ground.columns, ground.rows);
             }
         }
 
@@ -37,38 +37,31 @@ namespace WorldMap
             return (room.center - center).magnitude;
         }
 
-        // TODO: Groundクラスでタイルを管理する
-        private List<List<TileContainer>> tiles;
-        private Vector2 offset;
+        public Ground ground { private set; get; }
+        public Vector2 offset { private set; get; }
 
         public Room(List<List<TileContainer>> tiles, Vector2? offset)
         {
             this.offset = offset ?? Vector2.zero;
-            this.tiles = tiles;
-            for (int x = 0; x < tiles.Count; x++)
+            ground = new Ground(tiles);
+            foreach (int x in Enumerable.Range(0, ground.columns))
             {
-                for (int y = 0; y < tiles[x].Count; y++)
+                foreach (int y in Enumerable.Range(0, ground.rows))
                 {
-                    tiles[x][y].tile = new Floor();
+                    ground.Set(x, y, new Floor());
                 }
             }
 
-            var leading = tiles.FirstOrDefault();
-            foreach (int index in Enumerable.Range(0, leading.Count))
+            foreach (int y in Enumerable.Range(0, ground.rows))
             {
-                leading[index].tile = new VerticalWall();
+                ground.Set(0, y, new VerticalWall());
+                ground.Set(ground.columns - 1, y, new VerticalWall());
             }
 
-            var trailing = tiles.LastOrDefault();
-            foreach (int index in Enumerable.Range(0, trailing.Count))
+            foreach (int x in Enumerable.Range(0, ground.rows))
             {
-                trailing[index].tile = new VerticalWall();
-            }
-
-            foreach (int index in Enumerable.Range(0, tiles.Count))
-            {
-                tiles[index][0].tile = new SouthWall();
-                tiles[index][tiles[index].Count - 1].tile = new NorthWall();
+                ground.Set(x, 0, new SouthWall());
+                ground.Set(x, ground.rows - 1, new NorthWall());
             }
         }
 
@@ -90,11 +83,11 @@ namespace WorldMap
 
         public Vector2? GetPosition(TileContainer container)
         {
-            foreach (int x in Enumerable.Range(0, tiles.Count))
+            foreach (int x in Enumerable.Range(0, ground.columns))
             {
-                foreach (int y in Enumerable.Range(0, tiles[x].Count))
+                foreach (int y in Enumerable.Range(0, ground.rows))
                 {
-                    if (tiles[x][y] == container)
+                    if (ground.Get(x, y) == container)
                     {
                         return new Vector2(x, y);
                     }
@@ -103,6 +96,7 @@ namespace WorldMap
             return null;
         }
 
+        // 指定した壁に連続する壁をすべて取得する
         public List<TileContainer>? GetTerrain(TileContainer container)
         {
             // tmpがunwrapされないので別の変数を用意する
@@ -113,17 +107,12 @@ namespace WorldMap
             if (container.Equals(new SouthWall()) ||
                 container.Equals(new NorthWall()))
             {
-                var terrain = new List<TileContainer>();
-                foreach (int x in Enumerable.Range(0, tiles.Count))
-                {
-                    terrain.Add(tiles[x][(int)position.y]);
-                }
-                return terrain;
+                return ground.GetColumn((int)position.y);
             }
             if (container.Equals(new VerticalWall()))
             {
                 // TODO: 端っこを含まないようにする
-                return tiles[(int)position.x];
+                ground.GetRow((int)position.x);
             }
             return null;
         }

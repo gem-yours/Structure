@@ -84,44 +84,54 @@ public class EnemiesManager : MonoBehaviour
         }
     }
 
-    private IEnumerator AttemptSpawn()
+    private IEnumerator ContinuouslySpawn()
     {
         for (; ; )
         {
-            var room = MapManager.instance.currentRoom;
-            if (room == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            var rect = room.rect;
-            if (rect == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            if (MapManager.instance.currentArea == null)
-            {
-                yield return new WaitForSeconds(1);
-                continue;
-            }
-            var offset = MapManager.instance.currentArea.offset;
-
-            var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
-            Spawn(position + offset);
+            AttemptSpawn();
             yield return new WaitForSeconds(0.5f);
         }
     }
 
-    private GameObject? Spawn(Vector3 location)
+    private void AttemptSpawn()
     {
-        if (_enemies.Count > enemiesLimit)
+        var currentRoom = MapManager.instance.currentRoom;
+        if (currentRoom == null)
         {
-            return null;
+            return;
+        }
+        if (MapManager.instance.currentArea == null)
+        {
+            return;
         }
 
+        var positionInRoom = GenerateRandomPosition(currentRoom);
+        if (positionInRoom is null) return;
+
+        var location = (Vector2)positionInRoom + currentRoom.offset + MapManager.instance.currentArea.offset;
         // プレイヤーの近くに敵が出現しないようにする
-        if ((GameManager.instance.player.transform.position - location).magnitude < distanceThreshold)
+        if (((Vector2)GameManager.instance.player.transform.position - location).magnitude < distanceThreshold)
+        {
+            return;
+        }
+
+        Spawn(location);
+    }
+
+    private Vector2? GenerateRandomPosition(WorldMap.Room room)
+    {
+        // 壁の中などに出現する場合再抽選を10回まで行う
+        foreach (int numberOfRegenerate in Enumerable.Range(0, 10))
+        {
+            var position = new Vector2(Random.Range(0, room.ground.columns), Random.Range(0, room.ground.rows));
+            if (room.ground.Get(position)?.tile.canPassThrough ?? false) return position;
+        }
+        return null;
+    }
+
+    private Enemy? Spawn(Vector3 location)
+    {
+        if (_enemies.Count > enemiesLimit)
         {
             return null;
         }
@@ -137,7 +147,7 @@ public class EnemiesManager : MonoBehaviour
         };
         enemy.target = GameManager.instance.player.gameObject;
 
-        return enemyObj;
+        return enemyObj.GetComponent<Enemy>();
     }
 
 
@@ -176,7 +186,7 @@ public class EnemiesManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(AttemptSpawn());
+        StartCoroutine(ContinuouslySpawn());
         StartCoroutine(KillEnemiesFarAwayPlayer());
     }
 }
