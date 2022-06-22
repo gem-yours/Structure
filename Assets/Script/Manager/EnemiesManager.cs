@@ -95,13 +95,8 @@ public class EnemiesManager : MonoBehaviour
 
     private void AttemptSpawn()
     {
-        var room = MapManager.instance.currentRoom;
-        if (room == null)
-        {
-            return;
-        }
-        var rect = room.rect;
-        if (rect == null)
+        var currentRoom = MapManager.instance.currentRoom;
+        if (currentRoom == null)
         {
             return;
         }
@@ -110,16 +105,28 @@ public class EnemiesManager : MonoBehaviour
             return;
         }
 
-        var position = new Vector2(Random.Range(rect.x, rect.x + rect.width), Random.Range(rect.y, rect.y + rect.height));
+        var positionInRoom = GenerateRandomPosition(currentRoom);
+        if (positionInRoom is null) return;
 
-        var location = position + MapManager.instance.currentArea.offset;
+        var location = (Vector2)positionInRoom + currentRoom.offset + MapManager.instance.currentArea.offset;
         // プレイヤーの近くに敵が出現しないようにする
-        if ((GameManager.instance.player.transform.position - (Vector3)location).magnitude < distanceThreshold)
+        if (((Vector2)GameManager.instance.player.transform.position - location).magnitude < distanceThreshold)
         {
             return;
         }
 
         Spawn(location);
+    }
+
+    private Vector2? GenerateRandomPosition(WorldMap.Room room)
+    {
+        // 壁の中などに出現する場合再抽選を10回まで行う
+        foreach (int numberOfRegenerate in Enumerable.Range(0, 10))
+        {
+            var position = new Vector2(Random.Range(0, room.ground.columns), Random.Range(0, room.ground.rows));
+            if (room.ground.Get(position)?.tile.canPassThrough ?? false) return position;
+        }
+        return null;
     }
 
     private Enemy? Spawn(Vector3 location)

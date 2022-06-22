@@ -31,30 +31,35 @@ namespace WorldMap
     }
     public interface Tile
     {
+        bool canPassThrough { get; }
         string rawValue { get; }
         string resourcePath { get; }
     }
 
     public class Empty : Tile
     {
+        public bool canPassThrough { get; } = false;
         public string rawValue { get; } = "*";
         public string resourcePath { get; } = "Empty";
     }
 
     public class NorthWall : Tile
     {
+        public bool canPassThrough { get; } = false;
         public string rawValue { get; } = "~";
         public string resourcePath { get; } = "Wall";
     }
 
     public class SouthWall : Tile
     {
+        public bool canPassThrough { get; } = false;
         public string rawValue { get; } = "=";
         public string resourcePath { get; } = "Wall";
     }
 
     public class VerticalWall : Tile
     {
+        public bool canPassThrough { get; } = false;
         public string rawValue { get; } = "+";
         public string resourcePath { get; } = "Wall";
 
@@ -62,6 +67,7 @@ namespace WorldMap
 
     public class Floor : Tile
     {
+        public bool canPassThrough { get; } = true;
         public string rawValue { get; } = "#";
         public string resourcePath { get; } = "Tile";
 

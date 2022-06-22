@@ -38,7 +38,7 @@ namespace WorldMap
         }
 
         public Ground ground { private set; get; }
-        private Vector2 offset;
+        public Vector2 offset { private set; get; }
 
         public Room(List<List<TileContainer>> tiles, Vector2? offset)
         {
