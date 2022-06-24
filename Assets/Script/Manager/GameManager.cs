@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.menuButton.onClick.AddListener(() =>
         {
             Pause();
-            UIManager.instance.ShowMenu(() =>
+            UIManager.instance.ShowMenu(player.deck, () =>
             {
                 UIManager.instance.HideMenu();
                 Resume();
