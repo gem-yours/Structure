@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
     public MiniMap worldMap;
     public Button menuButton;
     public GameObject menu;
+    public DeckContents deckContents;
     public Button returnFromMenu;
     public GameObject loadingScreen;
     public TextMeshProUGUI loadingText;
@@ -176,8 +177,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowMenu(UnityEngine.Events.UnityAction onClick)
+    public void ShowMenu(Deck deck, UnityEngine.Events.UnityAction onClick)
     {
+        deckContents.deck = deck;
         returnFromMenu.onClick.AddListener(onClick);
         menu.SetActive(true);
     }
