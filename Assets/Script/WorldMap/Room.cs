@@ -58,7 +58,7 @@ namespace WorldMap
                 ground.Set(ground.columns - 1, y, new VerticalWall());
             }
 
-            foreach (int x in Enumerable.Range(0, ground.rows))
+            foreach (int x in Enumerable.Range(0, ground.columns))
             {
                 ground.Set(x, 0, new SouthWall());
                 ground.Set(x, ground.rows - 1, new NorthWall());

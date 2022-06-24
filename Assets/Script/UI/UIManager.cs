@@ -202,7 +202,7 @@ public class UIManager : MonoBehaviour
     // メニューが表示されてすぐに操作できると操作が事故るので、短い間操作不能にする
     private IEnumerator SetPickingSpellAction(SpellCard.OnClick onSpellPicked)
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.1f);
         // TODO: アニメーションを追加する
         spellCard1!.onClick = (Spell? spell) => onSpellPicked(spell);
         spellCard2!.onClick = onSpellPicked;
