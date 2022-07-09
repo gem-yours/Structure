@@ -1,0 +1,301 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "体の回転　X"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "体の回転　Z"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "右肩"
+		},
+		{
+			"Id": "Param2",
+			"GroupId": "",
+			"Name": "右肘"
+		},
+		{
+			"Id": "Param5",
+			"GroupId": "",
+			"Name": "右袖"
+		},
+		{
+			"Id": "Param3",
+			"GroupId": "",
+			"Name": "左肩"
+		},
+		{
+			"Id": "Param4",
+			"GroupId": "",
+			"Name": "左肘"
+		},
+		{
+			"Id": "Param6",
+			"GroupId": "",
+			"Name": "左袖"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "Param7",
+			"GroupId": "",
+			"Name": "尾"
+		},
+		{
+			"Id": "Param8",
+			"GroupId": "",
+			"Name": "腰"
+		},
+		{
+			"Id": "Param9",
+			"GroupId": "",
+			"Name": "舌の形状"
+		},
+		{
+			"Id": "Param10",
+			"GroupId": "",
+			"Name": "舌の回転"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "髪揺れ　前"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "髪揺れ　横"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "髪揺れ　後"
+		},
+		{
+			"Id": "Param11",
+			"GroupId": "",
+			"Name": "ベール"
+		},
+		{
+			"Id": "Param_Angle_Rotation_1_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[0]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_2_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[1]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_3_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[2]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_4_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[3]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_5_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[4]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_6_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[5]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_7_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[6]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_8_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[7]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_9_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[8]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_10_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[9]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_11_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[10]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_12_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[11]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_13_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[12]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_14_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[13]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_15_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[14]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_16_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[15]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_17_ArtMesh18",
+			"GroupId": "ParamGroup",
+			"Name": "[16]横髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_1_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[0]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_2_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[1]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_3_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[2]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_4_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[3]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_5_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[4]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_6_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[5]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_7_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[6]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_8_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[7]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_9_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[8]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_10_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[9]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_11_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[10]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_12_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[11]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_13_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[12]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_14_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[13]前髪"
+		},
+		{
+			"Id": "Param_Angle_Rotation_15_ArtMesh6",
+			"GroupId": "ParamGroup2",
+			"Name": "[14]前髪"
+		}
+	],
+	"ParameterGroups": [
+		{
+			"Id": "ParamGroup",
+			"GroupId": "",
+			"Name": "横髪"
+		},
+		{
+			"Id": "ParamGroup2",
+			"GroupId": "",
+			"Name": "前髪"
+		}
+	],
+	"Parts": [
+		{
+			"Id": "ArtMesh6_Skinning",
+			"Name": "前髪(スキニング)"
+		},
+		{
+			"Id": "Part2",
+			"Name": "前髪(回転)"
+		},
+		{
+			"Id": "ArtMesh18_Skinning",
+			"Name": "横髪(スキニング)"
+		},
+		{
+			"Id": "Part",
+			"Name": "横髪(回転)"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		]
+	]
+}
