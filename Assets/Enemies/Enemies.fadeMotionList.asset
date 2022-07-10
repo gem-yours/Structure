@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 403ae2dd693bb1d4b924f6b8d206b053, type: 3}
   m_Name: Enemies.fadeMotionList
   m_EditorClassIdentifier: 
-  MotionInstanceIds: 60f8ffff
+  MotionInstanceIds: 60f8ffffeaeeffff6ef8fffff4eeffff
   CubismFadeMotionObjects:
   - {fileID: 11400000, guid: 8fc05a9afa5224346b8a328fe3772d9c, type: 2}
+  - {fileID: 11400000, guid: 7bbe682b1ab0f6a4497b0ec16381492e, type: 2}
+  - {fileID: 11400000, guid: 7654fa6e895e5b64196c6dcdf89a5fec, type: 2}
+  - {fileID: 11400000, guid: 93d89a128ca45f345b6a6ded343a441c, type: 2}
