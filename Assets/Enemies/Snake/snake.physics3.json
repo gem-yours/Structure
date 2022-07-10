@@ -520,7 +520,7 @@
 						"Id": "Param5"
 					},
 					"VertexIndex": 1,
-					"Scale": 1.748,
+					"Scale": 100,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false
@@ -610,7 +610,7 @@
 						"Id": "Param6"
 					},
 					"VertexIndex": 1,
-					"Scale": 1.748,
+					"Scale": 75,
 					"Weight": 100,
 					"Type": "Angle",
 					"Reflect": false

@@ -2341,7 +2341,7 @@ GameObject:
   - component: {fileID: 985295015440868951}
   m_Layer: 0
   m_Name: snake
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2505,7 +2505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd9e6647bfff7542acb0200ab74bdd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CubismFadeMotionList: {fileID: 11400000, guid: e67fbc9b665936b4abb10991bdea9d9f, type: 2}
+  CubismFadeMotionList: {fileID: 11400000, guid: b9b383621ae947441bd61d562b295a5c, type: 2}
 --- !u!114 &985295015440868951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2824,7 +2824,7 @@ MonoBehaviour:
       - DestinationId: Param5
         ParticleIndex: 1
         TranslationScale: {x: 0, y: 0}
-        AngleScale: 1.748
+        AngleScale: 100
         Weight: 100
         SourceComponent: 2
         IsInverted: 0
@@ -2875,7 +2875,7 @@ MonoBehaviour:
       - DestinationId: Param6
         ParticleIndex: 1
         TranslationScale: {x: 0, y: 0}
-        AngleScale: 1.748
+        AngleScale: 75
         Weight: 100
         SourceComponent: 2
         IsInverted: 0
@@ -7157,7 +7157,7 @@ Transform:
   m_GameObject: {fileID: 6872195500470373857}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1707946659608760709}
